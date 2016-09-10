@@ -3,10 +3,10 @@ package com.huskygames.rekhid.slugger;
 
 public abstract class PhysicsObject {
 
-    private DoublePair position;
-    private DoublePair velocity;
+    protected DoublePair position;
+    protected DoublePair velocity;
 
-    private boolean gravity;
+    protected boolean gravity;
 
     public boolean isGravity() {
         return gravity;
