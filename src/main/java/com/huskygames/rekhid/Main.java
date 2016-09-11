@@ -1,5 +1,6 @@
 package com.huskygames.rekhid;
 
+import com.huskygames.rekhid.slugger.input.ControllerInput;
 import com.huskygames.rekhid.slugger.GamePanel;
 import com.huskygames.rekhid.slugger.resource.ResourceManager;
 import com.huskygames.rekhid.slugger.sound.SoundThread;
@@ -50,6 +51,7 @@ public class Main extends JFrame {
     private GameState state;
     private long tickCount;
     private MainMenu mainMenu;
+    private ControllerInput input;
 
     public Main() {
         super();

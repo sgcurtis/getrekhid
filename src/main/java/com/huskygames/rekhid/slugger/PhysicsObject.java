@@ -1,6 +1,8 @@
 package com.huskygames.rekhid.slugger;
 
 
+import com.huskygames.rekhid.slugger.util.DoublePair;
+
 public abstract class PhysicsObject {
 
     protected DoublePair position;
