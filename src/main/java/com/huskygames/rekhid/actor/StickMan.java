@@ -30,4 +30,9 @@ public class StickMan extends Fighter {
         }
         return temp.getImage();
     }
+
+    @Override
+    public void tick() {
+
+    }
 }

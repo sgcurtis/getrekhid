@@ -3,7 +3,7 @@ package com.huskygames.rekhid.slugger.actor;
 import com.huskygames.rekhid.slugger.actor.Actor;
 import com.huskygames.rekhid.slugger.util.DoublePair;
 
-public class Fighter extends Actor {
+public abstract class Fighter extends Actor {
 
     protected double damage;
 

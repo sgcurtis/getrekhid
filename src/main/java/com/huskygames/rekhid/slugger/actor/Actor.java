@@ -18,4 +18,6 @@ public abstract class Actor extends PhysicsObject {
         this.velocity = vel;
         this.position = pos;
     }
+
+    public abstract void tick();
 }
