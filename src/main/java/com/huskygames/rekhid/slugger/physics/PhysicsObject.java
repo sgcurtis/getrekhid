@@ -1,6 +1,7 @@
-package com.huskygames.rekhid.slugger;
+package com.huskygames.rekhid.slugger.physics;
 
 
+import com.huskygames.rekhid.slugger.physics.PhysicsManager;
 import com.huskygames.rekhid.slugger.util.DoublePair;
 
 public abstract class PhysicsObject {

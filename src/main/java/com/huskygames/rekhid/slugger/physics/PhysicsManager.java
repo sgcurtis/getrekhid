@@ -1,4 +1,4 @@
-package com.huskygames.rekhid.slugger;
+package com.huskygames.rekhid.slugger.physics;
 
 import java.util.HashSet;
 

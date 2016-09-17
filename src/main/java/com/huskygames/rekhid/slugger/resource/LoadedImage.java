@@ -12,7 +12,7 @@ import java.io.InputStream;
 public class LoadedImage extends LoadedResource {
 
     protected static final Logger logger = LogManager.getLogger(LoadedImage.class.getName());
-    private BufferedImage image;
+    protected BufferedImage image;
 
     public LoadedImage(String path, InputStream file) {
         super(path);

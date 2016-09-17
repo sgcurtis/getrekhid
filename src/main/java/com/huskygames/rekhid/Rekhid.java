@@ -16,9 +16,11 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.HashSet;
 
-public class Main extends JFrame {
+public class Rekhid extends JFrame {
 
-    private final static Logger logger = LogManager.getLogger(Main.class);
+    private static Rekhid instance;
+
+    private final static Logger logger = LogManager.getLogger(Rekhid.class);
     private static final String OPERATING_SYSTEM = System.getProperty("os.name");
 
     static {
@@ -47,15 +49,18 @@ public class Main extends JFrame {
     private final int screenWidth;
     private final int screenHeight;
     private final ResourceManager resourceManager;
+    private final ControllerInput controllerManager;
     private long lastTickTime = 0;
     private GameState state;
     private long tickCount;
     private MainMenu mainMenu;
     private ControllerInput input;
 
-    public Main() {
+    private Rekhid() {
         super();
         logger.info("Building main class");
+
+        instance = this;
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         screenHeight = screenSize.height;
@@ -81,10 +86,19 @@ public class Main extends JFrame {
 
         checkControlDevices();
         resourceManager = new ResourceManager();
+
+        controllerManager = new ControllerInput(this);
+    }
+
+    public static Rekhid getInstance() {
+        return instance;
     }
 
     public static void main(String[] args) {
-        Main game = new Main();
+
+        Thread.currentThread().setName("MainThread");
+
+        Rekhid game = new Rekhid();
         logger.info("Created game instance.");
 
         // Run the sounds
@@ -104,7 +118,6 @@ public class Main extends JFrame {
             }
         }
         // cleanup here
-
     }
 
     public ResourceManager getResourceManager() {
@@ -144,7 +157,6 @@ public class Main extends JFrame {
 
         long lastTick = System.currentTimeMillis();
 
-
         while (true) {
             // game loop
             panel.repaint();
@@ -152,6 +164,12 @@ public class Main extends JFrame {
             // This is terrible multithreading code, but it sure is easy.
             synchronized (gameLock) {
                 // ALL CODE THAT CHANGES THE GAME MUST BE IN HERE.
+
+                // STUFF TO RUN ALWAYS
+
+                controllerManager.tick();
+
+                // GAMESTATE SPECIFIC
                 switch (state) {
                     case MENU:
                         menuTick();

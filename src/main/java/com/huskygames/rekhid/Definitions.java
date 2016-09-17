@@ -7,7 +7,7 @@ public class Definitions {
 
     public static final String NAME = "GET REKHI'D";
 
-    public static final Main.GameState DEFAULT_STATE = Main.GameState.MENU;
+    public static final Rekhid.GameState DEFAULT_STATE = Rekhid.GameState.MENU;
 
     public static final int DEFAULT_WIDTH = 1280;
     public static final int DEFAULT_HEIGHT = 720;

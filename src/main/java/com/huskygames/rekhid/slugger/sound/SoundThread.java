@@ -27,6 +27,8 @@ public class SoundThread extends Thread {
 
     @Override
     public synchronized void run() {
+        Thread.currentThread().setName("AudioThread");
+        Thread.currentThread().setPriority(MIN_PRIORITY + 1);
         while (true) {
             // TODO: pop off queue and play requests
         }

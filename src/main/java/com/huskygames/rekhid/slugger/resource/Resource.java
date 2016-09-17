@@ -5,7 +5,10 @@ public enum Resource {
     // BEGIN RESOURCE LIST
 
     MAIN_MENU_BG("images/menu1.jpg", Type.IMAGE),
-    MENU_BG_MUSIC("meganddia.mp3", Type.MUSIC);
+    MENU_BG_MUSIC("music/meganddia.mp3", Type.MUSIC),
+
+    KUHLS_HEAD("images/kuhl.jpg", Type.IMAGE),
+    STICK_MAN("spritesheets/sticks.png", Type.SPRITE_SHEET);
 
     // END RESOURCE LIST
 

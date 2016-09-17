@@ -1,5 +1,6 @@
 package com.huskygames.rekhid.slugger.resource;
 
+import com.huskygames.rekhid.slugger.resource.sprite.SpriteSheet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,20 +28,31 @@ public class ResourceManager {
      * @param res the resource to request
      */
     public LoadedResource requestResource(Resource res) {
-        logger.warn("Resource location is: " + res.location);
+        LoadedResource cachedResource = cache.get(res);
+        if (cachedResource != null) {
+            return cachedResource;
+        }
+
         InputStream stream = ResourceManager.class.getClassLoader().getResourceAsStream(res.location);
 
         LoadedResource temp;
+
         if (res.type == Resource.Type.IMAGE) {
             temp = new LoadedImage(res.location, stream);
         }
         else if (res.type == Resource.Type.SPRITE_SHEET) {
-            // TODO: implement a sprite sheet and make it this
-            temp = new LoadedImage(res.location, stream);
+            String path = res.location;
+            InputStream defs = SpriteSheet.class.getResourceAsStream
+                    (path.substring(0, path.length() - 5) + ".properties");
+            temp = new SpriteSheet(path, stream, defs);
         }
         else {
             // TODO: add support for audio
             throw new UnsupportedOperationException("Unrecognized resource type.");
+        }
+
+        if (temp != null) {
+            cache.put(res, temp);
         }
 
         return temp;

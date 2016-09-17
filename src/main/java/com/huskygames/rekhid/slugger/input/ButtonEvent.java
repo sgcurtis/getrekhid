@@ -1,6 +1,6 @@
 package com.huskygames.rekhid.slugger.input;
 
-import com.huskygames.rekhid.slugger.Player;
+import com.huskygames.rekhid.slugger.actor.Player;
 
 public class ButtonEvent {
     private final ButtonType button;

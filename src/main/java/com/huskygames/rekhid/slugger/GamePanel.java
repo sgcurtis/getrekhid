@@ -1,16 +1,16 @@
 package com.huskygames.rekhid.slugger;
 
 import com.huskygames.rekhid.Definitions;
-import com.huskygames.rekhid.Main;
+import com.huskygames.rekhid.Rekhid;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class GamePanel extends JPanel {
 
-    private final Main parent;
+    private final Rekhid parent;
 
-    public GamePanel(Main parent) {
+    public GamePanel(Rekhid parent) {
         this.parent = parent;
         setBorder(BorderFactory.createLineBorder(Color.black));
     }
@@ -30,7 +30,7 @@ public class GamePanel extends JPanel {
             // ALL GAME DRAWING CODE MUST BE IN HERE
 
 
-            if (parent.getGameState() == Main.GameState.MENU) {
+            if (parent.getGameState() == Rekhid.GameState.MENU) {
                 parent.getMainMenu().draw((Graphics2D) g);
             }
 

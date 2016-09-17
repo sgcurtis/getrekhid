@@ -11,7 +11,7 @@
     <version>0.1-SNAPSHOT</version>
 
     <properties>
-        <javaLanguage.version>1.7</javaLanguage.version>
+        <javaLanguage.version>1.8</javaLanguage.version>
         <sourceEncoding>UTF-8</sourceEncoding>
     </properties>
 
@@ -66,7 +66,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>com.huskygames.rekhid.Main</mainClass>
+                            <mainClass>com.huskygames.rekhid.Rekhid</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

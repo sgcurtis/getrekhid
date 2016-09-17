@@ -1,4 +1,6 @@
-package com.huskygames.rekhid.slugger;
+package com.huskygames.rekhid.slugger.physics;
+
+import com.huskygames.rekhid.slugger.Drawable;
 
 public abstract class Particle extends PhysicsObject implements Drawable {
 
