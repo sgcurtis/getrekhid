@@ -6,8 +6,11 @@ import com.huskygames.rekhid.slugger.resource.LoadedImage;
 import com.huskygames.rekhid.slugger.resource.Resource;
 import com.huskygames.rekhid.slugger.resource.sprite.SpriteSheet;
 import com.huskygames.rekhid.slugger.util.DoublePair;
+import com.huskygames.rekhid.slugger.util.shape.*;
+import com.huskygames.rekhid.slugger.util.shape.Shape;
 
 import java.awt.*;
+import java.util.Set;
 
 public class StickMan extends Fighter {
     private final Professor prof;
@@ -34,5 +37,10 @@ public class StickMan extends Fighter {
     @Override
     public void tick() {
 
+    }
+
+    @Override
+    public Set<Shape> getCollisons() {
+        return null;
     }
 }

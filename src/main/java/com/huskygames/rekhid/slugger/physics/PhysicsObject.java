@@ -4,7 +4,7 @@ package com.huskygames.rekhid.slugger.physics;
 import com.huskygames.rekhid.slugger.physics.PhysicsManager;
 import com.huskygames.rekhid.slugger.util.DoublePair;
 
-public abstract class PhysicsObject {
+public abstract class PhysicsObject implements Collidable {
 
     protected DoublePair position;
     protected DoublePair velocity;
