@@ -11,7 +11,7 @@ import java.io.InputStream;
 
 public class LoadedImage extends LoadedResource {
 
-    private static final Logger logger = LogManager.getLogger(LoadedImage.class.getName());
+    protected static final Logger logger = LogManager.getLogger(LoadedImage.class.getName());
     private BufferedImage image;
 
     public LoadedImage(String path, InputStream file) {
