@@ -1,6 +1,6 @@
 package com.huskygames.rekhid.slugger.physics;
 
-import com.huskygames.rekhid.slugger.util.shape.Shape;
+import com.huskygames.rekhid.slugger.util.collison.shape.Shape;
 
 import java.util.Set;
 

@@ -2,6 +2,8 @@ package com.huskygames.rekhid.slugger.util;
 
 import java.awt.*;
 
+import static com.huskygames.rekhid.slugger.util.NumberUtilities.*;
+
 public class DoublePair {
     private double x, y;
 
@@ -26,12 +28,12 @@ public class DoublePair {
         this.x = x;
     }
 
-    public void add(DoublePair pair) {
+    public void addInPlace(DoublePair pair) {
         x = x + pair.x;
         y = y + pair.y;
     }
 
-    public void add(double scalar) {
+    public void addInPlace(double scalar) {
         x = scalar + x;
         y = scalar + y;
     }
@@ -39,4 +41,45 @@ public class DoublePair {
     public Point toPoint() {
         return new Point((int) x, (int) y);
     }
+
+    public DoublePair add(DoublePair pair) {
+        DoublePair temp = new DoublePair(0, 0);
+        temp.addInPlace(this);
+        temp.addInPlace(pair);
+        return temp;
+    }
+
+    public DoublePair subtract(DoublePair pair) {
+        DoublePair temp = new DoublePair(0, 0);
+        temp.addInPlace(this);
+        temp.addInPlace(pair.neg());
+        return temp;
+    }
+
+    public DoublePair neg() {
+        return new DoublePair(-x, -y);
+    }
+
+    public DoublePair getMin(DoublePair other) {
+        return new DoublePair(min(other.getX(), getX()), min(other.getY(), getY()));
+    }
+
+    public DoublePair getMax(DoublePair other) {
+        return new DoublePair(max(other.getX(), getX()), max(other.getY(), getY()));
+    }
+
+    public boolean isInAabb(DoublePair a, DoublePair b) {
+        DoublePair min = a.getMin(b);
+        DoublePair max = a.getMax(b);
+
+        if(this.getX() > min.getX() && this.getY() > min.getY()) {
+            if (this.getX() < max.getX() && this.getY() < max.getY()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
 }

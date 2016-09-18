@@ -47,7 +47,7 @@ public class ResourceManager {
             temp = new SpriteSheet(path, stream, defs);
         }
         else {
-            // TODO: add support for audio
+            // TODO: addInPlace support for audio
             throw new UnsupportedOperationException("Unrecognized resource type.");
         }
 

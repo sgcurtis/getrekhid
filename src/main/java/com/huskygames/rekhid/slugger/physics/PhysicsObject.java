@@ -1,7 +1,6 @@
 package com.huskygames.rekhid.slugger.physics;
 
 
-import com.huskygames.rekhid.slugger.physics.PhysicsManager;
 import com.huskygames.rekhid.slugger.util.DoublePair;
 
 public abstract class PhysicsObject implements Collidable {
@@ -37,9 +36,9 @@ public abstract class PhysicsObject implements Collidable {
 
     public void update() {
         if (gravity) {
-            velocity.add(PhysicsManager.GRAVITY);
+            velocity.addInPlace(PhysicsManager.GRAVITY);
         }
 
-        position.add(velocity);
+        position.addInPlace(velocity);
     }
 }
