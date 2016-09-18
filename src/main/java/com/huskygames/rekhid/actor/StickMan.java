@@ -6,8 +6,7 @@ import com.huskygames.rekhid.slugger.resource.LoadedImage;
 import com.huskygames.rekhid.slugger.resource.Resource;
 import com.huskygames.rekhid.slugger.resource.sprite.SpriteSheet;
 import com.huskygames.rekhid.slugger.util.DoublePair;
-import com.huskygames.rekhid.slugger.util.shape.*;
-import com.huskygames.rekhid.slugger.util.shape.Shape;
+import com.huskygames.rekhid.slugger.util.collison.shape.Shape;
 
 import java.awt.*;
 import java.util.Set;
