@@ -1,7 +1,9 @@
 package com.huskygames.rekhid.slugger.world;
 
 import com.huskygames.rekhid.Definitions;
+import com.huskygames.rekhid.actor.StickMan;
 import com.huskygames.rekhid.slugger.actor.Player;
+import com.huskygames.rekhid.slugger.util.IntPair;
 import javafx.util.Pair;
 
 /**
@@ -15,7 +17,7 @@ public class World {
     private int height = Definitions.DEFAULT_HEIGHT;
 
     //private Grid grid;
-    private Player[] players;
+    private StickMan[] players;
 
     //level contains its own colliders
     private Level level;
@@ -27,37 +29,38 @@ public class World {
      * @param theLevel: The Level that will be running on this world
      * @param theView: The starting viewport used in this world.
      */
-    public World(Level theLevel, int viewHeight, int viewTLX, int viewTLY) {
+    public World(Level theLevel, int viewHeight, int viewTLX, int viewTLY, StickMan player) {
         //grid = new Grid(Definitions.DEFAULT_WIDTH, Definitions.DEFAULT_HEIGHT);
-        players = new Player[4];
+        players = new StickMan[4];
         for(int i = 0; i < 4; i++) {
             players[i] = null;
         }
+        players[0] = player;
 
         //defined level
         level = theLevel;
 
         //starting viewport
-        viewPort = new ViewPort(viewHeight, new Pair<Integer, Integer>(viewTLX, viewTLY), height);
+        viewPort = new ViewPort(viewHeight, new IntPair(viewTLX, viewTLY), height);
     }
 
     /**
      * Constructs the world using abnormal height
      * @param height: the custom height used in this world
      * @param theLevel: the level that will run on this world
-     * @param theView: the starting viewport for this world
      */
-    public World(int height, Level theLevel, int viewHeight, int viewTLX, int viewTLY) {
+    public World(int height, Level theLevel, int viewHeight, int viewTLX, int viewTLY, StickMan player) {
         //grid = new Grid(width, height);
         this.height = height;
 
-        players = new Player[4];
+        players = new StickMan[4];
         for(int i = 0; i < 4; i++) {
             players[i] = null;
         }
+        players[0] = player;
         level = theLevel;
 
-        viewPort = new ViewPort(viewHeight, new Pair<Integer, Integer>(viewTLX, viewTLY), height);
+        viewPort = new ViewPort(viewHeight, new IntPair(viewTLX, viewTLY), height);
     }
 
 

@@ -1,10 +1,14 @@
 package com.huskygames.rekhid;
 
+import com.huskygames.rekhid.Levels.TestLevel;
+import com.huskygames.rekhid.actor.StickMan;
 import com.huskygames.rekhid.slugger.input.ControllerInput;
 import com.huskygames.rekhid.slugger.GamePanel;
 import com.huskygames.rekhid.slugger.resource.ResourceManager;
 import com.huskygames.rekhid.slugger.sound.SoundThread;
+import com.huskygames.rekhid.slugger.util.DoublePair;
 import com.huskygames.rekhid.slugger.util.FileUtilities;
+import com.huskygames.rekhid.slugger.world.World;
 import net.java.games.input.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,6 +19,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.util.HashSet;
+
+import static com.huskygames.rekhid.actor.Professor.KUHL;
 
 public class Rekhid extends JFrame {
 
@@ -54,7 +60,9 @@ public class Rekhid extends JFrame {
     private GameState state;
     private long tickCount;
     private MainMenu mainMenu;
+    private World world;
     private ControllerInput input;
+    private StickMan player1;
 
     private Rekhid() {
         super();
@@ -88,6 +96,10 @@ public class Rekhid extends JFrame {
         resourceManager = new ResourceManager();
 
         controllerManager = new ControllerInput(this);
+
+
+        //creates an instance of a player to be used for testing purposes
+        player1 = new StickMan(new DoublePair(0, 0), new DoublePair(0, 0), KUHL);
     }
 
     public static Rekhid getInstance() {
@@ -211,6 +223,9 @@ public class Rekhid extends JFrame {
     }
 
     private void matchTick() {
+        if (world == null) {
+            world = new World(new TestLevel(), 281, 283, 433, player1);
+        }
     }
 
     private void characterSelectTick() {
