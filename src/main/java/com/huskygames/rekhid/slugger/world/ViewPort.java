@@ -1,5 +1,6 @@
 package com.huskygames.rekhid.slugger.world;
 
+import com.huskygames.rekhid.slugger.util.IntPair;
 import javafx.util.Pair;
 
 /**
@@ -15,10 +16,10 @@ public class ViewPort {
     //the world's height, used for sanity checking
     int worldHeight;
 
-    Pair<Integer, Integer> topLeft;
+    IntPair topLeft;
 
 
-    public ViewPort(int theHeight, Pair<Integer, Integer> theCorner, int worldH) {
+    public ViewPort(int theHeight, IntPair theCorner, int worldH) {
         height = theHeight;
         topLeft = theCorner;
         worldHeight = worldH;
@@ -37,12 +38,14 @@ public class ViewPort {
         height = newHeight;
     }
 
-    public void update(Pair<Integer, Integer> newCorner) {
-        if(newCorner.getKey() = )
+    public void update(IntPair newCorner) {
+        if(newCorner.getX() < 0)
+            newCorner.setX(0);
+        if(newCorner.getX() > worldHeight * )
         topLeft = newCorner;
     }
 
-    public void update(int newHeight, Pair<Integer, Integer> newCorner) {
+    public void update(int newHeight, IntPair newCorner) {
         height = newHeight;
         topLeft = newCorner;
     }
@@ -51,7 +54,7 @@ public class ViewPort {
         return height;
     }
 
-    public Pair<Integer, Integer> getTopLeft() {
+    public IntPair getTopLeft() {
         return topLeft;
     }
 }
