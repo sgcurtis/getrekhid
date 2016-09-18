@@ -1,5 +1,6 @@
 package com.huskygames.rekhid.actor;
 
+import com.huskygames.rekhid.Definitions;
 import com.huskygames.rekhid.Rekhid;
 import com.huskygames.rekhid.slugger.actor.Fighter;
 import com.huskygames.rekhid.slugger.actor.Player;
@@ -22,6 +23,7 @@ public class StickMan extends Player {
     private final Professor prof;
     private final SpriteSheet sprite;
     private ControllerInput input;
+    private double speed = 5;
 
     public StickMan(DoublePair pos, DoublePair vel, Professor prof) {
         super(pos, vel);
@@ -97,17 +99,31 @@ public class StickMan extends Player {
             else if (temp.getX() > .1)
                 moveRight();
             else
-                temp.add(new DoublePair(-temp.getX() / 2, 0));
+                temp.addInPlace(new DoublePair(-temp.getX() / 2, 0));
 
         }
     }
 
     private void moveRight() {
-        velocity.add(new DoublePair(5, 0));
+        if(getVelocity().getX() < Definitions.MAXVPOS) {
+            if (getVelocity().getX() + speed > Definitions.MAXVPOS) {
+                velocity.addInPlace(new DoublePair(Definitions.MAXVPOS - speed, 0));
+            } else {
+                velocity.addInPlace(new DoublePair(speed, 0));
+            }
+        }
+
     }
 
     private void moveLeft(){
-        velocity.add(new DoublePair(-5, 0));
+        if(getVelocity().getX() > Definitions.MAXVNEG) {
+            if (getVelocity().getX() - speed < Definitions.MAXVNEG) {
+                velocity.addInPlace(new DoublePair(Definitions.MAXVNEG + speed, 0));
+            }
+            else {
+                velocity.addInPlace(new DoublePair(-speed, 0));
+            }
+        }
     }
     private void moveUp(){
 
@@ -117,13 +133,12 @@ public class StickMan extends Player {
     }
 
     @Override
-    public Set<Shape> getCollisons() {
+    public Set<Shape> getCollisions() {
         return null;
     }
 
     private void attack(){
 
-        DoublePair temp = input.getStickForPlayer(this);
         switch(getPrimaryDirection(input.getStickForPlayer(this))){
             case 0: // down
                 break;
