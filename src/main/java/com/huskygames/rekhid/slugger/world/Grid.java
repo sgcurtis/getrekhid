@@ -1,5 +1,6 @@
 package com.huskygames.rekhid.slugger.world;
 
+@Deprecated
 /**
  * Grid object to place objects on and around
  * Created by Kyle on 9/17/2016.

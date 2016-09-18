@@ -9,24 +9,41 @@ import com.huskygames.rekhid.slugger.actor.Player;
  */
 public class World {
 
-    private Grid grid;
+    //holds the height and width, in case it's not default
+    private int height = Definitions.DEFAULT_HEIGHT;
+    private int width = Definitions.DEFAULT_WIDTH;
+
+    //private Grid grid;
     private Player[] players;
+
+    //level contains its own colliders
     private Level level;
 
-    public World() {
-        grid = new Grid(Definitions.DEFAULT_WIDTH, Definitions.DEFAULT_HEIGHT);
+    //scale
+    private double scale;
+
+    private ViewPort viewPort;
+
+    public World(Level theLevel, ViewPort theView) {
+        //grid = new Grid(Definitions.DEFAULT_WIDTH, Definitions.DEFAULT_HEIGHT);
         players = new Player[4];
         for(int i = 0; i < 4; i++) {
             players[i] = null;
         }
+
+        //defined level
+        level = theLevel;
+
+        //starting viewport
+        viewPort = theView;
     }
 
-    public World(int width, int height) {
-        grid = new Grid(width, height);
+    public World(int width, int height, Level theLevel) {
+        //grid = new Grid(width, height);
         players = new Player[4];
         for(int i = 0; i < 4; i++) {
             players[i] = null;
         }
+        level = theLevel;
     }
-
 }
