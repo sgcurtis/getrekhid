@@ -41,12 +41,28 @@ public class ViewPort {
     public void update(IntPair newCorner) {
         if(newCorner.getX() < 0)
             newCorner.setX(0);
-        if(newCorner.getX() > worldHeight * )
+        if(newCorner.getX() > ((worldHeight * 16 / 9) - (height * 16 / 9)))
+            newCorner.setX(((worldHeight * 16 / 9) - (height * 16 / 9)));
+        if(newCorner.getY() < 0)
+            newCorner.setY(0);
+        if(newCorner.getY() > (worldHeight - height))
+            newCorner.setY((worldHeight - height));
         topLeft = newCorner;
     }
 
     public void update(int newHeight, IntPair newCorner) {
+        if (newHeight > worldHeight)
+            height = worldHeight;
         height = newHeight;
+
+        if(newCorner.getX() < 0)
+            newCorner.setX(0);
+        if(newCorner.getX() > ((worldHeight * 16 / 9) - (height * 16 / 9)))
+            newCorner.setX(((worldHeight * 16 / 9) - (height * 16 / 9)));
+        if(newCorner.getY() < 0)
+            newCorner.setY(0);
+        if(newCorner.getY() > (worldHeight - height))
+            newCorner.setY((worldHeight - height));
         topLeft = newCorner;
     }
 
