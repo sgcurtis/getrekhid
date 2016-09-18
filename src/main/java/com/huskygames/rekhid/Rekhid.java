@@ -120,10 +120,11 @@ public class Rekhid extends JFrame {
         // cleanup here
     }
 
-    public ResourceManager getResourceManager() {
-        return resourceManager;
-    }
+    public ResourceManager getResourceManager() { return resourceManager; }
 
+    public ControllerInput getControllerManager() {
+        return controllerManager;
+    }
     public MainMenu getMainMenu() {
         return mainMenu;
     }
@@ -172,10 +173,12 @@ public class Rekhid extends JFrame {
                 // GAMESTATE SPECIFIC
                 switch (state) {
                     case MENU:
-                        menuTick();
+                        //menuTick();
+                        state = GameState.CHARACTER_SELECT;
                         break;
                     case CHARACTER_SELECT:
-                        characterSelectTick();
+                        //characterSelectTick();
+                        state = GameState.MATCH;
                         break;
                     case MATCH:
                         matchTick();
@@ -211,6 +214,7 @@ public class Rekhid extends JFrame {
     }
 
     private void matchTick() {
+
     }
 
     private void characterSelectTick() {

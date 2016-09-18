@@ -28,7 +28,9 @@ public class GamePanel extends JPanel {
         // terrible lock contention, but it sure is easy
         synchronized (parent.getGameLock()) {
             // ALL GAME DRAWING CODE MUST BE IN HERE
+            if (parent.getGameState() == Rekhid.GameState.MATCH) {
 
+            }
 
             if (parent.getGameState() == Rekhid.GameState.MENU) {
                 parent.getMainMenu().draw((Graphics2D) g);
