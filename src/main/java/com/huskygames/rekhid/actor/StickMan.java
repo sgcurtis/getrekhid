@@ -24,7 +24,7 @@ public class StickMan extends Fighter {
 
     private Image getHead() {
         LoadedImage temp = null;
-        switch(prof) {
+        switch (prof) {
             case KUHL:
                 temp = (LoadedImage) Rekhid.getInstance().getResourceManager()
                         .requestResource(Resource.KUHLS_HEAD);
@@ -42,7 +42,7 @@ public class StickMan extends Fighter {
     }
 
     @Override
-    public Set<Shape> getCollisons() {
+    public Set<Shape> getCollisions() {
         return null;
     }
 }
