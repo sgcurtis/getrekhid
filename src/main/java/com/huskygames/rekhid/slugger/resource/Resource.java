@@ -13,6 +13,7 @@ public enum Resource {
     LEOS_HEAD("images/leo.jpg", Type.IMAGE);
 
 
+
     // END RESOURCE LIST
 
     final Type type;
