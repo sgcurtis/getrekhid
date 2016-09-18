@@ -9,6 +9,9 @@ public class Definitions {
 
     public static final Rekhid.GameState DEFAULT_STATE = Rekhid.GameState.MENU;
 
-    public static final int DEFAULT_WIDTH = 1366;
-    public static final int DEFAULT_HEIGHT = 768;
+    public static final int DEFAULT_WIDTH = 1280;
+    public static final int DEFAULT_HEIGHT = 720;
+
+    public static final double MAXVPOS = 20;
+    public static final double MAXVNEG = -20;
 }
