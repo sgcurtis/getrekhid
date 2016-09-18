@@ -10,6 +10,8 @@ public enum Resource {
     KUHLS_HEAD("images/kuhl.jpg", Type.IMAGE),
     STICK_MAN("spritesheets/sticks.png", Type.SPRITE_SHEET);
 
+
+
     // END RESOURCE LIST
 
     final Type type;
