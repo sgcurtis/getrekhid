@@ -8,7 +8,8 @@ public enum Resource {
     MENU_BG_MUSIC("music/meganddia.mp3", Type.MUSIC),
 
     KUHLS_HEAD("images/kuhl.jpg", Type.IMAGE),
-    STICK_MAN("spritesheets/sticks.png", Type.SPRITE_SHEET);
+    STICK_MAN("spritesheets/sticks.png", Type.SPRITE_SHEET),
+    LEOS_HEAD("images/leo.jpg", Type.IMAGE);
 
     // END RESOURCE LIST
 

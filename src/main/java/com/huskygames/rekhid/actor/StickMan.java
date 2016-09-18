@@ -29,6 +29,9 @@ public class StickMan extends Fighter {
                 temp = (LoadedImage) Rekhid.getInstance().getResourceManager()
                         .requestResource(Resource.KUHLS_HEAD);
                 break;
+            case LEO:
+                temp = (LoadedImage) Rekhid.getInstance().getResourceManager()
+                        .requestResource(Resource.LEOS_HEAD);
         }
         return temp.getImage();
     }

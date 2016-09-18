@@ -1,4 +1,4 @@
-package com.huskygames.rekhid.world;
+package com.huskygames.rekhid.slugger.world;
 
 import com.huskygames.rekhid.slugger.util.DoublePair;
 import com.huskygames.rekhid.slugger.util.collison.shape.Rectangle;
