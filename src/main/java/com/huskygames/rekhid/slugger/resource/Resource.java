@@ -11,6 +11,8 @@ public enum Resource {
     STICK_MAN("spritesheets/sticks.png", Type.SPRITE_SHEET),
     LEOS_HEAD("images/leo.jpg", Type.IMAGE);
 
+
+
     // END RESOURCE LIST
 
     final Type type;
