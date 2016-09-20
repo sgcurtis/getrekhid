@@ -38,6 +38,11 @@ public class DoublePair {
         y = scalar + y;
     }
 
+    public void addInPlace(double x, double y) {
+        this.x += x;
+        this.y += y;
+    }
+
     public Point toPoint() {
         return new Point((int) x, (int) y);
     }
@@ -53,6 +58,12 @@ public class DoublePair {
         DoublePair temp = new DoublePair(0, 0);
         temp.addInPlace(this);
         temp.addInPlace(pair.neg());
+        return temp;
+    }
+
+    public DoublePair subtract(IntPair pair) {
+        DoublePair temp = new DoublePair(-pair.getX(), -pair.getY());
+        temp.addInPlace(this);
         return temp;
     }
 
@@ -81,5 +92,19 @@ public class DoublePair {
         return false;
     }
 
+    public DoublePair multiply(double scalar) {
+        return new DoublePair(x * scalar, y * scalar);
+    }
 
+    public IntPair rounded() {
+        return new IntPair((int)Math.round(x), (int)Math.round(y));
+    }
+
+    @Override
+    public String toString() {
+        return "DoublePair{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
+    }
 }

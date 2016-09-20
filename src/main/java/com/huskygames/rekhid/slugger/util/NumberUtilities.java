@@ -1,12 +1,12 @@
 package com.huskygames.rekhid.slugger.util;
 
 public class NumberUtilities {
-    public static int truncate(int value, int max) {
-        if (value > max) {
-            return max;
+    public static int truncate(int z, int base, int max) {
+        if (z + base > max) {
+            return max - z;
         }
         else {
-            return value;
+            return z;
         }
     }
 

@@ -1,8 +1,5 @@
 package com.huskygames.rekhid.slugger.util;
 
-/**
- * Created by Kyle on 9/17/2016.
- */
 public class IntPair {
     private int x;
     private int y;
@@ -26,5 +23,13 @@ public class IntPair {
 
     public void setY(int newY) {
         y = newY;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
     }
 }

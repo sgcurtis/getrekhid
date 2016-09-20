@@ -1,4 +1,6 @@
 package com.huskygames.rekhid.slugger.util.collison.shape;
 
-public interface Shape {
+import com.huskygames.rekhid.slugger.Positionable;
+
+public interface Shape extends Positionable {
 }

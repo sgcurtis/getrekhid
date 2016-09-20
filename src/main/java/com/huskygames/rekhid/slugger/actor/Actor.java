@@ -1,13 +1,20 @@
 package com.huskygames.rekhid.slugger.actor;
 
-
 import com.huskygames.rekhid.slugger.physics.PhysicsObject;
 import com.huskygames.rekhid.slugger.util.DoublePair;
+import com.huskygames.rekhid.slugger.world.Heightable;
+import com.huskygames.rekhid.slugger.world.ViewPort;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public abstract class Actor extends PhysicsObject {
+import java.awt.*;
+import java.awt.image.BufferedImage;
+
+public abstract class Actor extends PhysicsObject implements Heightable {
     private final static Logger logger = LogManager.getLogger(Actor.class);
+    protected int lifetime;
+
+    public static final int FOREVER = -1;
 
     public Actor() {
         this(new DoublePair(0,0), new DoublePair(0,0));
@@ -20,4 +27,19 @@ public abstract class Actor extends PhysicsObject {
     }
 
     public abstract void tick();
+
+    public abstract BufferedImage getSprite();
+
+    /**
+     * Gets the ratio width/height of the sprite
+     */
+    public abstract double getAspectRatio();
+
+    public int getLifetime() {
+        return lifetime;
+    }
+
+    public DoublePair getRelativePosition(ViewPort port) {
+        return getPosition().subtract(port.getTopLeft());
+    }
 }

@@ -25,7 +25,7 @@ public class LoadedImage extends LoadedResource {
         }
     }
 
-    public Image getImage() {
+    public BufferedImage getImage() {
         return image;
     }
 }

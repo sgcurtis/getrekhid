@@ -7,7 +7,7 @@ import com.huskygames.rekhid.slugger.util.collison.shape.Rectangle;
 public class CollisonChecker {
 
     public static boolean intersects(Circle a, Circle b) {
-        DoublePair temp = a.getCenter().subtract(b.getCenter());
+        DoublePair temp = a.getPosition().subtract(b.getPosition());
         double x = temp.getX();
         double y = temp.getY();
 
@@ -24,8 +24,8 @@ public class CollisonChecker {
         double rectWidth = Math.abs(b.getPt1().getX() - b.getPt2().getX());
         double rectHeight = Math.abs(b.getPt1().getY() - b.getPt2().getY());
 
-        double cdX = Math.abs(a.getCenter().getX() - rectMin.getX());
-        double cdY = Math.abs(a.getCenter().getY() - rectMin.getY());
+        double cdX = Math.abs(a.getPosition().getX() - rectMin.getX());
+        double cdY = Math.abs(a.getPosition().getY() - rectMin.getY());
 
         if (cdX > rectWidth / 2 + a.getRadius()) return false;
         if (cdY > rectHeight / 2 + a.getRadius()) return false;

@@ -18,6 +18,7 @@ import javax.sound.sampled.AudioSystem;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
 import java.util.HashSet;
 
 import static com.huskygames.rekhid.actor.Professor.KUHL;
@@ -83,6 +84,8 @@ public class Rekhid extends JFrame {
         int computedY = screenHeight / 2 - Definitions.DEFAULT_HEIGHT / 2;
         this.setBounds(computedX, computedY, Definitions.DEFAULT_WIDTH, Definitions.DEFAULT_HEIGHT);
 
+        this.setSize(Definitions.DEFAULT_WIDTH, Definitions.DEFAULT_HEIGHT);
+
 
         panel = new GamePanel(this);
 
@@ -92,14 +95,13 @@ public class Rekhid extends JFrame {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setVisible(true);
 
-        checkControlDevices();
         resourceManager = new ResourceManager();
 
         controllerManager = new ControllerInput(this);
-
+        checkControlDevices();
 
         //creates an instance of a player to be used for testing purposes
-        player1 = new StickMan(new DoublePair(0, 0), new DoublePair(0, 0), KUHL);
+        player1 = new StickMan(new DoublePair(50, 300), new DoublePair(0, 0), KUHL);
     }
 
     public static Rekhid getInstance() {
@@ -109,6 +111,8 @@ public class Rekhid extends JFrame {
     public static void main(String[] args) {
 
         Thread.currentThread().setName("MainThread");
+
+        logger.info("PID: " + ManagementFactory.getRuntimeMXBean().getName());
 
         Rekhid game = new Rekhid();
         logger.info("Created game instance.");
@@ -160,8 +164,8 @@ public class Rekhid extends JFrame {
     private void checkControlDevices() {
         Controller[] controllers = ControllerEnvironment.getDefaultEnvironment().getControllers();
         logger.info("Detected usable controllers:");
-        for (Controller controller : controllers) {
-            logger.error(controller.getName() + "\t" + controller.getType() + "\t" + controller.getPortType());
+        for (Controller controller : controllerManager.getValidControllers()) {
+            logger.info(controller.getName() + "\t" + controller.getType() + "\t" + controller.getPortType());
         }
     }
 
@@ -191,8 +195,10 @@ public class Rekhid extends JFrame {
                     case CHARACTER_SELECT:
                         //characterSelectTick();
                         state = GameState.MATCH;
+                        world = new World(new TestLevel(), 500, 0, 0, player1);
                         break;
                     case MATCH:
+                        this.setSize(Definitions.DEFAULT_WIDTH, Definitions.DEFAULT_HEIGHT);
                         matchTick();
                         break;
                     case POST_MATCH:
@@ -226,9 +232,7 @@ public class Rekhid extends JFrame {
     }
 
     private void matchTick() {
-        if (world == null) {
-            world = new World(new TestLevel(), 281, 283, 433, player1);
-        }
+        world.tick();
     }
 
     private void characterSelectTick() {
@@ -242,6 +246,14 @@ public class Rekhid extends JFrame {
 
     public GameState getGameState() {
         return state;
+    }
+
+    public World getWorld() {
+        return world;
+    }
+
+    public long getTickCount() {
+        return tickCount;
     }
 
     public enum GameState {

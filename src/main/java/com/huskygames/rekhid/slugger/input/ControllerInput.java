@@ -43,6 +43,9 @@ public class ControllerInput {
                     if (type == Controller.Type.FINGERSTICK) {
                         isGood = true;
                     }
+                    if (type == Controller.Type.KEYBOARD) {
+                        isGood = true;
+                    }
                     return isGood;
                 }
         ).collect(Collectors.toList());

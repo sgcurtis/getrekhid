@@ -2,6 +2,8 @@ package com.huskygames.rekhid.actor;
 
 import com.huskygames.rekhid.Definitions;
 import com.huskygames.rekhid.Rekhid;
+import com.huskygames.rekhid.slugger.actor.Actor;
+import com.huskygames.rekhid.slugger.actor.ActorCircle;
 import com.huskygames.rekhid.slugger.actor.Fighter;
 import com.huskygames.rekhid.slugger.actor.Player;
 import com.huskygames.rekhid.slugger.input.ButtonEvent;
@@ -11,9 +13,11 @@ import com.huskygames.rekhid.slugger.resource.Resource;
 import com.huskygames.rekhid.slugger.resource.sprite.SpriteSheet;
 import com.huskygames.rekhid.slugger.util.DoublePair;
 import com.huskygames.rekhid.slugger.util.collison.shape.Shape;
+import com.huskygames.rekhid.slugger.world.Heightable;
 
 import java.awt.*;
 
+import java.awt.image.BufferedImage;
 import java.util.Set;
 
 import java.util.*;
@@ -23,17 +27,25 @@ public class StickMan extends Player {
     private final Professor prof;
     private final SpriteSheet sprite;
     private ControllerInput input;
+    private Set<Shape> colliders = new HashSet<>();
     private double speed = 5;
+
+    private long tickcount = 0;
 
     public StickMan(DoublePair pos, DoublePair vel, Professor prof) {
         super(pos, vel);
         this.prof = prof;
 
+        this.lifetime = Actor.FOREVER;
+
         this.sprite = (SpriteSheet) Rekhid.getInstance().getResourceManager().requestResource(Resource.STICK_MAN);
         this.input = Rekhid.getInstance().getControllerManager();
+
+        colliders.add(new ActorCircle(new DoublePair(0, getHeight()/4), this, getHeight()/4));
+        colliders.add(new ActorCircle(new DoublePair(0, -getHeight()/4), this, getHeight()/4));
     }
 
-    private Image getHead() {
+    private BufferedImage getHead() {
         LoadedImage temp = null;
         switch (prof) {
             case KUHL:
@@ -49,6 +61,8 @@ public class StickMan extends Player {
 
     @Override
     public void tick() {
+        position.addInPlace(0.5, 0);
+        tickcount++;
         if(executing > 0){
             switch(input.consumeEventsForPlayer(this).poll().getButton()) {
                 case ATTACK_BUTTON:
@@ -70,6 +84,16 @@ public class StickMan extends Player {
         } else{
             executing--;
         }
+    }
+
+    @Override
+    public BufferedImage getSprite() {
+        return sprite.getSprite((int) tickcount / 240, 1, tickcount % 120 > 60);
+    }
+
+    @Override
+    public double getAspectRatio() {
+        return getSprite().getWidth() / (double) getSprite().getHeight();
     }
 
     private int getPrimaryDirection(DoublePair input){
@@ -134,11 +158,10 @@ public class StickMan extends Player {
 
     @Override
     public Set<Shape> getCollisions() {
-        return null;
+        return colliders;
     }
 
     private void attack(){
-
         switch(getPrimaryDirection(input.getStickForPlayer(this))){
             case 0: // down
                 break;
@@ -153,4 +176,8 @@ public class StickMan extends Player {
         }
     }
 
+    @Override
+    public int getHeight() {
+        return Definitions.DEFAULT_PLAYER_HEIGHT;
+    }
 }

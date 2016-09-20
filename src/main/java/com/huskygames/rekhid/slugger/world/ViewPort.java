@@ -1,11 +1,11 @@
 package com.huskygames.rekhid.slugger.world;
 
+import com.huskygames.rekhid.Rekhid;
 import com.huskygames.rekhid.slugger.util.IntPair;
 import javafx.util.Pair;
 
 /**
  * The object that controls the viewing position and zoom for the matches.
- * Created by Kyle on 9/17/2016.
  */
 public class ViewPort {
 
@@ -18,13 +18,19 @@ public class ViewPort {
 
     IntPair topLeft;
 
-
-    public ViewPort(int theHeight, IntPair theCorner, int worldH) {
-        height = theHeight;
-        topLeft = theCorner;
-        worldHeight = worldH;
+    @Override
+    public String toString() {
+        return "ViewPort{" +
+                "height=" + height +
+                ", topLeft=" + topLeft +
+                '}';
     }
 
+    public ViewPort(int height, IntPair corner, int worldHeight) {
+        this.height = height;
+        topLeft = corner;
+        this.worldHeight = worldHeight;
+    }
 
     /**
      * Updates the height of the viewport
@@ -38,7 +44,7 @@ public class ViewPort {
         height = newHeight;
     }
 
-    public void update(IntPair newCorner) {
+    public void setCorner(IntPair newCorner) {
         if(newCorner.getX() < 0)
             newCorner.setX(0);
         if(newCorner.getX() > ((worldHeight * 16 / 9) - (height * 16 / 9)))
@@ -50,7 +56,7 @@ public class ViewPort {
         topLeft = newCorner;
     }
 
-    public void update(int newHeight, IntPair newCorner) {
+    public void setCorner(int newHeight, IntPair newCorner) {
         if (newHeight > worldHeight)
             height = worldHeight;
         height = newHeight;
@@ -72,5 +78,10 @@ public class ViewPort {
 
     public IntPair getTopLeft() {
         return topLeft;
+    }
+
+    public IntPair getWindowSize() {
+        return new IntPair(Rekhid.getInstance().getWidth(),
+                Rekhid.getInstance().getHeight());
     }
 }

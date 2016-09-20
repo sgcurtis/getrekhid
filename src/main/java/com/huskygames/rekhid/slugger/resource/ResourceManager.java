@@ -42,8 +42,8 @@ public class ResourceManager {
         }
         else if (res.type == Resource.Type.SPRITE_SHEET) {
             String path = res.location;
-            InputStream defs = SpriteSheet.class.getResourceAsStream
-                    (path.substring(0, path.length() - 5) + ".properties");
+            String defPath = path.substring(0, path.length() - 4) + ".properties";
+            InputStream defs = ResourceManager.class.getClassLoader().getResourceAsStream(defPath);
             temp = new SpriteSheet(path, stream, defs);
         }
         else {

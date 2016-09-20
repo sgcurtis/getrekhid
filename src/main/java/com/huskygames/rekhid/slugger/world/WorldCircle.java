@@ -5,7 +5,7 @@ import com.huskygames.rekhid.slugger.util.collison.shape.Circle;
 
 public class WorldCircle extends Circle {
     @Override
-    public DoublePair getCenter() {
+    public DoublePair getPosition() {
         return null;
     }
 

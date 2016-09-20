@@ -10,6 +10,11 @@ public class ActorRectangle extends Rectangle {
     private Actor parent;
 
     @Override
+    public DoublePair getPosition() {
+        return getPt1().getMin(getPt2());
+    }
+
+    @Override
     public DoublePair getPt1() {
         return parent.getPosition().add(relPt1);
     }

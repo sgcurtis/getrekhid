@@ -3,7 +3,6 @@ package com.huskygames.rekhid.slugger.physics;
 import java.util.HashSet;
 
 public class PhysicsManager {
-    public static final double GRAVITY = 10.0;
     private static PhysicsManager instance;
 
     private final HashSet<PhysicsObject> objects = new HashSet<>();
