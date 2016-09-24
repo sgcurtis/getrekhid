@@ -1,6 +1,5 @@
 package com.huskygames.rekhid;
 
-import com.huskygames.rekhid.Levels.TestLevel;
 import com.huskygames.rekhid.actor.StickMan;
 import com.huskygames.rekhid.slugger.input.ControllerInput;
 import com.huskygames.rekhid.slugger.GamePanel;
@@ -23,7 +22,6 @@ import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.util.HashSet;
 
-import static com.huskygames.rekhid.actor.Professor.KUHL;
 import static com.huskygames.rekhid.actor.Professor.LEO;
 
 public class Rekhid extends JFrame {
@@ -80,7 +78,6 @@ public class Rekhid extends JFrame {
         logger.info("Detected screen resolution: " + screenWidth + "x" + screenHeight);
 
         this.setTitle(Definitions.NAME);
-        //this.getContentPane().setLayout(null);
 
         int computedX = screenWidth / 2 - Definitions.DEFAULT_WIDTH / 2;
         int computedY = screenHeight / 2 - Definitions.DEFAULT_HEIGHT / 2;

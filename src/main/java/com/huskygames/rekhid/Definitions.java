@@ -52,7 +52,7 @@ public class Definitions {
     static {
         Font temp = null;
         try {
-            InputStream res = Definitions.class.getClassLoader().getResourceAsStream("roboto.ttf");
+            InputStream res = Definitions.class.getClassLoader().getResourceAsStream("weebfont.ttf");
             temp = Font.createFont(Font.TRUETYPE_FONT, res);
             temp = temp.deriveFont(30f);
         } catch (FontFormatException | IOException e) {

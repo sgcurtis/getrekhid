@@ -17,6 +17,9 @@ public class ResourceManager {
 
     private HashMap<Resource, LoadedResource> cache = new HashMap<>();
 
+    public ResourceManager() {
+    }
+
     public void suggestLoad(Resource res) {
         // TODO: for now, this just loads it normally. Make this smarter
         requestResource(res);
