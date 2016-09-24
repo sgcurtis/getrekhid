@@ -39,9 +39,11 @@ public class ControllerInput {
             if (controller.getKey().getType() == Controller.Type.KEYBOARD) {
                 while (eventQueue.getNextEvent(temp)) {
                     ButtonType type = keyboardmap.translate(temp.getComponent().getIdentifier());
-                    if (type != null) {
-                        ButtonEvent event = new ButtonEvent(type, controller.getValue(), temp.getNanos());
-                        queues.get(controller.getValue()).add(event);
+                    if (temp.getValue() == 1) {
+                        if (type != null) {
+                            ButtonEvent event = new ButtonEvent(type, controller.getValue(), temp.getNanos());
+                            queues.get(controller.getValue()).add(event);
+                        }
                     }
                 }
 

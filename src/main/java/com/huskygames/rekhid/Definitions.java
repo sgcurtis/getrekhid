@@ -5,6 +5,9 @@ import com.huskygames.rekhid.slugger.util.DoublePair;
 import com.huskygames.rekhid.slugger.util.IntPair;
 
 import java.awt.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.DecimalFormat;
 
 public class Definitions {
     public static final int TARGET_FPS = 60;
@@ -29,12 +32,35 @@ public class Definitions {
 
     public static final DoublePair GRAVITY = new DoublePair(0, 0.09);
 
-    public static final boolean DRAW_HITBOXES = true;
+    public static final boolean DRAW_HITBOXES = false;
 
     public static final Color HITBOX_COLOR = new Color(0, 100, 255, 100);
 
     public static final boolean NOISY_RENDER = false;
     public static final boolean NOISY_COLLIDER = false;
+
+    public static final Font DISPLAY_FONT;
+    public static final Font FPS_FONT;
+
+    private static final String DAMAGE_PATTERN = "###%";
+
+    public static final DecimalFormat DAMAGE_FORMATTER = new DecimalFormat(DAMAGE_PATTERN);
+
+    public static final Color SCORE_BACKGROUND = new Color(10, 255, 50, 140);
+    public static final IntPair SCORE_BACKGROUND_SIZE = new IntPair(150, 80);
+
+    static {
+        Font temp = null;
+        try {
+            InputStream res = Definitions.class.getClassLoader().getResourceAsStream("roboto.ttf");
+            temp = Font.createFont(Font.TRUETYPE_FONT, res);
+            temp = temp.deriveFont(30f);
+        } catch (FontFormatException | IOException e) {
+            e.printStackTrace();
+        }
+        DISPLAY_FONT = temp;
+        FPS_FONT = temp.deriveFont(12f);
+    }
 
     public static final double DEADZONE = 0.1;
 }

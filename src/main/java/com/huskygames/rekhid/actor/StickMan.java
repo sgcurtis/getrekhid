@@ -70,29 +70,31 @@ public class StickMan extends Player {
         if (executing == 0) {
 
             Queue<ButtonEvent> buttonEvents = input.consumeEventsForPlayer(this);
-            if (buttonEvents.peek() != null) {
-                switch (buttonEvents.poll().getButton()) {
-                    case ATTACK_BUTTON:
-                        break;
-                    case SPECIAL_BUTTON:
+            if (buttonEvents != null) {
+                if (buttonEvents.peek() != null) {
+                    switch (buttonEvents.poll().getButton()) {
+                        case ATTACK_BUTTON:
+                            break;
+                        case SPECIAL_BUTTON:
 
-                        break;
-                    case JUMP_BUTTON:
-                        velocity.setY(-1);
-                        position.setY(position.getY() - 3);
-                        break;
-                    case SHIELD_BUTTON:
-                        break;
-                    case TAUNT_BUTTON:
-                        break;
-                    case START_BUTTON:
-                        break;
-                    default:
+                            break;
+                        case JUMP_BUTTON:
+                            velocity.setY(-1);
+                            position.setY(position.getY() - 3);
+                            break;
+                        case SHIELD_BUTTON:
+                            break;
+                        case TAUNT_BUTTON:
+                            break;
+                        case START_BUTTON:
+                            break;
+                        default:
 
-                        break;
+                            break;
+                    }
                 }
+                getMovement();
             }
-            getMovement();
         } else {
             executing--;
         }
@@ -192,5 +194,18 @@ public class StickMan extends Player {
     @Override
     public int getHeight() {
         return Definitions.DEFAULT_PLAYER_HEIGHT;
+    }
+
+    @Override
+    public String getName() {
+        if (prof == Professor.KUHL) {
+            return "DR. KUHL";
+        }
+        else if (prof == Professor.LEO) {
+            return "LEO";
+        }
+        else {
+            return "UNKNOWN PROFESSOR";
+        }
     }
 }

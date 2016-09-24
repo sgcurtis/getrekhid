@@ -7,7 +7,7 @@ import com.huskygames.rekhid.actor.StickMan;
 import com.huskygames.rekhid.slugger.Drawable;
 import com.huskygames.rekhid.slugger.actor.Actor;
 import com.huskygames.rekhid.slugger.actor.ActorCircle;
-import com.huskygames.rekhid.slugger.actor.Player;
+import com.huskygames.rekhid.slugger.actor.Fighter;
 import com.huskygames.rekhid.slugger.physics.Collidable;
 import com.huskygames.rekhid.slugger.physics.PhysicsManager;
 import com.huskygames.rekhid.slugger.util.DoublePair;
@@ -22,6 +22,9 @@ import org.apache.logging.log4j.Logger;
 import java.awt.*;
 import java.awt.image.AffineTransformOp;
 
+import static com.huskygames.rekhid.actor.Professor.KUHL;
+import static com.huskygames.rekhid.actor.Professor.LEO;
+
 
 /**
  * The world object, contains the grid, and all the objects on the grid.
@@ -33,7 +36,7 @@ public class World implements Drawable {
     private int height = Definitions.DEFAULT_WORLD_SIZE.getX();
 
     //private Grid grid;
-    private StickMan[] players;
+    private Fighter[] fighters;
 
     //level contains its own colliders
     private Level level;
@@ -50,12 +53,13 @@ public class World implements Drawable {
      */
     public World(Level level, StickMan player) {
         //grid = new Grid(Definitions.DEFAULT_WIDTH, Definitions.DEFAULT_HEIGHT);
-        players = new StickMan[4];
+        fighters = new StickMan[4];
         for (int i = 0; i < 4; i++) {
-            players[i] = null;
+            fighters[i] = null;
         }
         PhysicsManager.getInstance().addObject(player);
-        players[0] = player;
+        fighters[0] = player;
+        fighters[1] = new StickMan(new DoublePair(1400, 300), new DoublePair(0, 0), KUHL);
 
         //defined level
         this.level = level;
@@ -76,11 +80,11 @@ public class World implements Drawable {
         //grid = new Grid(width, height);
         this.height = height;
 
-        players = new StickMan[4];
+        fighters = new StickMan[4];
         for (int i = 0; i < 4; i++) {
-            players[i] = null;
+            fighters[i] = null;
         }
-        players[0] = player;
+        fighters[0] = player;
         level = theLevel;
 
         viewPort = new ViewPort(viewHeight, new IntPair(viewTLX, viewTLY), height);
@@ -255,8 +259,8 @@ public class World implements Drawable {
         // draw the background
         drawBackground(context);
 
-        // draw the players
-        for (Player ply : players) {
+        // draw the fighters
+        for (Fighter ply : fighters) {
             if (ply != null) {
                 drawActor(ply, context);
             }
@@ -264,18 +268,20 @@ public class World implements Drawable {
     }
 
     public void tick() {
-
         int index = (int) (Rekhid.getInstance().getTickCount() / sizeAlternator.length) % sizeAlternator.length;
-       //w this.viewPort.setHeight(sizeAlternator[index]);
-        for (Player ply : players) {
+        this.viewPort.setHeight(sizeAlternator[index]);
+        for (Fighter ply : fighters) {
             if (ply != null) {
                 ply.tick();
             }
         }
-
     }
 
     public Level getLevel() {
         return level;
+    }
+
+    public Fighter[] getFighters() {
+        return fighters;
     }
 }

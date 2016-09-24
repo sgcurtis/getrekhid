@@ -28,4 +28,6 @@ public abstract class Fighter extends Actor {
     public void healDamage(double amount) {
         this.damage -= amount;
     }
+
+    public abstract String getName();
 }

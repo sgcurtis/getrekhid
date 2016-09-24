@@ -24,6 +24,7 @@ import java.lang.management.ManagementFactory;
 import java.util.HashSet;
 
 import static com.huskygames.rekhid.actor.Professor.KUHL;
+import static com.huskygames.rekhid.actor.Professor.LEO;
 
 public class Rekhid extends JFrame {
 
@@ -105,7 +106,7 @@ public class Rekhid extends JFrame {
 
 
         //creates an instance of a player to be used for testing purposes
-        player1 = new StickMan(new DoublePair(1250, 300), new DoublePair(0, 0), KUHL);
+        player1 = new StickMan(new DoublePair(1250, 300), new DoublePair(0, 0), LEO);
     }
 
     public static Rekhid getInstance() {
