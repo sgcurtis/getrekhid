@@ -5,7 +5,7 @@ import net.java.games.input.Component;
 import java.io.InputStream;
 import java.util.HashMap;
 
-public class KeyboardTranslator extends  ControlMapper {
+public class KeyboardTranslator extends ControlMapper {
 
     private static final HashMap<Component.Identifier, ButtonType> MAP = new HashMap<>();
 
@@ -22,4 +22,14 @@ public class KeyboardTranslator extends  ControlMapper {
     public ButtonType translate(Component.Identifier iden) {
         return MAP.get(iden);
     }
+
+    public Component.Identifier getLeft() {
+        return Component.Identifier.Key.A;
+    }
+
+    public Component.Identifier getRight() {
+        return Component.Identifier.Key.D;
+    }
+
+
 }

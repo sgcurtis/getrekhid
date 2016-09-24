@@ -4,14 +4,19 @@ import com.huskygames.rekhid.slugger.util.DoublePair;
 import com.huskygames.rekhid.slugger.util.collison.shape.Circle;
 
 public class ActorCircle extends Circle {
-    public DoublePair getOffset() {
-        return offset;
-    }
-
     private DoublePair offset;
     private Actor parent;
-
     private double r;
+
+    @Override
+    public String toString() {
+        return "ActorCircle{" +
+                "offset=" + offset +
+                ", parent=" + parent +
+                ", r=" + r +
+                ", trX=" + parent.getPosition().add(offset) +
+                '}';
+    }
 
     public ActorCircle(DoublePair offset, Actor parent, double r) {
         this.offset = offset;
@@ -20,6 +25,10 @@ public class ActorCircle extends Circle {
             throw new IllegalArgumentException("Radius cannot be negative!");
         }
         this.r = r;
+    }
+
+    public DoublePair getOffset() {
+        return offset;
     }
 
     @Override

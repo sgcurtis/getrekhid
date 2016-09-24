@@ -92,6 +92,11 @@ public class DoublePair {
         return false;
     }
 
+    public void zeroInPlace() {
+        x = 0.0;
+        y = 0.0;
+    }
+
     public DoublePair multiply(double scalar) {
         return new DoublePair(x * scalar, y * scalar);
     }

@@ -1,11 +1,23 @@
 package com.huskygames.rekhid.slugger.physics;
 
+import com.huskygames.rekhid.slugger.world.World;
+
 import java.util.HashSet;
 
 public class PhysicsManager {
     private static PhysicsManager instance;
 
     private final HashSet<PhysicsObject> objects = new HashSet<>();
+
+    private World world;
+
+    public void setWorld(World world) {
+        this.world = world;
+    }
+
+    public PhysicsManager() {
+        instance = this;
+    }
 
     public static PhysicsManager getInstance() {
         if (instance == null) {
@@ -20,8 +32,10 @@ public class PhysicsManager {
 
     public void updateObjects() {
         for (PhysicsObject object: objects) {
-            object.update();
+            object.update(world);
         }
+
+
     }
 
 

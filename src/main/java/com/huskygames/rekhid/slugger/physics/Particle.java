@@ -1,6 +1,7 @@
 package com.huskygames.rekhid.slugger.physics;
 
 import com.huskygames.rekhid.slugger.Drawable;
+import com.huskygames.rekhid.slugger.world.World;
 
 public abstract class Particle extends PhysicsObject implements Drawable {
 
@@ -46,8 +47,8 @@ public abstract class Particle extends PhysicsObject implements Drawable {
     }
 
     @Override
-    public void update() {
-        super.update();
+    public void update(World world) {
+        super.update(world);
 
         alpha -= fade;
         lifespan--;

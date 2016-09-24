@@ -4,10 +4,12 @@ import com.huskygames.rekhid.Levels.TestLevel;
 import com.huskygames.rekhid.actor.StickMan;
 import com.huskygames.rekhid.slugger.input.ControllerInput;
 import com.huskygames.rekhid.slugger.GamePanel;
+import com.huskygames.rekhid.slugger.physics.PhysicsManager;
 import com.huskygames.rekhid.slugger.resource.ResourceManager;
 import com.huskygames.rekhid.slugger.sound.SoundThread;
 import com.huskygames.rekhid.slugger.util.DoublePair;
 import com.huskygames.rekhid.slugger.util.FileUtilities;
+import com.huskygames.rekhid.slugger.world.DefaultLevel;
 import com.huskygames.rekhid.slugger.world.World;
 import net.java.games.input.*;
 import org.apache.logging.log4j.LogManager;
@@ -62,7 +64,6 @@ public class Rekhid extends JFrame {
     private long tickCount;
     private MainMenu mainMenu;
     private World world;
-    private ControllerInput input;
     private StickMan player1;
 
     private Rekhid() {
@@ -100,8 +101,11 @@ public class Rekhid extends JFrame {
         controllerManager = new ControllerInput(this);
         checkControlDevices();
 
+        // start some physics
+
+
         //creates an instance of a player to be used for testing purposes
-        player1 = new StickMan(new DoublePair(50, 300), new DoublePair(0, 0), KUHL);
+        player1 = new StickMan(new DoublePair(1250, 300), new DoublePair(0, 0), KUHL);
     }
 
     public static Rekhid getInstance() {
@@ -195,7 +199,11 @@ public class Rekhid extends JFrame {
                     case CHARACTER_SELECT:
                         //characterSelectTick();
                         state = GameState.MATCH;
-                        world = new World(new TestLevel(), 500, 0, 0, player1);
+                        world = new World(new DefaultLevel(), player1);
+                        PhysicsManager.getInstance().setWorld(world);
+
+                        controllerManager.assignController(controllerManager.getValidControllers().get(0),
+                                player1);
                         break;
                     case MATCH:
                         this.setSize(Definitions.DEFAULT_WIDTH, Definitions.DEFAULT_HEIGHT);
@@ -233,6 +241,7 @@ public class Rekhid extends JFrame {
 
     private void matchTick() {
         world.tick();
+        PhysicsManager.getInstance().updateObjects();
     }
 
     private void characterSelectTick() {

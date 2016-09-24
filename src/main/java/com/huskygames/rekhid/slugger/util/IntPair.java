@@ -25,11 +25,23 @@ public class IntPair {
         y = newY;
     }
 
+    public IntPair neg() {
+        return new IntPair(-x, -y);
+    }
+
+    public DoublePair mul(double scalar) {
+        return new DoublePair(x * scalar, y * scalar);
+    }
+
     @Override
     public String toString() {
         return "{" +
                 "x=" + x +
                 ", y=" + y +
                 '}';
+    }
+
+    public IntPair subtract(IntPair minR) {
+        return new IntPair(x - minR.getX(), y - minR.getY());
     }
 }

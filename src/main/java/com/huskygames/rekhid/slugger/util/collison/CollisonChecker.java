@@ -3,8 +3,24 @@ package com.huskygames.rekhid.slugger.util.collison;
 import com.huskygames.rekhid.slugger.util.DoublePair;
 import com.huskygames.rekhid.slugger.util.collison.shape.Circle;
 import com.huskygames.rekhid.slugger.util.collison.shape.Rectangle;
+import com.huskygames.rekhid.slugger.util.collison.shape.Shape;
 
 public class CollisonChecker {
+
+    public static boolean intersects(Shape a, Shape b) {
+        if (a instanceof Circle) {
+            if (b instanceof Circle) {
+                return intersects((Circle) a, (Circle) b);
+            }
+            return intersects((Circle) a, (Rectangle) b);
+        }
+        else {
+            if (b instanceof Circle) {
+                return intersects((Circle) b, (Rectangle) a);
+            }
+            return intersects((Rectangle) a, (Rectangle) b);
+        }
+    }
 
     public static boolean intersects(Circle a, Circle b) {
         DoublePair temp = a.getPosition().subtract(b.getPosition());

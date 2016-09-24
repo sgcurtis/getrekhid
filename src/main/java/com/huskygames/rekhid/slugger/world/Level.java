@@ -1,30 +1,39 @@
 package com.huskygames.rekhid.slugger.world;
 
 import com.huskygames.rekhid.slugger.physics.Collidable;
-import com.huskygames.rekhid.slugger.resource.LoadedImage;
 import com.huskygames.rekhid.slugger.resource.Resource;
 import com.huskygames.rekhid.slugger.util.IntPair;
 import com.huskygames.rekhid.slugger.util.collison.shape.Shape;
 
+import java.awt.image.BufferedImage;
 import java.util.Set;
 
 /**
  * Stores all the level-specific information for a given level
- * Created by Kyle on 9/17/2016.
  */
 public abstract class Level implements Collidable {
 
-    private Resource background;
-    private Set<Shape> colliders;
-    private Resource bgm;
-    private IntPair[] startPos;
+    protected Resource background;
+    protected Set<Shape> colliders;
+    protected Resource music;
+    protected IntPair[] startPos;
+    protected ViewPort defaultViewPort;
+
+    public IntPair getLevelSize() {
+        return levelSize;
+    }
+
+    protected IntPair levelSize;
+
+    public ViewPort getDefaultViewPort() {
+        return defaultViewPort;
+    }
 
     public Resource getBackground(){
         return background;
     }
-    public void setBackground(Resource bg) {
-        background = bg;
-    }
+
+    public abstract BufferedImage getBackgroundImage();
 
     public Set<Shape> getCollisions() {
         return colliders;
@@ -33,17 +42,11 @@ public abstract class Level implements Collidable {
         colliders = cols;
     }
 
-    public Resource getBgm() {
-        return bgm;
-    }
-    public void setBgm(Resource bgm) {
-        this.bgm = bgm;
+    public Resource getMusic() {
+        return music;
     }
 
     public IntPair[] getStartPos() {
         return startPos;
-    }
-    public void setStartPos(IntPair[] startPos) {
-        this.startPos = startPos;
     }
 }
