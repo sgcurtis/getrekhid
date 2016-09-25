@@ -5,6 +5,7 @@ public class SpriteSequence {
     private int[] col;
     private int[] frames;
     private int cur;
+    private int temp = 0;
     private String animation;
 
     public SpriteSequence(int[] rowseq, int[] colseq, int[] frames, String anim){
@@ -27,9 +28,10 @@ public class SpriteSequence {
         return animation;
     }
     public void next(){
-        if(frames[cur] > 0){
-            frames[cur]--;
+        if(frames[cur]-temp > 0){
+            temp++;
         } else{
+            temp = 0;
             cur = (cur + 1) % row.length;
         }
     }
