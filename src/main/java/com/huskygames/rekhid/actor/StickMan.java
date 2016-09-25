@@ -160,6 +160,8 @@ public class StickMan extends Player {
                 facingLeft = false;
                 executing = 1;
                 sequence = new SpriteSequence(new int[] {0,0,0,0,0,0,1,1,1}, new int[] {6,7,8,9,10,11,0,1,2}, new int[] {5,5,5,5,5,5,5,5,5}, "moveRight");
+            } else {
+                sequence.next();
             }
         }
 
@@ -175,13 +177,16 @@ public class StickMan extends Player {
             if(sequence == null || !sequence.getAnimation().equals("moveLeft")){
                 facingLeft = true;
                 executing = 1;
-                sequence = new SpriteSequence(new int[] {0,0,0,0,0,0,1,1,1}, new int[] {6,7,8,9,10,11,0,1,2}, new int[] {2,2,2,2,2,2,2,2,2}, "moveLeft");
+                sequence = new SpriteSequence(new int[] {0,0,0,0,0,0,1,1,1}, new int[] {6,7,8,9,10,11,0,1,2}, new int[] {5,5,5,5,5,5,5,5,5}, "moveLeft");
+            } else {
+                sequence.next();
             }
         }
     }
 
     private void jump() {
         if(jumps > 0){
+            position.setY(-3);
             velocity.addInPlace(0, -1);
             jumps--;
             executing = 12;
