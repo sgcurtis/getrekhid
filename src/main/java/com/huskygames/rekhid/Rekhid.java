@@ -204,7 +204,7 @@ public class Rekhid extends JFrame {
                                 player1);
                         break;
                     case MATCH:
-                        this.setSize(Definitions.DEFAULT_WIDTH, Definitions.DEFAULT_HEIGHT);
+                        //this.setSize(Definitions.DEFAULT_WIDTH, Definitions.DEFAULT_HEIGHT);
                         matchTick();
                         break;
                     case POST_MATCH:

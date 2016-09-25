@@ -268,12 +268,77 @@ public class World implements Drawable {
     }
 
     public void tick() {
-        int index = (int) (Rekhid.getInstance().getTickCount() / sizeAlternator.length) % sizeAlternator.length;
-        this.viewPort.setHeight(sizeAlternator[index]);
+
+        //int index = (int) (Rekhid.getInstance().getTickCount() / sizeAlternator.length) % sizeAlternator.length;
+        //this.viewPort.setHeight(sizeAlternator[index]);
         for (Fighter ply : fighters) {
             if (ply != null) {
                 ply.tick();
             }
+        }
+        updateViewport();
+    }
+
+    private void updateViewport() {
+        double viewRatio = 16 / 9;
+        int minX = Integer.MAX_VALUE;
+        int maxX = Integer.MIN_VALUE;
+        int minY = Integer.MAX_VALUE;
+        int maxY = Integer.MIN_VALUE;
+        for (int i = 0; i < 4; i++) {
+            Fighter ply = fighters[i];
+            if (ply != null) {
+                if (ply.getPosition().getX() < minX) {
+                    minX = (int) ply.getPosition().getX();
+                }
+                if (ply.getPosition().getX() > maxX) {
+                    maxX = (int) ply.getPosition().getX();
+                }
+
+                if (ply.getPosition().getY() < minY) {
+                    minY = (int) ply.getPosition().getY();
+                }
+                if (ply.getPosition().getY() > maxY) {
+                    maxY = (int) ply.getPosition().getY();
+                }
+            }
+        }
+        minX -= Definitions.VIEWPORT_PADDING;
+        minY -= Definitions.VIEWPORT_PADDING;
+        maxX += Definitions.VIEWPORT_PADDING;
+        maxY += Definitions.VIEWPORT_PADDING;
+
+        IntPair minist = level.getMinViewPort();
+        IntPair maxist = level.getMaxViewPort();
+        minX = minX > minist.getX() ? minX : minist.getX();
+        minY = minY > minist.getY() ? minY : minist.getY();
+
+        maxX = maxX < maxist.getX() ? maxX : maxist.getX();
+        maxY = maxY < maxist.getY() ? maxY : maxist.getY();
+
+        if (maxY - minY < level.getMinViewHeight()) {
+            int center = minY + ((maxY - minY) / 2);
+            minY = center - level.getMinViewHeight() / 2;
+            maxY = center + level.getMinViewHeight() / 2;
+        }
+
+        int xDis = maxX - minX;
+        int yDis = maxY - minY;
+
+        int ypropo = (int) (yDis * viewRatio);
+
+        IntPair topLeft = new IntPair(minX, minY);
+        IntPair bottomRight = new IntPair(maxX, maxY);
+
+        if (ypropo > xDis) {
+            // y is the bounding factor
+            viewPort.setCorner(topLeft);
+            viewPort.setHeight(yDis);
+        }
+        else {
+            // x is the bounding factor
+            viewPort.setCorner(topLeft);
+            viewPort.setHeight((int) (xDis / viewRatio));
         }
     }
 

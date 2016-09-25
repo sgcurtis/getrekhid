@@ -107,7 +107,7 @@ public class StickMan extends Player {
             jumps = 2;
             return sprite.getSprite(6,1,facingLeft);
         } else {
-            return sprite.getSprite(sequence.getX(), sequence.getY(), facingLeft);
+            return sprite.getSprite(sequence.getY(), sequence.getX(), facingLeft);
         }
         //return sprite.getSprite(((int) tickcount / 240) % 12, 1, tickcount % 120 > 60);
     }
@@ -186,8 +186,8 @@ public class StickMan extends Player {
 
     private void jump() {
         if(jumps > 0){
-            position.setY(-3);
-            velocity.addInPlace(0, -1);
+            position.setY(position.getY() - 3);
+            velocity.addInPlace(0, -5);
             jumps--;
             executing = 12;
             sequence = new SpriteSequence(new int[] {1,1,1,1,1,1}, new int[] {5,6,7,8,9,10}, new int[] {2,2,2,2,2,2}, "jumping");

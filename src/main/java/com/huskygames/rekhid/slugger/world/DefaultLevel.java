@@ -11,6 +11,11 @@ import java.awt.image.BufferedImage;
 import java.util.HashSet;
 
 public class DefaultLevel extends Level {
+
+    private final IntPair minView = new IntPair(500, 100);
+    private final IntPair maxView = new IntPair(3000, 1500);
+    private final int minViewHeight = 300;
+
     public DefaultLevel() {
         background = Resource.DEFAULT_LEVEL_BG;
         levelSize = Definitions.DEFAULT_WORLD_SIZE;
@@ -23,5 +28,20 @@ public class DefaultLevel extends Level {
     public BufferedImage getBackgroundImage() {
         return ((LoadedImage) Rekhid.getInstance().getResourceManager()
                 .requestResource(background)).getImage();
+    }
+
+    @Override
+    public IntPair getMinViewPort() {
+        return minView;
+    }
+
+    @Override
+    public IntPair getMaxViewPort() {
+        return maxView;
+    }
+
+    @Override
+    public int getMinViewHeight() {
+        return 100;
     }
 }
