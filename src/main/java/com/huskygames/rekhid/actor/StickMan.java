@@ -10,6 +10,7 @@ import com.huskygames.rekhid.slugger.input.ButtonEvent;
 import com.huskygames.rekhid.slugger.input.ControllerInput;
 import com.huskygames.rekhid.slugger.resource.LoadedImage;
 import com.huskygames.rekhid.slugger.resource.Resource;
+import com.huskygames.rekhid.slugger.resource.sprite.SpriteSequence;
 import com.huskygames.rekhid.slugger.resource.sprite.SpriteSheet;
 import com.huskygames.rekhid.slugger.util.DoublePair;
 import com.huskygames.rekhid.slugger.util.collison.shape.Shape;
@@ -20,6 +21,7 @@ import org.apache.logging.log4j.Logger;
 import java.awt.*;
 
 import java.awt.image.BufferedImage;
+import java.util.List;
 import java.util.Set;
 
 import java.util.*;
@@ -28,6 +30,7 @@ import java.util.*;
 public class StickMan extends Player {
     private final Professor prof;
     private final SpriteSheet sprite;
+    private SpriteSequence sequence;
     private ControllerInput input;
     private Set<Shape> colliders = new HashSet<>();
     private double speed = 5;
@@ -68,7 +71,6 @@ public class StickMan extends Player {
         //position.addInPlace(1.5, 0);
         tickcount++;
         if (executing == 0) {
-
             Queue<ButtonEvent> buttonEvents = input.consumeEventsForPlayer(this);
             if (buttonEvents != null) {
                 if (buttonEvents.peek() != null) {
@@ -76,7 +78,6 @@ public class StickMan extends Player {
                         case ATTACK_BUTTON:
                             break;
                         case SPECIAL_BUTTON:
-
                             break;
                         case JUMP_BUTTON:
                             velocity.setY(-1);
@@ -89,7 +90,6 @@ public class StickMan extends Player {
                         case START_BUTTON:
                             break;
                         default:
-
                             break;
                     }
                 }
@@ -97,12 +97,18 @@ public class StickMan extends Player {
             }
         } else {
             executing--;
+            sequence.next();
         }
     }
 
     @Override
     public BufferedImage getSprite() {
-        return sprite.getSprite(((int) tickcount / 240) % 12, 1, tickcount % 120 > 60);
+        if(executing == 0){
+            return sprite.getSprite(6,1,facingLeft);
+        } else {
+            return sprite.getSprite(sequence.getX(), sequence.getY(), facingLeft);
+        }
+        //return sprite.getSprite(((int) tickcount / 240) % 12, 1, tickcount % 120 > 60);
     }
 
     @Override
@@ -149,6 +155,11 @@ public class StickMan extends Player {
             } else {
                 velocity.addInPlace(new DoublePair(speed, 0));
             }
+            if(!sequence.getAnimation().equals("moveRight")){
+                facingLeft = false;
+                executing = 1;
+                sequence = new SpriteSequence(new int[] {0,0,0,0,0,0,1,1,1}, new int[] {6,7,8,9,10,11,0,1,2}, new int[] {2,2,2,2,2,2,2,2,2}, "moveRight");
+            }
         }
 
     }
@@ -159,6 +170,11 @@ public class StickMan extends Player {
                 velocity.addInPlace(new DoublePair(Definitions.MAXVNEG + speed, 0));
             } else {
                 velocity.addInPlace(new DoublePair(-speed, 0));
+            }
+            if(!sequence.getAnimation().equals("moveLeft")){
+                facingLeft = true;
+                executing = 1;
+                sequence = new SpriteSequence(new int[] {0,0,0,0,0,0,1,1,1}, new int[] {6,7,8,9,10,11,0,1,2}, new int[] {2,2,2,2,2,2,2,2,2}, "moveLeft");
             }
         }
     }
