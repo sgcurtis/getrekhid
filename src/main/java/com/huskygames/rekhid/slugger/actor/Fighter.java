@@ -7,6 +7,7 @@ public abstract class Fighter extends Actor {
 
     protected double damage;
     protected int executing;
+    protected boolean disabled;
     protected boolean facingLeft;
 
     public Fighter(DoublePair pos, DoublePair vel) {

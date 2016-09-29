@@ -25,8 +25,8 @@ public class Definitions {
     public static final boolean DRAW_CENTRES = false;
     public static final Color CENTRE_COLOR = new Color(0,255, 0, 100);
 
-    public static final double MAXVPOS = 20;
-    public static final double MAXVNEG = -20;
+    public static final double MAXVPOS = 10;
+    public static final double MAXVNEG = -10;
 
     public static final int DEFAULT_PLAYER_HEIGHT = 100;
 
