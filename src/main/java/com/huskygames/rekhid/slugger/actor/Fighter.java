@@ -6,7 +6,7 @@ import com.huskygames.rekhid.slugger.util.DoublePair;
 public abstract class Fighter extends Actor {
 
     protected double damage;
-    protected int executing;
+    protected boolean executing;
     protected boolean disabled;
     protected boolean facingLeft;
 

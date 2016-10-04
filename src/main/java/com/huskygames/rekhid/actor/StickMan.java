@@ -4,7 +4,6 @@ import com.huskygames.rekhid.Definitions;
 import com.huskygames.rekhid.Rekhid;
 import com.huskygames.rekhid.slugger.actor.Actor;
 import com.huskygames.rekhid.slugger.actor.ActorCircle;
-import com.huskygames.rekhid.slugger.actor.Fighter;
 import com.huskygames.rekhid.slugger.actor.Player;
 import com.huskygames.rekhid.slugger.input.ButtonEvent;
 import com.huskygames.rekhid.slugger.input.ControllerInput;
@@ -14,14 +13,10 @@ import com.huskygames.rekhid.slugger.resource.sprite.SpriteSequence;
 import com.huskygames.rekhid.slugger.resource.sprite.SpriteSheet;
 import com.huskygames.rekhid.slugger.util.DoublePair;
 import com.huskygames.rekhid.slugger.util.collison.shape.Shape;
-import com.huskygames.rekhid.slugger.world.Heightable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.awt.*;
-
 import java.awt.image.BufferedImage;
-import java.util.List;
 import java.util.Set;
 
 import java.util.*;
@@ -45,7 +40,7 @@ public class StickMan extends Player {
         this.prof = prof;
 
         this.lifetime = Actor.FOREVER;
-        executing = 0;
+        executing = false;
         this.sprite = (SpriteSheet) Rekhid.getInstance().getResourceManager().requestResource(Resource.STICK_MAN);
         this.input = Rekhid.getInstance().getControllerManager();
 
@@ -70,10 +65,9 @@ public class StickMan extends Player {
 
     @Override
     public void tick() {
-        //position.addInPlace(1.5, 0);
         tickcount++;
         if (!disabled) {
-            if (sequence != null) {
+            if (executing) {
                 sequence.next();
             }
             Queue<ButtonEvent> buttonEvents = input.consumeEventsForPlayer(this);
@@ -106,14 +100,13 @@ public class StickMan extends Player {
 
     @Override
     public BufferedImage getSprite() {
-        if(executing == 0 || sequence == null){
+        if(!executing || sequence == null){
             jumps = 2;
             return sprite.getSprite(6,1,facingLeft);
+            //return getHead();
         } else {
-            executing--;
             return sprite.getSprite(sequence.getY(), sequence.getX(), facingLeft);
         }
-        //return sprite.getSprite(((int) tickcount / 240) % 12, 1, tickcount % 120 > 60);
     }
 
     @Override
@@ -122,8 +115,10 @@ public class StickMan extends Player {
     }
 
     private int getPrimaryDirection(DoublePair input) {
-        int temp = 4;
-        //down = 0, left = 1, up = 2, right = 3 neutral = 4
+        int temp = -1;
+        if(input == null)
+            return -1;
+        //down = 0, left = 1, up = 2, right = 3 neutral = 4 error = -1
         if (Math.abs(input.getX()) - Math.abs(input.getY()) > Definitions.DEADZONE) {
             if (input.getX() < -Definitions.DEADZONE)
                 temp = 1;
@@ -141,59 +136,58 @@ public class StickMan extends Player {
     }
 
     private void getMovement() {
-        DoublePair temp = input.getStickForPlayer(this);
-        if (temp != null) {
-            if (getPrimaryDirection(temp) == 1) {
-                moveLeft();
-                if(getVelocity().getX()>0)
-                    setVelocity(new DoublePair(-getVelocity().getX(),getVelocity().getY()));
-            }
-            else if (getPrimaryDirection(temp) == 3) {
-                moveRight();
-                if(getVelocity().getX()<0)
-                    setVelocity(new DoublePair(-getVelocity().getX(),getVelocity().getY()));
-            }
-            else {
-                if (sequence!=null && !sequence.getAnimation().equals("jumping"))
-                    sequence = null;
-                velocity.addInPlace(new DoublePair(-velocity.getX() / slidiness, 0));
-            }
 
+        int dir = getPrimaryDirection(input.getStickForPlayer(this));
+
+        if (dir == 1) {
+            if(getVelocity().getX()>0)
+                setVelocity(new DoublePair(-getVelocity().getX(),getVelocity().getY()));
+            moveLeft();
         }
+        else if (dir == 3) {
+            if(getVelocity().getX()<0)
+                setVelocity(new DoublePair(-getVelocity().getX(),getVelocity().getY()));
+            moveRight();
+        }
+        else {
+            if (!sequence.getAnimation().equals("jumping"))
+                executing = false;
+            velocity.addInPlace(new DoublePair(-velocity.getX() / slidiness, 0));
+        }
+
+
     }
 
     private void moveRight() {
-        if (getVelocity().getX() <= Definitions.MAXVPOS) {
-            if (getVelocity().getX() + speed > Definitions.MAXVPOS) {
-                velocity.addInPlace(new DoublePair(Definitions.MAXVPOS - getVelocity().getX(), 0));
+        if (getVelocity().getX() <= Definitions.MAX_VELOCITY) {
+            if (getVelocity().getX() + speed > Definitions.MAX_VELOCITY) {
+                velocity.addInPlace(new DoublePair(Definitions.MAX_VELOCITY - getVelocity().getX(), 0));
             } else {
                 velocity.addInPlace(new DoublePair(speed, 0));
             }
             if(sequence == null || !sequence.getAnimation().equals("moveRight")){
                 facingLeft = false;
-                executing = 1;
                 sequence = new SpriteSequence(new int[] {0,0,0,0,0,0,1,1,1}, new int[] {6,7,8,9,10,11,0,1,2}, new int[] {5,5,5,5,5,5,5,5,5}, "moveRight");
-            } else {
-                executing = 1;
             }
+            executing = true;
+
         }
 
     }
 
     private void moveLeft() {
-        if (getVelocity().getX() >= Definitions.MAXVNEG) {
-            if (getVelocity().getX() - speed < Definitions.MAXVNEG) {
-                velocity.addInPlace(new DoublePair(Definitions.MAXVNEG - getVelocity().getX(), 0));
+        if (getVelocity().getX() >= -Definitions.MAX_VELOCITY) {
+            if (getVelocity().getX() - speed < -Definitions.MAX_VELOCITY) {
+                velocity.addInPlace(new DoublePair(-Definitions.MAX_VELOCITY - getVelocity().getX(), 0));
             } else {
                 velocity.addInPlace(new DoublePair(-speed, 0));
             }
             if(sequence == null || !sequence.getAnimation().equals("moveLeft")){
                 facingLeft = true;
-                executing = 1;
                 sequence = new SpriteSequence(new int[] {0,0,0,0,0,0,1,1,1}, new int[] {6,7,8,9,10,11,0,1,2}, new int[] {5,5,5,5,5,5,5,5,5}, "moveLeft");
-            } else {
-                executing = 1;
             }
+            executing = true;
+
         }
     }
 
@@ -202,7 +196,7 @@ public class StickMan extends Player {
             position.setY(position.getY() - 3);
             velocity.addInPlace(0, -5);
             jumps--;
-            executing = 18;
+            executing = true;
             sequence = new SpriteSequence(new int[] {1,1,1,1,1,1}, new int[] {5,6,7,8,9,10}, new int[] {3,3,3,3,3,3}, "jumping");
         }
     }
