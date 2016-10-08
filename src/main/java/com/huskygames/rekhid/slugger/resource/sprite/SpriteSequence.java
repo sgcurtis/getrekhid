@@ -6,13 +6,15 @@ public class SpriteSequence {
     private int[] frames;
     private int cur;
     private int temp = 0;
+    private boolean loop;
     private String animation;
 
-    public SpriteSequence(int[] rowseq, int[] colseq, int[] frames, String anim){
+    public SpriteSequence(int[] rowseq, int[] colseq, int[] frames, String anim, boolean loop){
         row = rowseq;
         col = colseq;
         this.frames = frames;
         cur = 0;
+        this.loop = loop;
         animation = anim;
     }
     public int getX(){
@@ -32,7 +34,10 @@ public class SpriteSequence {
             temp++;
         } else{
             temp = 0;
-            cur = (cur + 1) % row.length;
+            if ( cur + 2 == row.length && !loop )
+                assert true;
+            else
+                cur = (cur + 1) % row.length;
         }
     }
 }

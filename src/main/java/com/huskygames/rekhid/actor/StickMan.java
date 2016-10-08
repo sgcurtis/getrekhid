@@ -150,7 +150,7 @@ public class StickMan extends Player {
             moveRight();
         }
         else {
-            if (!sequence.getAnimation().equals("jumping"))
+            if (sequence != null && !sequence.getAnimation().equals("jumping"))
                 executing = false;
             velocity.addInPlace(new DoublePair(-velocity.getX() / slidiness, 0));
         }
@@ -167,7 +167,7 @@ public class StickMan extends Player {
             }
             if(sequence == null || !sequence.getAnimation().equals("moveRight")){
                 facingLeft = false;
-                sequence = new SpriteSequence(new int[] {0,0,0,0,0,0,1,1,1}, new int[] {6,7,8,9,10,11,0,1,2}, new int[] {5,5,5,5,5,5,5,5,5}, "moveRight");
+                sequence = new SpriteSequence(new int[] {0,0,0,0,0,0,1,1,1}, new int[] {6,7,8,9,10,11,0,1,2}, new int[] {5,5,5,5,5,5,5,5,5}, "moveRight", true);
             }
             executing = true;
 
@@ -184,7 +184,7 @@ public class StickMan extends Player {
             }
             if(sequence == null || !sequence.getAnimation().equals("moveLeft")){
                 facingLeft = true;
-                sequence = new SpriteSequence(new int[] {0,0,0,0,0,0,1,1,1}, new int[] {6,7,8,9,10,11,0,1,2}, new int[] {5,5,5,5,5,5,5,5,5}, "moveLeft");
+                sequence = new SpriteSequence(new int[] {0,0,0,0,0,0,1,1,1}, new int[] {6,7,8,9,10,11,0,1,2}, new int[] {5,5,5,5,5,5,5,5,5}, "moveLeft", true);
             }
             executing = true;
 
@@ -197,7 +197,7 @@ public class StickMan extends Player {
             velocity.addInPlace(0, -5);
             jumps--;
             executing = true;
-            sequence = new SpriteSequence(new int[] {1,1,1,1,1,1}, new int[] {5,6,7,8,9,10}, new int[] {3,3,3,3,3,3}, "jumping");
+            sequence = new SpriteSequence(new int[] {1,1,1,1,1,1}, new int[] {5,6,7,8,9,10}, new int[] {3,10,10,10,10,10}, "jumping", false);
         }
     }
 
