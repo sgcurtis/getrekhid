@@ -45,6 +45,9 @@ public abstract class Actor extends PhysicsObject implements Heightable {
     }
 
     public Set<Shape> getPain() { return hurters;}
+    public void removeHurtBox(HurtBox box){
+        hurters.remove(box);
+    }
 
     public DoublePair getRelativePosition(ViewPort port) {
         return getPosition().subtract(port.getTopLeft());

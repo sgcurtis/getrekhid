@@ -76,6 +76,7 @@ public class StickMan extends Player {
                 if (buttonEvents.peek() != null) {
                     switch (buttonEvents.poll().getButton()) {
                         case ATTACK_BUTTON:
+                            attack();
                             break;
                         case SPECIAL_BUTTON:
                             break;
@@ -91,9 +92,6 @@ public class StickMan extends Player {
                         default:
                             break;
                     }
-                }
-                for (Shape box : getPain()){
-                    ((HurtBox) box).decrementLife();
                 }
                 getMovement();
             }
@@ -215,18 +213,22 @@ public class StickMan extends Player {
     }
 
     private void attack() {
-        switch (getPrimaryDirection(input.getStickForPlayer(this))) {
-            case 0: // down
-                break;
-            case 1: // left
-                break;
-            case 2: // up
-                break;
-            case 3: // right
-                break;
-            case 4: // neutral
-                hurters.add(new HurtBox(new DoublePair(2, 0), this, 3, new DoublePair(1, 1), 10));
-                break;
+        if(hurters.size() == 0) {
+            switch (getPrimaryDirection(input.getStickForPlayer(this))) {
+                case 0: // down
+                    break;
+                case 1: // left
+                    break;
+                case 2: // up
+                    break;
+                case 3: // right
+                    break;
+                case 4: // neutral
+                    hurters.add(new HurtBox(new DoublePair(0, 0), this, 100, new DoublePair(1, 1), 10, 60));
+                    break;
+            }
+        } else{
+            logger.warn(null, "Cannot attack right now, attack is already in progress");
         }
     }
 
