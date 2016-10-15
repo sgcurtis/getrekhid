@@ -190,12 +190,8 @@ public class World implements Drawable {
         Color temp = context.getColor();
         if(actor instanceof Actor) {
             Set<Shape> shapes = actor.getCollisions();
-            shapes.addAll(((Actor)actor).getPain());
+            context.setColor(Definitions.HITBOX_COLOR);
             for (Shape shape : shapes) {
-                if (shape instanceof HurtBox)
-                    context.setColor(Definitions.HURTBOX_COLOR);
-                else
-                    context.setColor(Definitions.HITBOX_COLOR);
                 DoublePair position = translatePosition(shape);
 
                 DoublePair pixelCenter = position.multiply(1 / getViewRatio());
@@ -231,6 +227,33 @@ public class World implements Drawable {
                     IntPair size = max.subtract(min);
 
                     context.fillRect(min.getX(), min.getY(), size.getX(), size.getY());
+                }
+            }
+            shapes = ((Actor)actor).getPain();
+            context.setColor(Definitions.HURTBOX_COLOR);
+            for(Shape shape : shapes){
+                if (shape instanceof HurtBox) {
+                    if(((HurtBox)shape).decrementLife()){
+                        ((Actor) actor).removeHurtBox((HurtBox)shape);
+                        logger.warn(null, "Hurtbox should be gone now!");
+                        continue;
+                    }
+                }
+                DoublePair position = translatePosition(shape);
+
+                DoublePair pixelCenter = position.multiply(1 / getViewRatio());
+                int radiusInPx = (int) (((Circle) shape).getRadius() * (1 / getViewRatio()));
+                int diamInPx = radiusInPx * 2;
+                context.fillOval(centrer(pixelCenter.getX(), diamInPx),
+                        centrer(pixelCenter.getY(), diamInPx), diamInPx, diamInPx);
+                ActorCircle cir = (ActorCircle) shape;
+                //noinspection Simplify,PointlessBooleanExpression,ConstantConditions
+                if (Rekhid.getInstance().getTickCount() % 60 == 0 && Definitions.NOISY_RENDER) {
+                    //logger.info("   Actor is at: " + actor.getPosition() + " hitbox is at offset " +
+                    //        cir.getOffset() + ", therefore the computed position is " + cir.getPosition());
+                    logger.info("   my radius in pixels is: " + radiusInPx);
+                    logger.info("   drawing circle at: " + pixelCenter);
+
                 }
             }
         }
