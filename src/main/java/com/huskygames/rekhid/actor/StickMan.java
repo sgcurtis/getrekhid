@@ -4,6 +4,7 @@ import com.huskygames.rekhid.Definitions;
 import com.huskygames.rekhid.Rekhid;
 import com.huskygames.rekhid.slugger.actor.Actor;
 import com.huskygames.rekhid.slugger.actor.ActorCircle;
+import com.huskygames.rekhid.slugger.actor.HurtBox;
 import com.huskygames.rekhid.slugger.actor.Player;
 import com.huskygames.rekhid.slugger.input.ButtonEvent;
 import com.huskygames.rekhid.slugger.input.ControllerInput;
@@ -221,6 +222,7 @@ public class StickMan extends Player {
             case 3: // right
                 break;
             case 4: // neutral
+                new HurtBox(new DoublePair(2, 0), this, 3, new DoublePair(1, 1), 10);
                 break;
         }
     }
