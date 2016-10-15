@@ -94,6 +94,9 @@ public class StickMan extends Player {
                             break;
                     }
                 }
+                for (Shape box : getPain()){
+                    ((HurtBox) box).decrementLife();
+                }
                 getMovement();
             }
         } else {
