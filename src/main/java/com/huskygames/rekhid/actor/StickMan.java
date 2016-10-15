@@ -222,10 +222,12 @@ public class StickMan extends Player {
             case 3: // right
                 break;
             case 4: // neutral
-                new HurtBox(new DoublePair(2, 0), this, 3, new DoublePair(1, 1), 10);
+                hurters.add(new HurtBox(new DoublePair(2, 0), this, 3, new DoublePair(1, 1), 10));
                 break;
         }
     }
+
+    public Set<Shape> getPain() {return hurters;}
 
     @Override
     public int getHeight() {

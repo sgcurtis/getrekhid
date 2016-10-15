@@ -8,6 +8,7 @@ import com.huskygames.rekhid.slugger.Drawable;
 import com.huskygames.rekhid.slugger.actor.Actor;
 import com.huskygames.rekhid.slugger.actor.ActorCircle;
 import com.huskygames.rekhid.slugger.actor.Fighter;
+import com.huskygames.rekhid.slugger.actor.HurtBox;
 import com.huskygames.rekhid.slugger.physics.Collidable;
 import com.huskygames.rekhid.slugger.physics.PhysicsManager;
 import com.huskygames.rekhid.slugger.util.DoublePair;
@@ -21,6 +22,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
 import java.awt.image.AffineTransformOp;
+import java.util.Set;
 
 import static com.huskygames.rekhid.actor.Professor.KUHL;
 import static com.huskygames.rekhid.actor.Professor.LEO;
@@ -186,45 +188,50 @@ public class World implements Drawable {
 
     private void drawHitbox(Collidable actor, Graphics2D context) {
         Color temp = context.getColor();
-        context.setColor(Definitions.HITBOX_COLOR);
-        for (Shape shape : actor.getCollisions()) {
-            DoublePair position = translatePosition(shape);
+        if(actor instanceof Actor) {
+            Set<Shape> shapes = actor.getCollisions();
+            shapes.addAll(((Actor)actor).getPain());
+            for (Shape shape : shapes) {
+                if (shape instanceof HurtBox)
+                    context.setColor(Definitions.HURTBOX_COLOR);
+                else
+                    context.setColor(Definitions.HITBOX_COLOR);
+                DoublePair position = translatePosition(shape);
 
-            DoublePair pixelCenter = position.multiply(1 / getViewRatio());
+                DoublePair pixelCenter = position.multiply(1 / getViewRatio());
 
 
-            if (shape instanceof Circle) {
-                int radiusInPx = (int) (((Circle) shape).getRadius() * (1 / getViewRatio()));
-                int diamInPx = radiusInPx * 2;
-                context.fillOval(centrer(pixelCenter.getX(), diamInPx),
-                        centrer(pixelCenter.getY(), diamInPx), diamInPx, diamInPx);
-                ActorCircle cir = (ActorCircle) shape;
-                //noinspection Simplify,PointlessBooleanExpression,ConstantConditions
-                if (Rekhid.getInstance().getTickCount() % 60 == 0 && Definitions.NOISY_RENDER) {
-                    //logger.info("   Actor is at: " + actor.getPosition() + " hitbox is at offset " +
-                    //        cir.getOffset() + ", therefore the computed position is " + cir.getPosition());
-                    logger.info("   my radius in pixels is: " + radiusInPx);
-                    logger.info("   drawing circle at: " + pixelCenter);
+                if (shape instanceof Circle) {
+                    int radiusInPx = (int) (((Circle) shape).getRadius() * (1 / getViewRatio()));
+                    int diamInPx = radiusInPx * 2;
+                    context.fillOval(centrer(pixelCenter.getX(), diamInPx),
+                            centrer(pixelCenter.getY(), diamInPx), diamInPx, diamInPx);
+                    ActorCircle cir = (ActorCircle) shape;
+                    //noinspection Simplify,PointlessBooleanExpression,ConstantConditions
+                    if (Rekhid.getInstance().getTickCount() % 60 == 0 && Definitions.NOISY_RENDER) {
+                        //logger.info("   Actor is at: " + actor.getPosition() + " hitbox is at offset " +
+                        //        cir.getOffset() + ", therefore the computed position is " + cir.getPosition());
+                        logger.info("   my radius in pixels is: " + radiusInPx);
+                        logger.info("   drawing circle at: " + pixelCenter);
 
+                    }
+                } else if (shape instanceof Rectangle) {
+                    Rectangle rectangle = (Rectangle) shape;
+                    IntPair max = rectangle
+                            .getMax()
+                            .subtract(viewPort.getTopLeft())
+                            .multiply(1 / getViewRatio())
+                            .rounded();
+                    IntPair min = rectangle
+                            .getMin()
+                            .subtract(viewPort.getTopLeft())
+                            .multiply(1 / getViewRatio())
+                            .rounded();
+
+                    IntPair size = max.subtract(min);
+
+                    context.fillRect(min.getX(), min.getY(), size.getX(), size.getY());
                 }
-            }
-
-            else if (shape instanceof Rectangle) {
-                Rectangle rectangle = (Rectangle) shape;
-                IntPair max = rectangle
-                        .getMax()
-                        .subtract(viewPort.getTopLeft())
-                        .multiply(1 / getViewRatio())
-                        .rounded();
-                IntPair min = rectangle
-                        .getMin()
-                        .subtract(viewPort.getTopLeft())
-                        .multiply(1 / getViewRatio())
-                        .rounded();
-
-                IntPair size = max.subtract(min);
-
-                context.fillRect(min.getX(), min.getY(), size.getX(), size.getY());
             }
         }
         context.setColor(temp);
@@ -246,7 +253,7 @@ public class World implements Drawable {
 
         IntPair bgPos = viewPort.getTopLeft().neg().mul(1/ getViewRatio()).rounded();
         int height = (int) (level.getBackgroundImage().getHeight() * (1 / getViewRatio()));
-        context.drawImage(level.getBackgroundImage(), bgPos.getX(), bgPos.getY(), (int) pxw, (int)pxh, null);
+        context.drawImage(level.getBackgroundImage(), bgPos.getX(), bgPos.getY(), (int) pxw, (int) pxh, null);
 
         if (Definitions.DRAW_HITBOXES) {
             drawHitbox(level, context);
