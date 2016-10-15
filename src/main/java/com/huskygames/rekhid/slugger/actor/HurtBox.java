@@ -16,4 +16,8 @@ public class HurtBox extends ActorCircle {
     public DoublePair getEffect() {
         return effect;
     }
+
+    public boolean decrementLife(){
+        return --lifetime==0 ? true : false;
+    }
 }
