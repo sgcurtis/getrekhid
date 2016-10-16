@@ -11,7 +11,7 @@ public class CollisonCheckerTest {
 
     @Test
     public void testIntersects() throws Exception {
-        assertFalse(CollisonChecker.intersects(
+        assertFalse(CollisionChecker.intersects(
                 new WorldCircle(new DoublePair(40, 40), 10),
                 new WorldCircle(new DoublePair(100, 100), 50)));
     }
