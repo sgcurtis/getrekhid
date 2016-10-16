@@ -49,7 +49,7 @@ public abstract class Fighter extends Actor {
 
         logger.info(null, "Damaging Player");
         ((Fighter)hit.getParent()).getDamaged().add(this);
-        damage -= 0.10;
+        damage -= ((double)hit.getDamage()) * 0.01;
         velocity.addInPlace(hit.getEffect());
     }
 
