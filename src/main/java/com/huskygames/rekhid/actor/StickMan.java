@@ -2,10 +2,7 @@ package com.huskygames.rekhid.actor;
 
 import com.huskygames.rekhid.Definitions;
 import com.huskygames.rekhid.Rekhid;
-import com.huskygames.rekhid.slugger.actor.Actor;
-import com.huskygames.rekhid.slugger.actor.ActorCircle;
-import com.huskygames.rekhid.slugger.actor.HurtBox;
-import com.huskygames.rekhid.slugger.actor.Player;
+import com.huskygames.rekhid.slugger.actor.*;
 import com.huskygames.rekhid.slugger.input.ButtonEvent;
 import com.huskygames.rekhid.slugger.input.ControllerInput;
 import com.huskygames.rekhid.slugger.resource.LoadedImage;
@@ -70,6 +67,26 @@ public class StickMan extends Player {
         if (!disabled) {
             if (executing) {
                 sequence.next();
+            }
+            Set<HurtBox> boxes = new HashSet<>();
+            for(Shape shape : hurters){
+                boxes.add((HurtBox)shape);
+            }
+
+            Iterator<Shape> i = hurters.iterator();
+            Shape cur = null;
+
+            while (i.hasNext()){
+                cur = i.next();
+                if (cur instanceof HurtBox) {
+                    if (((HurtBox) cur).decrementLife()) {
+                        i.remove();
+                        logger.warn(null, "Hurtbox should be gone now!");
+                        if (getPain().size() == 0) {
+                            clearDamaged();
+                        }
+                    }
+                }
             }
             Queue<ButtonEvent> buttonEvents = input.consumeEventsForPlayer(this);
             if (buttonEvents != null) {
