@@ -2,9 +2,7 @@ package com.huskygames.rekhid.actor;
 
 import com.huskygames.rekhid.Definitions;
 import com.huskygames.rekhid.Rekhid;
-import com.huskygames.rekhid.slugger.actor.Actor;
-import com.huskygames.rekhid.slugger.actor.ActorCircle;
-import com.huskygames.rekhid.slugger.actor.Player;
+import com.huskygames.rekhid.slugger.actor.*;
 import com.huskygames.rekhid.slugger.input.ButtonEvent;
 import com.huskygames.rekhid.slugger.input.ControllerInput;
 import com.huskygames.rekhid.slugger.resource.LoadedImage;
@@ -72,11 +70,32 @@ public class StickMan extends Player {
             if (executing) {
                 sequence.next();
             }
+            Set<HurtBox> boxes = new HashSet<>();
+            for(Shape shape : hurters){
+                boxes.add((HurtBox)shape);
+            }
+
+            Iterator<Shape> i = hurters.iterator();
+            Shape cur = null;
+
+            while (i.hasNext()){
+                cur = i.next();
+                if (cur instanceof HurtBox) {
+                    if (((HurtBox) cur).decrementLife()) {
+                        i.remove();
+                        logger.warn(null, "Hurtbox should be gone now!");
+                        if (getPain().size() == 0) {
+                            clearDamaged();
+                        }
+                    }
+                }
+            }
             Queue<ButtonEvent> buttonEvents = input.consumeEventsForPlayer(this);
             if (buttonEvents != null) {
                 if (buttonEvents.peek() != null) {
                     switch (buttonEvents.poll().getButton()) {
                         case ATTACK_BUTTON:
+                            attack();
                             break;
                         case SPECIAL_BUTTON:
                             break;
@@ -228,19 +247,39 @@ public class StickMan extends Player {
     }
 
     private void attack() {
-        switch (getPrimaryDirection(input.getStickForPlayer(this))) {
-            case 0: // down
-                break;
-            case 1: // left
-                break;
-            case 2: // up
-                break;
-            case 3: // right
-                break;
-            case 4: // neutral
-                break;
+        if(hurters.size() == 0) {
+            switch (getPrimaryDirection(input.getStickForPlayer(this))) {
+                case 0: // down
+                    break;
+                case 1: // left
+                    break;
+                case 2: // up
+                    break;
+                case 3: // right
+                    break;
+                case 4: // neutral
+                    DoublePair direction;
+                    DoublePair offsetLow;
+                    DoublePair offsetHigh;
+                    if(facingLeft) {
+                        direction = new DoublePair(-2, 1);
+                        offsetLow = new DoublePair(-10, -15);
+                        offsetHigh = new DoublePair(-10, 15);
+                    }else {
+                        direction = new DoublePair(2, 1);
+                        offsetLow = new DoublePair(10, -15);
+                        offsetHigh = new DoublePair(10, 15);
+                    }
+                    hurters.add(new HurtBox(offsetLow, this, 20, direction, 5, 5));
+                    hurters.add(new HurtBox(offsetHigh, this, 20, direction, 5, 5));
+                    break;
+            }
+        } else{
+            logger.warn(null, "Cannot attack right now, attack is already in progress");
         }
     }
+
+    public Set<Shape> getPain() {return hurters;}
 
     @Override
     public int getHeight() {

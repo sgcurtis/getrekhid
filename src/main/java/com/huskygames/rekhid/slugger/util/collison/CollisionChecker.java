@@ -5,7 +5,7 @@ import com.huskygames.rekhid.slugger.util.collison.shape.Circle;
 import com.huskygames.rekhid.slugger.util.collison.shape.Rectangle;
 import com.huskygames.rekhid.slugger.util.collison.shape.Shape;
 
-public class CollisonChecker {
+public class CollisionChecker {
 
     public static boolean intersects(Shape a, Shape b) {
         if (a instanceof Circle) {

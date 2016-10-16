@@ -4,11 +4,14 @@ package com.huskygames.rekhid.slugger.physics;
 import com.huskygames.rekhid.Definitions;
 import com.huskygames.rekhid.Rekhid;
 import com.huskygames.rekhid.slugger.Positionable;
+import com.huskygames.rekhid.slugger.actor.Actor;
+import com.huskygames.rekhid.slugger.actor.Fighter;
 import com.huskygames.rekhid.slugger.util.DoublePair;
-import com.huskygames.rekhid.slugger.util.collison.CollisonChecker;
+import com.huskygames.rekhid.slugger.util.collison.CollisionChecker;
 import com.huskygames.rekhid.slugger.util.collison.shape.Circle;
 import com.huskygames.rekhid.slugger.util.collison.shape.Rectangle;
 import com.huskygames.rekhid.slugger.util.collison.shape.Shape;
+import com.huskygames.rekhid.slugger.actor.HurtBox;
 import com.huskygames.rekhid.slugger.world.World;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -50,8 +53,8 @@ public abstract class PhysicsObject implements Collidable, Positionable {
     public void update(World world) {
         if (gravity) {
             boolean hitLevel = false;
-            for (Shape shape: world.getLevel().getCollisions()) {
-                for (Shape actorBox: getCollisions()) {
+            for (Shape shape : world.getLevel().getCollisions()) {
+                for (Shape actorBox : getCollisions()) {
                     // TODO: Fix this, it's garbage
 
                     if (shape instanceof Rectangle) {
@@ -87,7 +90,23 @@ public abstract class PhysicsObject implements Collidable, Positionable {
                 velocity.addInPlace(Definitions.GRAVITY);
             }
         }
-
+        for(Fighter fighter : world.getFighters()){
+            if(fighter == null){
+                continue;
+            }
+            for (Shape hurtBox : fighter.getPain()) {
+                for (Fighter target : world.getFighters()) {
+                    if(target == null){
+                        continue;
+                    }
+                    for (Shape hitBox : target.getCollisions()) {
+                        if (CollisionChecker.intersects(hurtBox, hitBox)) {
+                            target.takeDamage((HurtBox) hurtBox);
+                        }
+                    }
+                }
+            }
+        }
         position.addInPlace(velocity);
     }
 
