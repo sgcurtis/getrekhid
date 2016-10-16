@@ -228,16 +228,16 @@ public class StickMan extends Player {
                     DoublePair offsetLow;
                     DoublePair offsetHigh;
                     if(facingLeft) {
-                        direction = new DoublePair(-5, 1);
+                        direction = new DoublePair(-2, 1);
                         offsetLow = new DoublePair(-10, -15);
                         offsetHigh = new DoublePair(-10, 15);
                     }else {
-                        direction = new DoublePair(5, 1);
+                        direction = new DoublePair(2, 1);
                         offsetLow = new DoublePair(10, -15);
                         offsetHigh = new DoublePair(10, 15);
                     }
-                    hurters.add(new HurtBox(offsetLow, this, 20, direction, 10, 5));
-                    hurters.add(new HurtBox(offsetHigh, this, 20, direction, 10, 5));
+                    hurters.add(new HurtBox(offsetLow, this, 20, direction, 5, 5));
+                    hurters.add(new HurtBox(offsetHigh, this, 20, direction, 5, 5));
                     break;
             }
         } else{
