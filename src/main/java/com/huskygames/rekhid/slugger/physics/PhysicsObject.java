@@ -58,17 +58,23 @@ public abstract class PhysicsObject implements Collidable, Positionable {
                         if (actorBox instanceof Circle) {
                             Circle cir = (Circle) actorBox;
                             Rectangle rectangle = (Rectangle) shape;
-                            if (cir.getPosition().getY() + cir.getRadius() >= rectangle.getMin().getY() &&  cir.getPosition().getY() + cir.getRadius() <= rectangle.getMax().getY() && cir.getPosition().getX() + cir.getRadius() >= rectangle.getMin().getX() &&  cir.getPosition().getX() + cir.getRadius() <= rectangle.getMax().getX() ) {
-                                hitLevel = true;
-                                if (Rekhid.getInstance().getTickCount() % 60 == 0 && Definitions.NOISY_COLLIDER) {
-                                    logger.info("Circle at: " + cir.getPosition() + " with radius: " + cir.getRadius() +
-                                            " collided with rect: " + rectangle);
+                                if (cir.getPosition().getY() + cir.getRadius() >= rectangle.getMin().getY()) {
+                                    if (cir.getPosition().getY() + cir.getRadius() <= rectangle.getMax().getY()) {
+                                        if (cir.getPosition().getX() + cir.getRadius() >= rectangle.getMin().getX()) {
+                                            if (cir.getPosition().getX() + cir.getRadius() <= rectangle.getMax().getX()) {
+                                                hitLevel = true;
+                                                if (Rekhid.getInstance().getTickCount() % 60 == 0 && Definitions.NOISY_COLLIDER) {
+                                                    logger.info("Circle at: " + cir.getPosition() + " with radius: " + cir.getRadius() +
+                                                            " collided with rect: " + rectangle);
+                                                }
+                                                if (velocity.getY() >= 0) {
+                                                    velocity.setY(0);
+                                                    decollide(rectangle, cir);
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
-                                if(velocity.getY() >= 0) {
-                                    velocity.setY(0);
-                                    decollide(rectangle, cir);
-                                }
-                            }
                         }
 
                     }
