@@ -241,7 +241,20 @@ public class StickMan extends Player {
                 case 3: // right
                     break;
                 case 4: // neutral
-                    hurters.add(new HurtBox(new DoublePair(0, 0), this, 100, new DoublePair(1, 1), 10, 60));
+                    DoublePair direction;
+                    DoublePair offsetLow;
+                    DoublePair offsetHigh;
+                    if(facingLeft) {
+                        direction = new DoublePair(-5, 1);
+                        offsetLow = new DoublePair(-10, -15);
+                        offsetHigh = new DoublePair(-10, 15);
+                    }else {
+                        direction = new DoublePair(5, 1);
+                        offsetLow = new DoublePair(10, -15);
+                        offsetHigh = new DoublePair(10, 15);
+                    }
+                    hurters.add(new HurtBox(offsetLow, this, 20, direction, 10, 5));
+                    hurters.add(new HurtBox(offsetHigh, this, 20, direction, 10, 5));
                     break;
             }
         } else{

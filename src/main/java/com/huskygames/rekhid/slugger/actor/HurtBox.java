@@ -10,7 +10,7 @@ public class HurtBox extends ActorCircle {
 
     public HurtBox(DoublePair offset, Actor parent, double r, DoublePair hit, int damage, int life){
         super(offset, parent, r);
-
+        this.parent = parent;
         effect = hit;
         this.damage = damage;
         lifetime = life;
@@ -19,7 +19,7 @@ public class HurtBox extends ActorCircle {
     public DoublePair getEffect() {
         return effect;
     }
-
+    public Actor getParent() { return parent; }
     public boolean decrementLife(){
         return --lifetime <= 0;
     }

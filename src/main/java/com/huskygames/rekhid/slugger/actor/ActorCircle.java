@@ -30,6 +30,7 @@ public class ActorCircle extends Circle {
     public DoublePair getOffset() {
         return offset;
     }
+    public void setOffset(DoublePair newOffset){ offset = newOffset; }
 
     @Override
     public DoublePair getPosition() {
