@@ -234,16 +234,6 @@ public class World implements Drawable {
                 shapes = ((Fighter) actor).getPain();
                 context.setColor(Definitions.HURTBOX_COLOR);
                 for (Shape shape : shapes) {
-                    if (shape instanceof HurtBox) {
-                        if (((HurtBox) shape).decrementLife()) {
-                            ((Actor) actor).removeHurtBox((HurtBox) shape);
-                            logger.warn(null, "Hurtbox should be gone now!");
-                            if(((Fighter)actor).getPain().size() == 0) {
-                                ((Fighter) actor).clearDamaged();
-                            }
-                            continue;
-                        }
-                    }
                     DoublePair position = translatePosition(shape);
 
                     DoublePair pixelCenter = position.multiply(1 / getViewRatio());
