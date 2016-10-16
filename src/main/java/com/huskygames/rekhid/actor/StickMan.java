@@ -31,6 +31,7 @@ public class StickMan extends Player {
     private double speed = 0.5;
     private double slidiness = 10;
     private int jumps = 2;
+    private DoublePair playerPos = new DoublePair(0,0);
 
     private long tickcount = 0;
     private Logger logger = LogManager.getLogger(StickMan.class.getName());
@@ -38,6 +39,7 @@ public class StickMan extends Player {
     public StickMan(DoublePair pos, DoublePair vel, Professor prof) {
         super(pos, vel);
         this.prof = prof;
+        this.playerPos = pos;
 
         this.lifetime = Actor.FOREVER;
         executing = false;
@@ -139,6 +141,12 @@ public class StickMan extends Player {
 
         int dir = getPrimaryDirection(input.getStickForPlayer(this));
 
+
+        // Check if player goes off screen
+        if(this.playerPos.getX() > 3300 || this.playerPos.getX() <500  ){
+            this.die();
+        }
+
         if (dir == 1) {
             if(getVelocity().getX()>0)
                 setVelocity(new DoublePair(-getVelocity().getX(),getVelocity().getY()));
@@ -173,6 +181,13 @@ public class StickMan extends Player {
 
         }
 
+
+
+    }
+
+    //Move up to Player/Fighter?
+    private void die(){
+        this.playerPos.setX(1800);
     }
 
     private void moveLeft() {
@@ -189,6 +204,7 @@ public class StickMan extends Player {
             executing = true;
 
         }
+
     }
 
     private void jump() {

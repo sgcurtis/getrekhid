@@ -13,44 +13,24 @@ import java.util.Set;
  */
 public abstract class Level implements Collidable {
 
-    protected Resource background;
-    protected Set<Shape> colliders;
-    protected Resource music;
-    protected IntPair[] startPos;
-    protected ViewPort defaultViewPort;
+    public abstract IntPair getLevelSize();
 
-    public IntPair getLevelSize() {
-        return levelSize;
-    }
+    public abstract ViewPort getDefaultViewPort();
 
-    protected IntPair levelSize;
-
-    public ViewPort getDefaultViewPort() {
-        return defaultViewPort;
-    }
-
-    public Resource getBackground(){
-        return background;
-    }
+    public abstract Resource getBackground();
 
     public abstract BufferedImage getBackgroundImage();
 
-    public Set<Shape> getCollisions() {
-        return colliders;
-    }
-    public void setColliders(Set<Shape> cols) {
-        colliders = cols;
-    }
+    public abstract Set<Shape> getCollisions();
 
-    public Resource getMusic() {
-        return music;
-    }
+    public abstract void setColliders(Set<Shape> cols);
 
-    public IntPair[] getStartPos() {
-        return startPos;
-    }
+    public abstract Resource getMusic();
+
+    public abstract IntPair[] getStartPos();
 
     public abstract IntPair getMinViewPort();
+
     public abstract IntPair getMaxViewPort();
 
     public abstract int getMinViewHeight();
