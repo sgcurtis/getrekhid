@@ -64,8 +64,10 @@ public abstract class PhysicsObject implements Collidable, Positionable {
                                     logger.info("Circle at: " + cir.getPosition() + " with radius: " + cir.getRadius() +
                                             " collided with rect: " + rectangle);
                                 }
-                                velocity.setY(0);
-                                decollide(rectangle, cir);
+                                if(velocity.getY() >= 0) {
+                                    velocity.setY(0);
+                                    decollide(rectangle, cir);
+                                }
                             }
                         }
 
