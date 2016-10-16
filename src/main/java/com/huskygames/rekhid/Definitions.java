@@ -34,6 +34,7 @@ public class Definitions {
     public static final boolean DRAW_HITBOXES = true;
 
     public static final Color HITBOX_COLOR = new Color(0, 100, 255, 100);
+    public static final Color HURTBOX_COLOR = new Color(245, 0, 0, 100);
 
     public static final boolean NOISY_RENDER = false;
     public static final boolean NOISY_COLLIDER = false;
@@ -41,7 +42,7 @@ public class Definitions {
     public static final Font DISPLAY_FONT;
     public static final Font FPS_FONT;
 
-    private static final String DAMAGE_PATTERN = "###%";
+    private static final String DAMAGE_PATTERN = "0.00";
 
     public static final DecimalFormat DAMAGE_FORMATTER = new DecimalFormat(DAMAGE_PATTERN);
 

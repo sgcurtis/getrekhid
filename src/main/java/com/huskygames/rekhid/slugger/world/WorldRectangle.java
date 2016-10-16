@@ -26,9 +26,7 @@ public class WorldRectangle extends Rectangle {
     }
 
     @Override
-    public DoublePair getPt1() {
-        return pt1;
-    }
+    public DoublePair getPt1() { return pt1; }
 
     @Override
     public DoublePair getPt2() {

@@ -24,6 +24,10 @@ public class ControllerInput {
     private HashMap<Player, DoublePair> sticks = new HashMap<>();
 
     private KeyboardTranslator keyboardmap = new KeyboardTranslator();
+
+    private GamepadTranslator gamepadmap = new GamepadTranslator();
+    private boolean allowJump = true;
+
     private static final Logger logger = LogManager.getLogger(ControllerInput.class.getName());
 
     public ControllerInput(Rekhid parent) {
@@ -60,6 +64,33 @@ public class ControllerInput {
                     }
                 }
 
+
+            }
+            else if(controller.getKey().getType() == Controller.Type.GAMEPAD){
+                while (eventQueue.getNextEvent(temp)) {
+                    ButtonType type = gamepadmap.translate(temp.getComponent().getIdentifier());
+                    if (temp.getValue() == 1) {
+                        if (type != null) {
+                            ButtonEvent event = new ButtonEvent(type, controller.getValue(), temp.getNanos());
+                            queues.get(controller.getValue()).add(event);
+                        }
+                    }
+                }
+
+
+
+                if (controller.getKey().getComponent(gamepadmap.getLeftStickY()).getPollData() == -1) {
+                    if (allowJump) {
+                        ButtonEvent event = new ButtonEvent(ButtonType.JUMP_BUTTON, controller.getValue(), temp.getNanos());
+                        queues.get(controller.getValue()).add(event);
+                        allowJump = false;
+                    }
+                }
+                if (!allowJump && controller.getKey().getComponent(gamepadmap.getLeftStickY()).getPollData() > -1){
+                    allowJump = true;
+                }
+
+                sticks.get(controller.getValue()).setX(controller.getKey().getComponent(gamepadmap.getLeftStickX()).getPollData());
 
             }
         }

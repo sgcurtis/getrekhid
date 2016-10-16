@@ -11,7 +11,7 @@ import java.awt.image.BufferedImage;
 import java.util.HashSet;
 import java.util.Set;
 
-public class DefaultLevel extends Level {
+public class LevelTerminal extends Level {
 
     private final IntPair minView = new IntPair(500, 100);
     private final IntPair maxView = new IntPair(3000, 1500);
@@ -23,12 +23,16 @@ public class DefaultLevel extends Level {
     protected IntPair[] startPos;
     protected ViewPort defaultViewPort;
 
-    public DefaultLevel() {
-        background = Resource.DEFAULT_LEVEL_BG;
+    public LevelTerminal() {
+        background = Resource.LEVEL_TERMINAL_BG;
         levelSize = Definitions.DEFAULT_WORLD_SIZE;
         defaultViewPort = new ViewPort(1500, new IntPair(700, 200), levelSize.getY());
         colliders = new HashSet<Shape>();
         colliders.add(new WorldRectangle(0,500, 7000,1000));
+        colliders.add(new WorldRectangle(850,300, 1300,400));
+        colliders.add(new WorldRectangle(1890,280, 2300,350));
+        colliders.add(new WorldRectangle(3000,300, 3400,400));
+
     }
 
     @Override
@@ -59,9 +63,7 @@ public class DefaultLevel extends Level {
     public IntPair[] getStartPos() { return startPos; }
 
     @Override
-    public IntPair getMinViewPort() {
-        return minView;
-    }
+    public IntPair getMinViewPort() { return minView; }
 
     @Override
     public IntPair getMaxViewPort() {
