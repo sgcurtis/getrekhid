@@ -31,7 +31,7 @@ public class Definitions {
 
     public static final DoublePair GRAVITY = new DoublePair(0, 0.09);
 
-    public static final boolean DRAW_HITBOXES = true;
+    public static final boolean DRAW_HITBOXES = false;
 
     public static final Color HITBOX_COLOR = new Color(0, 100, 255, 100);
 
