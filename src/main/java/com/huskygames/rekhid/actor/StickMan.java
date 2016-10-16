@@ -103,7 +103,7 @@ public class StickMan extends Player {
     @Override
     public BufferedImage getSprite() {
         if(!executing || sequence == null){
-            jumps = 2;
+            //jumps = 2;
             return sprite.getSprite(6,1,facingLeft);
             //return getHead();
         } else {
@@ -163,7 +163,8 @@ public class StickMan extends Player {
             velocity.addInPlace(new DoublePair(-velocity.getX() / slidiness, 0));
         }
 
-
+        if (jumps != 2 && velocity.getY() == 0)
+            jumps = 2;
     }
 
     private void moveRight() {
