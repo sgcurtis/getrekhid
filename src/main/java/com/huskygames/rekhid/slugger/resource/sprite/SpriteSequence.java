@@ -17,6 +17,7 @@ public class SpriteSequence {
         this.loop = loop;
         animation = anim;
     }
+
     public int getX(){
         return row[cur];
     }
