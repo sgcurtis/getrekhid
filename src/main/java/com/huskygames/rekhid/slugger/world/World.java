@@ -189,7 +189,6 @@ public class World implements Drawable {
 
     private void drawHitbox(Collidable actor, Graphics2D context) {
         Color temp = context.getColor();
-        if(actor instanceof Actor) {
             Set<Shape> shapes = actor.getCollisions();
             context.setColor(Definitions.HITBOX_COLOR);
             for (Shape shape : shapes) {
@@ -252,7 +251,7 @@ public class World implements Drawable {
                     }
                 }
             }
-        }
+
         context.setColor(temp);
     }
 
