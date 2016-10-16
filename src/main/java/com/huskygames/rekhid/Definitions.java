@@ -42,7 +42,7 @@ public class Definitions {
     public static final Font DISPLAY_FONT;
     public static final Font FPS_FONT;
 
-    private static final String DAMAGE_PATTERN = "###%";
+    private static final String DAMAGE_PATTERN = "0.00";
 
     public static final DecimalFormat DAMAGE_FORMATTER = new DecimalFormat(DAMAGE_PATTERN);
 

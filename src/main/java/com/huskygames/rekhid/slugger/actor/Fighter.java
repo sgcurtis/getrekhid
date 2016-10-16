@@ -12,6 +12,7 @@ public abstract class Fighter extends Actor {
 
     public Fighter(DoublePair pos, DoublePair vel) {
         super(pos, vel);
+        damage = 4.00;
     }
 
     public double getDamage() {
@@ -31,4 +32,9 @@ public abstract class Fighter extends Actor {
     }
 
     public abstract String getName();
+
+    public void takeDamage(HurtBox hit){
+        damage -= 0.10;
+        velocity.addInPlace(hit.getEffect());
+    }
 }
