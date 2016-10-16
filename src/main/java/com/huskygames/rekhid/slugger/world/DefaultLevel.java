@@ -9,12 +9,19 @@ import com.huskygames.rekhid.slugger.util.collison.shape.Shape;
 
 import java.awt.image.BufferedImage;
 import java.util.HashSet;
+import java.util.Set;
 
 public class DefaultLevel extends Level {
 
     private final IntPair minView = new IntPair(500, 100);
     private final IntPair maxView = new IntPair(3000, 1500);
     private final int minViewHeight = 300;
+    protected IntPair levelSize;
+    protected Resource background;
+    protected Set<Shape> colliders;
+    protected Resource music;
+    protected IntPair[] startPos;
+    protected ViewPort defaultViewPort;
 
     public DefaultLevel() {
         background = Resource.DEFAULT_LEVEL_BG;
@@ -25,10 +32,31 @@ public class DefaultLevel extends Level {
     }
 
     @Override
+    public IntPair getLevelSize() { return levelSize; }
+
+    @Override
+    public ViewPort getDefaultViewPort() { return defaultViewPort; }
+
+    @Override
+    public Resource getBackground(){ return background; }
+
+    @Override
     public BufferedImage getBackgroundImage() {
         return ((LoadedImage) Rekhid.getInstance().getResourceManager()
                 .requestResource(background)).getImage();
     }
+
+    @Override
+    public Set<Shape> getCollisions() { return colliders; }
+
+    @Override
+    public void setColliders(Set<Shape> cols) { colliders = cols; }
+
+    @Override
+    public Resource getMusic() { return music; }
+
+    @Override
+    public IntPair[] getStartPos() { return startPos; }
 
     @Override
     public IntPair getMinViewPort() {
