@@ -1,6 +1,7 @@
 package com.huskygames.rekhid.slugger.world;
 
 import com.huskygames.rekhid.Definitions;
+import com.huskygames.rekhid.actor.Professor;
 import com.huskygames.rekhid.slugger.Positionable;
 import com.huskygames.rekhid.Rekhid;
 import com.huskygames.rekhid.actor.StickMan;
@@ -22,6 +23,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
 import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
 import java.util.Set;
 
 import static com.huskygames.rekhid.actor.Professor.KUHL;
@@ -170,6 +172,11 @@ public class World implements Drawable {
                     actor.getHeight() / (double) viewPort.getHeight() * 100 + "%");
         }
 
+        if (actor instanceof StickMan) {
+            StickMan stickMan = (StickMan) actor;
+            Professor prof = stickMan.getProf();
+        }
+
         AffineTransformOp scaler = SpriteUtilities.buildScaleOp(
                 actor.getSprite().getHeight(null), (int) heightInPix);
 
@@ -189,7 +196,6 @@ public class World implements Drawable {
 
     private void drawHitbox(Collidable actor, Graphics2D context) {
         Color temp = context.getColor();
-        if(actor instanceof Actor) {
             Set<Shape> shapes = actor.getCollisions();
             context.setColor(Definitions.HITBOX_COLOR);
             for (Shape shape : shapes) {
@@ -251,7 +257,6 @@ public class World implements Drawable {
 
                     }
                 }
-            }
         }
         context.setColor(temp);
     }

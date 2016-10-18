@@ -286,6 +286,10 @@ public class StickMan extends Player {
         return Definitions.DEFAULT_PLAYER_HEIGHT;
     }
 
+    public Professor getProf() {
+        return  prof;
+    }
+
     @Override
     public String getName() {
         if (prof == Professor.KUHL) {
