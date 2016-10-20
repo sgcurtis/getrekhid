@@ -34,4 +34,7 @@ public abstract class Level implements Collidable {
     public abstract IntPair getMaxViewPort();
 
     public abstract int getMinViewHeight();
+
+    public abstract IntPair getLowerRightPlayableArea();
+    public abstract IntPair getUpperLeftPlayableArea();
 }

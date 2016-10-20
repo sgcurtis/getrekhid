@@ -2,7 +2,6 @@ package com.huskygames.rekhid.slugger.world;
 
 import com.huskygames.rekhid.Rekhid;
 import com.huskygames.rekhid.slugger.util.IntPair;
-import javafx.util.Pair;
 
 /**
  * The object that controls the viewing position and zoom for the matches.
@@ -44,35 +43,45 @@ public class ViewPort {
     }
 
     public void setCorner(IntPair newCorner) {
-        if (newCorner.getX() < 0)
+        if (newCorner.getX() < 0) {
             newCorner.setX(0);
-        if (newCorner.getX() > ((worldHeight * 16 / 9) - (height * 16 / 9)))
+        }
+        if (newCorner.getX() > ((worldHeight * 16 / 9) - (height * 16 / 9))) {
             newCorner.setX(((worldHeight * 16 / 9) - (height * 16 / 9)));
-        if (newCorner.getY() < 0)
+        }
+        if (newCorner.getY() < 0) {
             newCorner.setY(0);
-        if (newCorner.getY() > (worldHeight - height))
+        }
+        if (newCorner.getY() > (worldHeight - height)) {
             newCorner.setY((worldHeight - height));
+        }
         topLeft = newCorner;
     }
 
     public void setCorner(int newHeight, IntPair newCorner) {
-        if (newHeight > worldHeight)
+        if (newHeight > worldHeight) {
             height = worldHeight;
+        }
         height = newHeight;
 
-        if (newCorner.getX() < 0)
+        if (newCorner.getX() < 0) {
             newCorner.setX(0);
-        if (newCorner.getX() > ((worldHeight * 16 / 9) - (height * 16 / 9)))
+        }
+        if (newCorner.getX() > ((worldHeight * 16 / 9) - (height * 16 / 9))) {
             newCorner.setX(((worldHeight * 16 / 9) - (height * 16 / 9)));
-        if (newCorner.getY() < 0)
+        }
+        if (newCorner.getY() < 0) {
             newCorner.setY(0);
-        if (newCorner.getY() > (worldHeight - height))
+        }
+        if (newCorner.getY() > (worldHeight - height)) {
             newCorner.setY((worldHeight - height));
+        }
         topLeft = newCorner;
     }
 
     /**
      * The current height of the viewport, in px
+     *
      * @return
      */
     public int getHeight() {
@@ -89,6 +98,7 @@ public class ViewPort {
 
     /**
      * Returns the size of the Canvas/Window in pixels
+     *
      * @return
      */
     public IntPair getWindowSize() {

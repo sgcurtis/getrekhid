@@ -2,7 +2,8 @@ package com.huskygames.rekhid.slugger.util;
 
 import java.awt.*;
 
-import static com.huskygames.rekhid.slugger.util.NumberUtilities.*;
+import static com.huskygames.rekhid.slugger.util.NumberUtilities.max;
+import static com.huskygames.rekhid.slugger.util.NumberUtilities.min;
 
 public class DoublePair {
     private double x, y;
@@ -83,7 +84,7 @@ public class DoublePair {
         DoublePair min = a.getMin(b);
         DoublePair max = a.getMax(b);
 
-        if(this.getX() > min.getX() && this.getY() > min.getY()) {
+        if (this.getX() > min.getX() && this.getY() > min.getY()) {
             if (this.getX() < max.getX() && this.getY() < max.getY()) {
                 return true;
             }
@@ -102,7 +103,7 @@ public class DoublePair {
     }
 
     public IntPair rounded() {
-        return new IntPair((int)Math.round(x), (int)Math.round(y));
+        return new IntPair((int) Math.round(x), (int) Math.round(y));
     }
 
     @Override
