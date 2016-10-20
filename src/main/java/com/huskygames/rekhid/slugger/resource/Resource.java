@@ -21,16 +21,16 @@ public enum Resource {
     final Type type;
     final String location;
 
+    Resource(String location, Type type) {
+        this.location = location;
+        this.type = type;
+    }
+
     public enum Type {
         MUSIC,
         CLIP,
         IMAGE,
         SPRITE_SHEET,
         SPRITE_SHEET_DEFINITION
-    }
-
-    Resource(String location, Type type) {
-        this.location = location;
-        this.type = type;
     }
 }

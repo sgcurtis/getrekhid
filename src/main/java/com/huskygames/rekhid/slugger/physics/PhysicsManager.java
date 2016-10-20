@@ -11,10 +11,6 @@ public class PhysicsManager {
 
     private World world;
 
-    public void setWorld(World world) {
-        this.world = world;
-    }
-
     public PhysicsManager() {
         instance = this;
     }
@@ -26,18 +22,17 @@ public class PhysicsManager {
         return instance;
     }
 
+    public void setWorld(World world) {
+        this.world = world;
+    }
+
     public void addObject(PhysicsObject object) {
         objects.add(object);
     }
 
     public void updateObjects() {
-        for (PhysicsObject object: objects) {
+        for (PhysicsObject object : objects) {
             object.update(world);
         }
-
-
     }
-
-
-
 }

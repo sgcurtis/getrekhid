@@ -1,24 +1,27 @@
 package com.huskygames.rekhid.slugger.input;
 
-import com.huskygames.rekhid.slugger.actor.Player;
+import com.huskygames.rekhid.slugger.actor.Fighter;
 
 public class ButtonEvent {
     private final ButtonType button;
     private final long nanoTime;
+    private final Fighter fighter;
 
-    public Player getPlayer() {
-        return player;
+    public ButtonEvent(ButtonType button, Fighter fighter, long nanoTime) {
+        this.button = button;
+        this.fighter = fighter;
+        this.nanoTime = nanoTime;
+    }
+
+    public Fighter getFighter() {
+        return fighter;
     }
 
     public ButtonType getButton() {
         return button;
     }
 
-    private final Player player;
-
-    public ButtonEvent(ButtonType button, Player player, long nanoTime) {
-        this.button = button;
-        this.player = player;
-        this.nanoTime = nanoTime;
+    public long getTime() {
+        return nanoTime;
     }
 }

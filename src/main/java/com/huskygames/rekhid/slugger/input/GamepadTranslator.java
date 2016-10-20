@@ -3,16 +3,15 @@ package com.huskygames.rekhid.slugger.input;
 /**
  * Created by alex on 10/15/2016.
  */
+
 import net.java.games.input.Component;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.InputStream;
 import java.util.HashMap;
 
 
-
-public class GamepadTranslator  extends ControlMapper  {
+public class GamepadTranslator extends ControlMapper {
     private static final Logger logger = LogManager.getLogger(GamepadTranslator.class.getName());
 
     private static final HashMap<Component.Identifier, ButtonType> MAP = new HashMap<>();
@@ -26,7 +25,6 @@ public class GamepadTranslator  extends ControlMapper  {
         MAP.put(Component.Identifier.Button._5, ButtonType.SHIELD_BUTTON);
         MAP.put(Component.Identifier.Button._6, ButtonType.START_BUTTON);
         MAP.put(Component.Identifier.Button._7, ButtonType.START_BUTTON);
-
 
 
     }

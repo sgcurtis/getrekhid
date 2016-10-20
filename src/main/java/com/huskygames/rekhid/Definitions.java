@@ -23,7 +23,7 @@ public class Definitions {
     public static final IntPair DEFAULT_WORLD_SIZE = new IntPair(3840, 2160);
 
     public static final boolean DRAW_CENTRES = false;
-    public static final Color CENTRE_COLOR = new Color(0,255, 0, 100);
+    public static final Color CENTRE_COLOR = new Color(0, 255, 0, 100);
 
     public static final double MAX_VELOCITY = 10;
 
@@ -41,13 +41,12 @@ public class Definitions {
 
     public static final Font DISPLAY_FONT;
     public static final Font FPS_FONT;
-
-    private static final String DAMAGE_PATTERN = "0.00";
-
-    public static final DecimalFormat DAMAGE_FORMATTER = new DecimalFormat(DAMAGE_PATTERN);
-
     public static final Color SCORE_BACKGROUND = new Color(10, 255, 50, 140);
     public static final IntPair SCORE_BACKGROUND_SIZE = new IntPair(150, 80);
+    public static final double DEADZONE = 0.1;
+    public static final int VIEWPORT_PADDING = 100;
+    private static final String DAMAGE_PATTERN = "0.00";
+    public static final DecimalFormat DAMAGE_FORMATTER = new DecimalFormat(DAMAGE_PATTERN);
 
     static {
         Font temp = null;
@@ -61,8 +60,4 @@ public class Definitions {
         DISPLAY_FONT = temp;
         FPS_FONT = temp.deriveFont(12f);
     }
-
-    public static final double DEADZONE = 0.1;
-
-    public static final int VIEWPORT_PADDING = 100;
 }

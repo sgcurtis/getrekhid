@@ -15,30 +15,36 @@ public class DefaultLevel extends Level {
 
     private final IntPair minView = new IntPair(500, 100);
     private final IntPair maxView = new IntPair(3000, 1500);
+    private final IntPair minPlayable = new IntPair(0, 0);
+    private final IntPair maxPlayable = new IntPair(3500, 2000);
+
     private final int minViewHeight = 300;
-    protected IntPair levelSize;
-    protected Resource background;
-    protected Set<Shape> colliders;
+
+    protected IntPair levelSize  = Definitions.DEFAULT_WORLD_SIZE;
+    protected Resource background = Resource.DEFAULT_LEVEL_BG;
+    protected Set<Shape> colliders = new HashSet<Shape>();
     protected Resource music;
     protected IntPair[] startPos;
-    protected ViewPort defaultViewPort;
+    protected ViewPort defaultViewPort = new ViewPort(1500, new IntPair(700, 200), levelSize.getY());
 
     public DefaultLevel() {
-        background = Resource.DEFAULT_LEVEL_BG;
-        levelSize = Definitions.DEFAULT_WORLD_SIZE;
-        defaultViewPort = new ViewPort(1500, new IntPair(700, 200), levelSize.getY());
-        colliders = new HashSet<Shape>();
-        colliders.add(new WorldRectangle(0,500, 7000,1000));
+        colliders.add(new WorldRectangle(0, 500, 7000, 1000));
     }
 
     @Override
-    public IntPair getLevelSize() { return levelSize; }
+    public IntPair getLevelSize() {
+        return levelSize;
+    }
 
     @Override
-    public ViewPort getDefaultViewPort() { return defaultViewPort; }
+    public ViewPort getDefaultViewPort() {
+        return defaultViewPort;
+    }
 
     @Override
-    public Resource getBackground(){ return background; }
+    public Resource getBackground() {
+        return background;
+    }
 
     @Override
     public BufferedImage getBackgroundImage() {
@@ -47,16 +53,24 @@ public class DefaultLevel extends Level {
     }
 
     @Override
-    public Set<Shape> getCollisions() { return colliders; }
+    public Set<Shape> getCollisions() {
+        return colliders;
+    }
 
     @Override
-    public void setColliders(Set<Shape> cols) { colliders = cols; }
+    public void setColliders(Set<Shape> cols) {
+        colliders = cols;
+    }
 
     @Override
-    public Resource getMusic() { return music; }
+    public Resource getMusic() {
+        return music;
+    }
 
     @Override
-    public IntPair[] getStartPos() { return startPos; }
+    public IntPair[] getStartPos() {
+        return startPos;
+    }
 
     @Override
     public IntPair getMinViewPort() {
@@ -71,5 +85,15 @@ public class DefaultLevel extends Level {
     @Override
     public int getMinViewHeight() {
         return 100;
+    }
+
+    @Override
+    public IntPair getLowerRightPlayableArea() {
+        return maxPlayable;
+    }
+
+    @Override
+    public IntPair getUpperLeftPlayableArea() {
+        return minPlayable;
     }
 }
