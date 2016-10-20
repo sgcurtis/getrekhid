@@ -8,10 +8,8 @@ import java.awt.*;
 import java.util.HashSet;
 
 public abstract class Menu implements Drawable {
+    private final Logger logger = LogManager.getLogger(Menu.class.getName());
     private final HashSet<MenuItem> items = new HashSet<>();
-
-    protected final Logger logger = LogManager.getLogger(Menu.class.getName());
-
     protected Image background;
 
     public void draw(Graphics2D context) {

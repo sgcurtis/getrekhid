@@ -1,14 +1,12 @@
 package com.huskygames.rekhid.slugger.world;
 
 import com.huskygames.rekhid.Definitions;
-import com.huskygames.rekhid.slugger.Positionable;
 import com.huskygames.rekhid.Rekhid;
 import com.huskygames.rekhid.actor.StickMan;
 import com.huskygames.rekhid.slugger.Drawable;
+import com.huskygames.rekhid.slugger.Positionable;
 import com.huskygames.rekhid.slugger.actor.Actor;
-import com.huskygames.rekhid.slugger.actor.ActorCircle;
 import com.huskygames.rekhid.slugger.actor.Fighter;
-import com.huskygames.rekhid.slugger.actor.HurtBox;
 import com.huskygames.rekhid.slugger.physics.Collidable;
 import com.huskygames.rekhid.slugger.physics.PhysicsManager;
 import com.huskygames.rekhid.slugger.util.DoublePair;
@@ -22,10 +20,11 @@ import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
 import java.awt.image.AffineTransformOp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import static com.huskygames.rekhid.actor.Professor.KUHL;
-import static com.huskygames.rekhid.actor.Professor.LEO;
 
 
 /**
@@ -38,7 +37,7 @@ public class World implements Drawable {
     private int height = Definitions.DEFAULT_WORLD_SIZE.getX();
 
     //private Grid grid;
-    private Fighter[] fighters;
+    private List<Fighter> fighters = new ArrayList<>(4);
 
     //level contains its own colliders
     private Level level;
@@ -55,14 +54,12 @@ public class World implements Drawable {
      */
     public World(Level level, StickMan player) {
         //grid = new Grid(Definitions.DEFAULT_WIDTH, Definitions.DEFAULT_HEIGHT);
-        fighters = new StickMan[4];
-        for (int i = 0; i < 4; i++) {
-            fighters[i] = null;
-        }
         PhysicsManager.getInstance().addObject(player);
-        fighters[0] = player;
-        fighters[1] = new StickMan(new DoublePair(1400, 300), new DoublePair(0, 0), KUHL);
-        PhysicsManager.getInstance().addObject(fighters[1]);
+        fighters.add(player);
+        player.setPosition(level.getStartPos()[0].asDoublePair());
+        fighters.add(new StickMan(level.getStartPos()[1].asDoublePair(),
+                new DoublePair(0, 0), KUHL));
+        PhysicsManager.getInstance().addObject(fighters.get(1));
 
         //defined level
         this.level = level;
@@ -73,12 +70,12 @@ public class World implements Drawable {
         Rekhid.getInstance().getResourceManager().suggestLoad(level.getBackground());
     }
 
-    /**
+/*    *//**
      * Constructs the world using abnormal height
      *
      * @param height:   the custom height used in this world
      * @param theLevel: the level that will run on this world
-     */
+     *//*
     public World(int height, Level theLevel, int viewHeight, int viewTLX, int viewTLY, StickMan player) {
         //grid = new Grid(width, height);
         this.height = height;
@@ -91,13 +88,13 @@ public class World implements Drawable {
         level = theLevel;
 
         viewPort = new ViewPort(viewHeight, new IntPair(viewTLX, viewTLY), height);
-    }
+    }*/
 
 
     /**
      * Returns the scale of the view, based on the height of the viewport and the height of the world
      *
-     * @return: a double of the scale of the viewport to the world
+     * @return a double of the scale of the viewport to the world
      * NOTE: the scale should never be less than 1. This is strictly to blow up the image when the viewport is zoomed in.
      * The largest the viewport can be is the size of the world itself.
      */
@@ -189,68 +186,60 @@ public class World implements Drawable {
 
     private void drawHitbox(Collidable actor, Graphics2D context) {
         Color temp = context.getColor();
-            Set<Shape> shapes = actor.getCollisions();
-            context.setColor(Definitions.HITBOX_COLOR);
+        Set<Shape> shapes = actor.getCollisions();
+        context.setColor(Definitions.HITBOX_COLOR);
+        for (Shape shape : shapes) {
+            DoublePair position = translatePosition(shape);
+
+            DoublePair pixelCenter = position.multiply(1 / getViewRatio());
+            if (shape instanceof Circle) {
+                int radiusInPx = (int) (((Circle) shape).getRadius() * (1 / getViewRatio()));
+                int diamInPx = radiusInPx * 2;
+                context.fillOval(centrer(pixelCenter.getX(), diamInPx),
+                        centrer(pixelCenter.getY(), diamInPx), diamInPx, diamInPx);
+                //noinspection Simplify,PointlessBooleanExpression,ConstantConditions
+                if (Rekhid.getInstance().getTickCount() % 60 == 0 && Definitions.NOISY_RENDER) {
+                    logger.info("   my radius in pixels is: " + radiusInPx);
+                    logger.info("   drawing circle at: " + pixelCenter);
+
+                }
+            } else if (shape instanceof Rectangle) {
+                Rectangle rectangle = (Rectangle) shape;
+                IntPair max = rectangle
+                        .getMax()
+                        .subtract(viewPort.getTopLeft())
+                        .multiply(1 / getViewRatio())
+                        .rounded();
+                IntPair min = rectangle
+                        .getMin()
+                        .subtract(viewPort.getTopLeft())
+                        .multiply(1 / getViewRatio())
+                        .rounded();
+
+                IntPair size = max.subtract(min);
+
+                context.fillRect(min.getX(), min.getY(), size.getX(), size.getY());
+            }
+        }
+        if (actor instanceof Fighter) {
+            shapes = ((Fighter) actor).getPain();
+            context.setColor(Definitions.HURTBOX_COLOR);
             for (Shape shape : shapes) {
                 DoublePair position = translatePosition(shape);
 
                 DoublePair pixelCenter = position.multiply(1 / getViewRatio());
+                int radiusInPx = (int) (((Circle) shape).getRadius() * (1 / getViewRatio()));
+                int diamInPx = radiusInPx * 2;
+                context.fillOval(centrer(pixelCenter.getX(), diamInPx),
+                        centrer(pixelCenter.getY(), diamInPx), diamInPx, diamInPx);
+                //noinspection Simplify,PointlessBooleanExpression,ConstantConditions
+                if (Rekhid.getInstance().getTickCount() % 60 == 0 && Definitions.NOISY_RENDER) {
+                    logger.info("   my radius in pixels is: " + radiusInPx);
+                    logger.info("   drawing circle at: " + pixelCenter);
 
-
-                if (shape instanceof Circle) {
-                    int radiusInPx = (int) (((Circle) shape).getRadius() * (1 / getViewRatio()));
-                    int diamInPx = radiusInPx * 2;
-                    context.fillOval(centrer(pixelCenter.getX(), diamInPx),
-                            centrer(pixelCenter.getY(), diamInPx), diamInPx, diamInPx);
-                    ActorCircle cir = (ActorCircle) shape;
-                    //noinspection Simplify,PointlessBooleanExpression,ConstantConditions
-                    if (Rekhid.getInstance().getTickCount() % 60 == 0 && Definitions.NOISY_RENDER) {
-                        //logger.info("   Actor is at: " + actor.getPosition() + " hitbox is at offset " +
-                        //        cir.getOffset() + ", therefore the computed position is " + cir.getPosition());
-                        logger.info("   my radius in pixels is: " + radiusInPx);
-                        logger.info("   drawing circle at: " + pixelCenter);
-
-                    }
-                } else if (shape instanceof Rectangle) {
-                    Rectangle rectangle = (Rectangle) shape;
-                    IntPair max = rectangle
-                            .getMax()
-                            .subtract(viewPort.getTopLeft())
-                            .multiply(1 / getViewRatio())
-                            .rounded();
-                    IntPair min = rectangle
-                            .getMin()
-                            .subtract(viewPort.getTopLeft())
-                            .multiply(1 / getViewRatio())
-                            .rounded();
-
-                    IntPair size = max.subtract(min);
-
-                    context.fillRect(min.getX(), min.getY(), size.getX(), size.getY());
                 }
             }
-            if(actor instanceof Fighter) {
-                shapes = ((Fighter) actor).getPain();
-                context.setColor(Definitions.HURTBOX_COLOR);
-                for (Shape shape : shapes) {
-                    DoublePair position = translatePosition(shape);
-
-                    DoublePair pixelCenter = position.multiply(1 / getViewRatio());
-                    int radiusInPx = (int) (((Circle) shape).getRadius() * (1 / getViewRatio()));
-                    int diamInPx = radiusInPx * 2;
-                    context.fillOval(centrer(pixelCenter.getX(), diamInPx),
-                            centrer(pixelCenter.getY(), diamInPx), diamInPx, diamInPx);
-                    ActorCircle cir = (ActorCircle) shape;
-                    //noinspection Simplify,PointlessBooleanExpression,ConstantConditions
-                    if (Rekhid.getInstance().getTickCount() % 60 == 0 && Definitions.NOISY_RENDER) {
-                        //logger.info("   Actor is at: " + actor.getPosition() + " hitbox is at offset " +
-                        //        cir.getOffset() + ", therefore the computed position is " + cir.getPosition());
-                        logger.info("   my radius in pixels is: " + radiusInPx);
-                        logger.info("   drawing circle at: " + pixelCenter);
-
-                    }
-                }
-            }
+        }
 
         context.setColor(temp);
     }
@@ -258,8 +247,6 @@ public class World implements Drawable {
     public void drawBackground(Graphics2D context) {
         int levelHeight = level.getLevelSize().getY(); // the full size of level, in GU
         int levelImageHeight = level.getBackgroundImage().getHeight(); // the height of the bg image in px
-
-        int canvasHeight = viewPort.getWindowSize().getY(); // the size of the canvas, in px
         int viewPortHeight = viewPort.getHeight(); // the height of the view port, in GU
 
         double vr = levelHeight / (double) viewPortHeight;
@@ -267,10 +254,7 @@ public class World implements Drawable {
         double pxh = vr * levelImageHeight;
         double pxw = vr * level.getBackgroundImage().getWidth();
 
-        IntPair topLeft = viewPort.getTopLeft(); // the upper left corner, where the viewport starts, 0, 0 relative to port
-
-        IntPair bgPos = viewPort.getTopLeft().neg().mul(1/ getViewRatio()).rounded();
-        int height = (int) (level.getBackgroundImage().getHeight() * (1 / getViewRatio()));
+        IntPair bgPos = viewPort.getTopLeft().neg().mul(1 / getViewRatio()).rounded();
         context.drawImage(level.getBackgroundImage(), bgPos.getX(), bgPos.getY(), (int) pxw, (int) pxh, null);
 
         if (Definitions.DRAW_HITBOXES) {
@@ -302,6 +286,24 @@ public class World implements Drawable {
             }
         }
         updateViewport();
+
+        for (Fighter ply : fighters) {
+            // first, check to see if they've left the world
+            DoublePair lowerBound = level.getUpperLeftPlayableArea().asDoublePair();
+            DoublePair upperBound = level.getLowerRightPlayableArea().asDoublePair();
+
+            if (!ply.getPosition().isInAabb(lowerBound, upperBound)) {
+                // kill em!
+                ply.setDead(true);
+            }
+
+            if (ply.isDead()) {
+                ply.setPosition(level.getStartPos()[fighters.indexOf(ply)].asDoublePair());
+                // revive!
+                ply.setDead(false);
+            }
+
+        }
     }
 
     private void updateViewport() {
@@ -310,8 +312,7 @@ public class World implements Drawable {
         int maxX = Integer.MIN_VALUE;
         int minY = Integer.MAX_VALUE;
         int maxY = Integer.MIN_VALUE;
-        for (int i = 0; i < 4; i++) {
-            Fighter ply = fighters[i];
+        for (Fighter ply: fighters) {
             if (ply != null) {
                 if (ply.getPosition().getX() < minX) {
                     minX = (int) ply.getPosition().getX();
@@ -353,14 +354,12 @@ public class World implements Drawable {
         int ypropo = (int) (yDis * viewRatio);
 
         IntPair topLeft = new IntPair(minX, minY);
-        IntPair bottomRight = new IntPair(maxX, maxY);
 
         if (ypropo > xDis) {
             // y is the bounding factor
             viewPort.setCorner(topLeft);
             viewPort.setHeight(yDis);
-        }
-        else {
+        } else {
             // x is the bounding factor
             viewPort.setCorner(topLeft);
             viewPort.setHeight((int) (xDis / viewRatio));
@@ -371,7 +370,7 @@ public class World implements Drawable {
         return level;
     }
 
-    public Fighter[] getFighters() {
+    public List<Fighter> getFighters() {
         return fighters;
     }
 }
