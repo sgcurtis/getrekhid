@@ -52,6 +52,10 @@ public class StickMan extends Fighter {
             new int[]{3,3,3},
             new int[]{4,5,4},
             new int[]{5,5,5}, "neutralAttack");
+    SpriteSequence upAttack = new SpriteSequence(
+            new int[]{4,4,4,5},
+            new int[]{9,10,11,0},
+            new int[]{5,5,5,5}, "upAttack");
 
     // end sprite sequences
 
@@ -207,7 +211,7 @@ public class StickMan extends Fighter {
 
             moveSideways();
         } else {
-            if (sequence != null && !sequence.getSequence().equals(jump)) {
+            if (sequence != null && !sequence.getSequence().equals(jump) && !attacking()) {
                 executing = false;
             }
 
@@ -283,26 +287,12 @@ public class StickMan extends Fighter {
                 case 1: // left
                     break;
                 case 2: // up
+                    upAttack();
                     break;
                 case 3: // right
                     break;
                 case 4: // neutral
-                    DoublePair direction;
-                    DoublePair offsetLow;
-                    DoublePair offsetHigh;
-                    if (facingLeft) {
-                        direction = new DoublePair(-2, 1);
-                        offsetLow = new DoublePair(-10, -15);
-                        offsetHigh = new DoublePair(-10, 15);
-                    } else {
-                        direction = new DoublePair(2, 1);
-                        offsetLow = new DoublePair(10, -15);
-                        offsetHigh = new DoublePair(10, 15);
-                    }
-                    hurters.add(new HurtBox(offsetLow, this, 20, direction, 5, 5));
-                    hurters.add(new HurtBox(offsetHigh, this, 20, direction, 5, 5));
-                    sequence = new SpriteState(neutralAttack, false, 0);
-                    executing = true;
+                    neutralAttack();
                     break;
             }
         } else {
@@ -310,6 +300,46 @@ public class StickMan extends Fighter {
         }
     }
 
+    private void upAttack(){
+        DoublePair direction = new DoublePair(0, -5);
+        DoublePair offsetLow;
+        DoublePair offsetHigh;
+        if (facingLeft) {
+            offsetLow = new DoublePair(-10, 0);
+            offsetHigh = new DoublePair(-10, 30);
+        } else {
+            offsetLow = new DoublePair(10, 0);
+            offsetHigh = new DoublePair(10, 30);
+        }
+        hurters.add(new HurtBox(offsetLow, this, 20, direction, 8, 8));
+        hurters.add(new HurtBox(offsetHigh, this, 20, direction, 8, 8));
+        sequence = new SpriteState(upAttack, false, 0);
+        executing = true;
+    }
+
+    private void neutralAttack(){
+        DoublePair direction;
+        DoublePair offsetLow;
+        DoublePair offsetHigh;
+        if (facingLeft) {
+            direction = new DoublePair(-2, 1);
+            offsetLow = new DoublePair(-10, -15);
+            offsetHigh = new DoublePair(-10, 15);
+        } else {
+            direction = new DoublePair(2, 1);
+            offsetLow = new DoublePair(10, -15);
+            offsetHigh = new DoublePair(10, 15);
+        }
+        hurters.add(new HurtBox(offsetLow, this, 20, direction, 5, 5));
+        hurters.add(new HurtBox(offsetHigh, this, 20, direction, 5, 5));
+        sequence = new SpriteState(neutralAttack, false, 0);
+        executing = true;
+    }
+
+    public boolean attacking(){
+        String temp = sequence.getSequence().getName();
+        return temp == "upAttack" || temp == "neutralAttack";
+    }
     public Set<Shape> getPain() {
         return hurters;
     }
