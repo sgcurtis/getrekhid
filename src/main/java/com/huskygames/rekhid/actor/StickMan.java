@@ -373,7 +373,6 @@ public class StickMan extends Fighter {
                 directions[i][j] = new DoublePair(multiplier * 2, 1);
             }
         }
-
         theAttack = new Attack(offsets, ticks, damages, directions, areas, this);
         sequence = new SpriteState(neutralAttack, false, 0, this);
         executing = true;
