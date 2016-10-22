@@ -48,6 +48,10 @@ public class StickMan extends Fighter {
             new int[]{1,  1,  1,  1,  1,  1},
             new int[]{5,  6,  7,  8,  9, 10},
             new int[]{3, 10, 10, 10, 10, 10}, "jumping");
+    SpriteSequence neutralAttack = new SpriteSequence(
+            new int[]{3,3,3},
+            new int[]{4,5,4},
+            new int[]{5,5,5}, "neutralAttack");
 
     // end sprite sequences
 
@@ -297,6 +301,8 @@ public class StickMan extends Fighter {
                     }
                     hurters.add(new HurtBox(offsetLow, this, 20, direction, 5, 5));
                     hurters.add(new HurtBox(offsetHigh, this, 20, direction, 5, 5));
+                    sequence = new SpriteState(neutralAttack, false, 0);
+                    executing = true;
                     break;
             }
         } else {
