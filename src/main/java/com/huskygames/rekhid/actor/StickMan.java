@@ -59,6 +59,7 @@ public class StickMan extends Fighter {
             new int[]{9,10,11,0,1},
             new int[]{4, 4, 4,10,0}, "upAttack");
 
+
     // end sprite sequences
 
     private static final Logger logger = LogManager.getLogger(StickMan.class.getName());
