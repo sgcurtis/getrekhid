@@ -8,6 +8,15 @@ public class ActorCircle extends Circle {
     private Actor parent;
     private double r;
 
+    public ActorCircle(DoublePair offset, Actor parent, double r) {
+        this.offset = offset;
+        this.parent = parent;
+        if (r < 0) {
+            throw new IllegalArgumentException("Radius cannot be negative!");
+        }
+        this.r = r;
+    }
+
     @Override
     public String toString() {
         return "ActorCircle{" +
@@ -18,19 +27,13 @@ public class ActorCircle extends Circle {
                 '}';
     }
 
-    public ActorCircle(DoublePair offset, Actor parent, double r) {
-        this.offset = offset;
-        this.parent = parent;
-        if (r < 0) {
-            throw new IllegalArgumentException("Radius cannot be negative!");
-        }
-        this.r = r;
-    }
-
     public DoublePair getOffset() {
         return offset;
     }
-    public void setOffset(DoublePair newOffset){ offset = newOffset; }
+
+    public void setOffset(DoublePair newOffset) {
+        offset = newOffset;
+    }
 
     @Override
     public DoublePair getPosition() {

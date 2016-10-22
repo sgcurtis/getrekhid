@@ -4,25 +4,22 @@ import com.huskygames.rekhid.slugger.resource.LoadedImage;
 import com.huskygames.rekhid.slugger.util.NumberUtilities;
 import com.huskygames.rekhid.slugger.util.SpriteUtilities;
 
-import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.Properties;
 
 /**
  * Sprite sheets will be created for each character, and will be in "PNG" format. A .properties
  * file withthe same name in the same directory will define the image parts in a schema defined as:
- *
+ * <p>
  * spriteheight:
  * spritewidth:
  * width:
  * height:
  * spritecountwidth:
  * spritecountheight:
- *
  */
 public class SpriteSheet extends LoadedImage {
 

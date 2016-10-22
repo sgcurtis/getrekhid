@@ -1,6 +1,5 @@
 package com.huskygames.rekhid.slugger.util;
 
-import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 
@@ -8,6 +7,7 @@ public class SpriteUtilities {
 
     /**
      * Creates a reversing affine transformation that "mirrors" the image
+     *
      * @param width the width of the image.
      * @return
      */
@@ -15,7 +15,7 @@ public class SpriteUtilities {
         AffineTransform temp = new AffineTransform();
         temp.translate(width / 2, 0);
         temp.scale(-1, 1);
-        temp.translate(-width/2 , 0);
+        temp.translate(-width / 2, 0);
         return temp;
     }
 
@@ -27,7 +27,7 @@ public class SpriteUtilities {
     }
 
     public static AffineTransformOp buildScaleOp(int currHeight, int desiredheight) {
-        return new AffineTransformOp(buildScale(currHeight,desiredheight),
+        return new AffineTransformOp(buildScale(currHeight, desiredheight),
                 AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
     }
 }

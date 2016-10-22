@@ -1,8 +1,8 @@
 package com.huskygames.rekhid.slugger.input;
 
 import com.huskygames.rekhid.Rekhid;
+import com.huskygames.rekhid.slugger.actor.Fighter;
 import com.huskygames.rekhid.slugger.util.DoublePair;
-import com.huskygames.rekhid.slugger.actor.Player;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
 import net.java.games.input.Event;
@@ -16,26 +16,21 @@ import java.util.stream.Collectors;
 
 public class ControllerInput {
 
+    private static final Logger logger = LogManager.getLogger(ControllerInput.class.getName());
     private final Rekhid parent;
-
-    private HashMap<Controller, Player> controls = new HashMap<>();
-
-    private HashMap<Player, Queue<ButtonEvent>> queues = new HashMap<>();
-    private HashMap<Player, DoublePair> sticks = new HashMap<>();
-
+    private HashMap<Controller, Fighter> controls = new HashMap<>();
+    private HashMap<Fighter, Queue<ButtonEvent>> queues = new HashMap<>();
+    private HashMap<Fighter, DoublePair> sticks = new HashMap<>();
     private KeyboardTranslator keyboardmap = new KeyboardTranslator();
-
     private GamepadTranslator gamepadmap = new GamepadTranslator();
     private boolean allowJump = true;
-
-    private static final Logger logger = LogManager.getLogger(ControllerInput.class.getName());
 
     public ControllerInput(Rekhid parent) {
         this.parent = parent;
     }
 
     public void tick() {
-        for (Map.Entry<Controller, Player> controller : controls.entrySet()) {
+        for (Map.Entry<Controller, Fighter> controller : controls.entrySet()) {
             controller.getKey().poll();
             EventQueue eventQueue = controller.getKey().getEventQueue();
             Event temp = new Event();
@@ -53,20 +48,17 @@ public class ControllerInput {
 
                 if (controller.getKey().getComponent(keyboardmap.getLeft()).getPollData() != 0) {
                     sticks.get(controller.getValue()).setX(-0.9);
-                }
-                else {
+                } else {
                     sticks.get(controller.getValue()).setX(0);
                     if (controller.getKey().getComponent(keyboardmap.getRight()).getPollData() != 0) {
                         sticks.get(controller.getValue()).setX(0.9);
-                    }
-                    else {
+                    } else {
                         sticks.get(controller.getValue()).setX(0);
                     }
                 }
 
 
-            }
-            else if(controller.getKey().getType() == Controller.Type.GAMEPAD){
+            } else if (controller.getKey().getType() == Controller.Type.GAMEPAD) {
                 while (eventQueue.getNextEvent(temp)) {
                     ButtonType type = gamepadmap.translate(temp.getComponent().getIdentifier());
                     if (temp.getValue() == 1) {
@@ -78,7 +70,6 @@ public class ControllerInput {
                 }
 
 
-
                 if (controller.getKey().getComponent(gamepadmap.getLeftStickY()).getPollData() == -1) {
                     if (allowJump) {
                         ButtonEvent event = new ButtonEvent(ButtonType.JUMP_BUTTON, controller.getValue(), temp.getNanos());
@@ -86,7 +77,7 @@ public class ControllerInput {
                         allowJump = false;
                     }
                 }
-                if (!allowJump && controller.getKey().getComponent(gamepadmap.getLeftStickY()).getPollData() > -1){
+                if (!allowJump && controller.getKey().getComponent(gamepadmap.getLeftStickY()).getPollData() > -1) {
                     allowJump = true;
                 }
 
@@ -96,7 +87,7 @@ public class ControllerInput {
         }
     }
 
-    public void assignController(Controller cont, Player ply) {
+    public void assignController(Controller cont, Fighter ply) {
         this.controls.put(cont, ply);
         this.queues.put(ply, new LinkedBlockingQueue<ButtonEvent>());
         this.sticks.put(ply, new DoublePair(0, 0));
@@ -131,7 +122,7 @@ public class ControllerInput {
      * <p>
      * DO NOT MODIFY THE RETURNED LIST
      */
-    public Queue<ButtonEvent> requestEventsForPlayer(Player p) {
+    public Queue<ButtonEvent> requestEventsForPlayer(Fighter p) {
         // TODO: actually return this
         return queues.get(p);
     }
@@ -142,14 +133,14 @@ public class ControllerInput {
      * @param p
      * @return
      */
-    public Queue<ButtonEvent> consumeEventsForPlayer(Player p) {
+    public Queue<ButtonEvent> consumeEventsForPlayer(Fighter p) {
         Queue<ButtonEvent> temp = queues.get(p);
         queues.put(p, new LinkedBlockingQueue<ButtonEvent>());
 
         return temp;
     }
 
-    public DoublePair getStickForPlayer(Player p) {
+    public DoublePair getStickForPlayer(Fighter p) {
         return sticks.get(p);
     }
 }

@@ -21,10 +21,9 @@ public class SoundThread extends Thread {
         instance = new SoundThread();
     }
 
-    private volatile boolean dirtyBackground = true;
-
     private final ConcurrentLinkedQueue<ClipRequest> queue = new ConcurrentLinkedQueue<>();
     private final ResourceManager resourceManager;
+    private volatile boolean dirtyBackground = true;
     private volatile Resource backgroundMusic;
 
     public SoundThread() {

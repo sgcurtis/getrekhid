@@ -44,4 +44,8 @@ public class IntPair {
     public IntPair subtract(IntPair minR) {
         return new IntPair(x - minR.getX(), y - minR.getY());
     }
+
+    public DoublePair asDoublePair() {
+        return new DoublePair(x, y);
+    }
 }
