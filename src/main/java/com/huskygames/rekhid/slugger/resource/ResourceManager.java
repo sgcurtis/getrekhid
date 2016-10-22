@@ -47,14 +47,12 @@ public class ResourceManager {
 
         if (res.type == Resource.Type.IMAGE) {
             temp = new LoadedImage(res.location, stream);
-        }
-        else if (res.type == Resource.Type.SPRITE_SHEET) {
+        } else if (res.type == Resource.Type.SPRITE_SHEET) {
             String path = res.location;
             String defPath = path.substring(0, path.length() - 4) + ".properties";
             InputStream defs = ResourceManager.class.getClassLoader().getResourceAsStream(defPath);
             temp = new SpriteSheet(path, stream, defs);
-        }
-        else if (res.type == Resource.Type.MUSIC) {
+        } else if (res.type == Resource.Type.MUSIC) {
             try {
 
                 AudioInputStream inputStream = AudioSystem.getAudioInputStream(stream);
@@ -67,14 +65,13 @@ public class ResourceManager {
                         baseFormat.getChannels() * 2,
                         baseFormat.getSampleRate(),
                         baseFormat.isBigEndian()
-                        );
+                );
                 temp = new AudioFile(res.location, inputStream, format);
-            } catch (UnsupportedAudioFileException | IOException e ) {
+            } catch (UnsupportedAudioFileException | IOException e) {
                 logger.warn("Unable to open audio: " + res.location, e);
                 temp = null;
             }
-        }
-        else {
+        } else {
             // TODO: addInPlace support for audio
             throw new UnsupportedOperationException("Unrecognized resource type.");
         }

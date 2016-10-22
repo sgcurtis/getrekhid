@@ -1,17 +1,17 @@
 package com.huskygames.rekhid;
 
 import com.huskygames.rekhid.actor.StickMan;
-import com.huskygames.rekhid.slugger.input.ControllerInput;
 import com.huskygames.rekhid.slugger.GamePanel;
+import com.huskygames.rekhid.slugger.input.ControllerInput;
 import com.huskygames.rekhid.slugger.physics.PhysicsManager;
 import com.huskygames.rekhid.slugger.resource.ResourceManager;
 import com.huskygames.rekhid.slugger.sound.SoundThread;
 import com.huskygames.rekhid.slugger.util.DoublePair;
 import com.huskygames.rekhid.slugger.util.FileUtilities;
-import com.huskygames.rekhid.slugger.world.DefaultLevel;
 import com.huskygames.rekhid.slugger.world.LevelTerminal;
 import com.huskygames.rekhid.slugger.world.World;
-import net.java.games.input.*;
+import net.java.games.input.Controller;
+import net.java.games.input.ControllerEnvironment;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,10 +27,9 @@ import static com.huskygames.rekhid.actor.Professor.LEO;
 
 public class Rekhid extends JFrame {
 
-    private static Rekhid instance;
-
     private final static Logger logger = LogManager.getLogger(Rekhid.class);
     private static final String OPERATING_SYSTEM = System.getProperty("os.name");
+    private static Rekhid instance;
 
     static {
         HashSet<String> files = new HashSet<>();
@@ -139,11 +138,14 @@ public class Rekhid extends JFrame {
         // cleanup here
     }
 
-    public ResourceManager getResourceManager() { return resourceManager; }
+    public ResourceManager getResourceManager() {
+        return resourceManager;
+    }
 
     public ControllerInput getControllerManager() {
         return controllerManager;
     }
+
     public MainMenu getMainMenu() {
         return mainMenu;
     }

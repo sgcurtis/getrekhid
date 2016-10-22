@@ -7,6 +7,11 @@ public class WorldRectangle extends Rectangle {
     private DoublePair pt1;
     private DoublePair pt2;
 
+    public WorldRectangle(double x1, double y1, double x2, double y2) {
+        pt1 = new DoublePair(x1, y1);
+        pt2 = new DoublePair(x2, y2);
+    }
+
     @Override
     public String toString() {
         return "WorldRectangle{" +
@@ -15,18 +20,15 @@ public class WorldRectangle extends Rectangle {
                 '}';
     }
 
-    public WorldRectangle(double x1, double y1, double x2, double y2) {
-        pt1 = new DoublePair(x1, y1);
-        pt2 = new DoublePair(x2, y2);
-    }
-
     @Override
     public DoublePair getPosition() {
         return pt1;
     }
 
     @Override
-    public DoublePair getPt1() { return pt1; }
+    public DoublePair getPt1() {
+        return pt1;
+    }
 
     @Override
     public DoublePair getPt2() {
