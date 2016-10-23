@@ -37,8 +37,7 @@ public class SpriteState {
         } else {
             temp = 0;
             if (cur + 2 == sequence.row.length && !loop) {
-
-                // TODO: this is trivially true, what did you mean to do here?
+                // end of animation settings
                 assert true;
             }
             else {
