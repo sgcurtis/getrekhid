@@ -12,14 +12,13 @@ import com.huskygames.rekhid.slugger.resource.sprite.SpriteSheet;
 import com.huskygames.rekhid.slugger.resource.sprite.SpriteState;
 import com.huskygames.rekhid.slugger.util.DoublePair;
 import com.huskygames.rekhid.slugger.util.collison.shape.Shape;
+import net.java.games.input.Controller;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.awt.image.BufferedImage;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A simple StickMan intended to illustrate the game
@@ -34,6 +33,7 @@ public class StickMan extends Fighter {
     private double slidiness = 10;
     private int jumps = 2;
     private DoublePair playerPos;
+    private double gamepadMaxVelocity = 1;
 
     // declare sprite sequences
     SpriteSequence moveRight = new SpriteSequence(
@@ -119,6 +119,8 @@ public class StickMan extends Fighter {
                     case TAUNT_BUTTON:
                         break;
                     case START_BUTTON:
+                        break;
+                    case CONTROLLER_SELECT_BUTTON:
                         break;
                     default:
                         break;
@@ -211,12 +213,15 @@ public class StickMan extends Fighter {
         if (jumps != 2 && velocity.getY() == 0) {
             jumps = 2;
         }
+        if (input.getStickForPlayer(this) != null) {
+            gamepadMaxVelocity = Math.pow(Math.abs(input.getStickForPlayer(this).getX()), 2);
+        }
     }
 
     private void moveRight() {
-        if (getVelocity().getX() <= Definitions.MAX_VELOCITY) {
-            if (getVelocity().getX() + speed > Definitions.MAX_VELOCITY) {
-                velocity.addInPlace(new DoublePair(Definitions.MAX_VELOCITY - getVelocity().getX(), 0));
+        if (getVelocity().getX() <= Definitions.MAX_VELOCITY * gamepadMaxVelocity) {
+            if (getVelocity().getX() + speed > Definitions.MAX_VELOCITY * gamepadMaxVelocity) {
+                velocity.addInPlace(new DoublePair(Definitions.MAX_VELOCITY * gamepadMaxVelocity - getVelocity().getX(), 0));
             } else {
                 velocity.addInPlace(new DoublePair(speed, 0));
             }
@@ -226,6 +231,9 @@ public class StickMan extends Fighter {
             }
             executing = true;
         }
+        else{
+            velocity.addInPlace(new DoublePair(-speed, 0));
+        }
     }
 
     //Move up to Player/Fighter?
@@ -234,9 +242,9 @@ public class StickMan extends Fighter {
     }
 
     private void moveLeft() {
-        if (getVelocity().getX() >= -Definitions.MAX_VELOCITY) {
-            if (getVelocity().getX() - speed < -Definitions.MAX_VELOCITY) {
-                velocity.addInPlace(new DoublePair(-Definitions.MAX_VELOCITY - getVelocity().getX(), 0));
+        if (getVelocity().getX() >= -Definitions.MAX_VELOCITY * gamepadMaxVelocity) {
+            if (getVelocity().getX() - speed < -Definitions.MAX_VELOCITY * gamepadMaxVelocity) {
+                velocity.addInPlace(new DoublePair(-Definitions.MAX_VELOCITY * gamepadMaxVelocity - getVelocity().getX(), 0));
             } else {
                 velocity.addInPlace(new DoublePair(-speed, 0));
             }
@@ -246,6 +254,9 @@ public class StickMan extends Fighter {
             }
             executing = true;
 
+        }
+        else{
+            velocity.addInPlace(new DoublePair(speed, 0));
         }
 
     }

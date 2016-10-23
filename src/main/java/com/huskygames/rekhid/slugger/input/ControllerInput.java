@@ -47,11 +47,11 @@ public class ControllerInput {
                 }
 
                 if (controller.getKey().getComponent(keyboardmap.getLeft()).getPollData() != 0) {
-                    sticks.get(controller.getValue()).setX(-0.9);
+                    sticks.get(controller.getValue()).setX(-1);
                 } else {
                     sticks.get(controller.getValue()).setX(0);
                     if (controller.getKey().getComponent(keyboardmap.getRight()).getPollData() != 0) {
-                        sticks.get(controller.getValue()).setX(0.9);
+                        sticks.get(controller.getValue()).setX(1);
                     } else {
                         sticks.get(controller.getValue()).setX(0);
                     }
