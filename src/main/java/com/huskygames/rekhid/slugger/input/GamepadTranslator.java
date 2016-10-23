@@ -23,7 +23,7 @@ public class GamepadTranslator extends ControlMapper {
         MAP.put(Component.Identifier.Button._3, ButtonType.JUMP_BUTTON);
         MAP.put(Component.Identifier.Button._4, ButtonType.SHIELD_BUTTON);
         MAP.put(Component.Identifier.Button._5, ButtonType.SHIELD_BUTTON);
-        MAP.put(Component.Identifier.Button._6, ButtonType.START_BUTTON);
+        MAP.put(Component.Identifier.Button._6, ButtonType.CONTROLLER_SELECT_BUTTON);
         MAP.put(Component.Identifier.Button._7, ButtonType.START_BUTTON);
 
 

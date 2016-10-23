@@ -15,6 +15,7 @@ public class KeyboardTranslator extends ControlMapper {
         MAP.put(Component.Identifier.Key.W, ButtonType.JUMP_BUTTON);
         MAP.put(Component.Identifier.Key.I, ButtonType.SHIELD_BUTTON);
         MAP.put(Component.Identifier.Key.SPACE, ButtonType.START_BUTTON);
+        MAP.put(Component.Identifier.Key.RETURN, ButtonType.CONTROLLER_SELECT_BUTTON);
     }
 
     @Override
