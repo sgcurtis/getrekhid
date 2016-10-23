@@ -151,9 +151,13 @@ public class StickMan extends Fighter {
 
     protected void updateHurtBoxes() {
         if(theAttack != null) {
+<<<<<<< HEAD
             if(theAttack.next()){
                 theAttack = null;
             }
+=======
+            theAttack.next();
+>>>>>>> new hurtbox/.Attack code
         }
         if (theAttack == null && fightersHit.size() > 0 ) {
             clearDamaged();
