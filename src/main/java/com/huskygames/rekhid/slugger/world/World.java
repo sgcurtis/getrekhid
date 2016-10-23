@@ -2,6 +2,7 @@ package com.huskygames.rekhid.slugger.world;
 
 import com.huskygames.rekhid.Definitions;
 import com.huskygames.rekhid.Rekhid;
+import com.huskygames.rekhid.actor.Professor;
 import com.huskygames.rekhid.actor.StickMan;
 import com.huskygames.rekhid.slugger.Drawable;
 import com.huskygames.rekhid.slugger.Positionable;
@@ -21,6 +22,7 @@ import org.apache.logging.log4j.Logger;
 import java.awt.*;
 import java.awt.image.AffineTransformOp;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -52,23 +54,20 @@ public class World implements Drawable {
      *
      * @param level: The Level that will be running on this world
      */
-    public World(Level level, StickMan player1, StickMan player2) {
+    public World(Level level, LinkedList<StickMan> players) {
         //grid = new Grid(Definitions.DEFAULT_WIDTH, Definitions.DEFAULT_HEIGHT);
 
-        //BRIAN ADDED THINGS, added a new fighter for AI to control and renamed first player,
-        // changed constructor for world will ask Jeff about this.
-        PhysicsManager.getInstance().addObject(player1);
-        fighters.add(player1);
-        player1.setPosition(level.getStartPos()[0].asDoublePair());
-        fighters.add(new StickMan(level.getStartPos()[1].asDoublePair(),
-                new DoublePair(0, 0), KUHL));
-        PhysicsManager.getInstance().addObject(fighters.get(1));
-
-        fighters.add(player2);
-        player2.setPosition(level.getStartPos()[0].asDoublePair());
-        fighters.add(new StickMan(level.getStartPos()[1].asDoublePair(),
-                new DoublePair(0, 0), KUHL));
-        PhysicsManager.getInstance().addObject(fighters.get(2));
+        //added a new fighter for AI to control and renamed first player,
+        // changed constructor for world
+        for (StickMan Player : players) {
+            PhysicsManager.getInstance().addObject(Player);
+            fighters.add(Player);
+            Player.setPosition(level.getStartPos()[0].asDoublePair());
+            fighters.add(new StickMan(level.getStartPos()[1].asDoublePair(),
+                    //TODO: add some way to pass a Professor Enum
+                    new DoublePair(0, 0), KUHL));
+            PhysicsManager.getInstance().addObject(fighters.get(1));
+        }
 
         //defined level
         this.level = level;
