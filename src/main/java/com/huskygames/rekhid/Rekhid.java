@@ -2,6 +2,7 @@ package com.huskygames.rekhid;
 
 import com.huskygames.rekhid.actor.StickMan;
 import com.huskygames.rekhid.slugger.GamePanel;
+import com.huskygames.rekhid.slugger.actor.AI.FSM;
 import com.huskygames.rekhid.slugger.input.ControllerInput;
 import com.huskygames.rekhid.slugger.physics.PhysicsManager;
 import com.huskygames.rekhid.slugger.resource.ResourceManager;
@@ -14,6 +15,7 @@ import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import sun.text.resources.cldr.sr.FormatData_sr_Latn_ME;
 
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioSystem;
@@ -65,6 +67,10 @@ public class Rekhid extends JFrame {
     private World world;
     private StickMan player1;
 
+    // BRIAN ADDED THINGS
+    private StickMan AiPlayer;
+    private FSM firstAI;
+
     private Rekhid() {
         super();
         logger.info("Building main class");
@@ -104,6 +110,12 @@ public class Rekhid extends JFrame {
 
         //creates an instance of a player to be used for testing purposes
         player1 = new StickMan(new DoublePair(1250, 300), new DoublePair(0, 0), LEO);
+
+        // BRIAN ADDED THINGS
+        // Add new stickman for ai player to control
+        AiPlayer = new StickMan(new DoublePair(1250, 300), new DoublePair(0, 0), LEO);
+        // Add it to the AI class (will change FSM name later, Java has FSM class already
+        firstAI = new FSM(1, AiPlayer, player1 );
     }
 
     public static Rekhid getInstance() {
@@ -182,7 +194,6 @@ public class Rekhid extends JFrame {
         while (true) {
             // game loop
             panel.repaint();
-
             // This is terrible multithreading code, but it sure is easy.
             synchronized (gameLock) {
                 // ALL CODE THAT CHANGES THE GAME MUST BE IN HERE.
@@ -201,7 +212,7 @@ public class Rekhid extends JFrame {
                         //characterSelectTick();
                         state = GameState.MATCH;
                         //world = new World(new DefaultLevel(), player1);
-                        world = new World(new LevelTerminal(), player1);
+                        world = new World(new LevelTerminal(), player1, AiPlayer);
                         PhysicsManager.getInstance().setWorld(world);
 
                         controllerManager.assignController(controllerManager.getValidControllers().get(0), player1);
@@ -243,6 +254,8 @@ public class Rekhid extends JFrame {
     private void matchTick() {
         world.tick();
         PhysicsManager.getInstance().updateObjects();
+        // BRIAN ADDED THINGS, move up to world maybe?
+        firstAI.update();
     }
 
     private void characterSelectTick() {

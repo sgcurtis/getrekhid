@@ -52,14 +52,23 @@ public class World implements Drawable {
      *
      * @param level: The Level that will be running on this world
      */
-    public World(Level level, StickMan player) {
+    public World(Level level, StickMan player1, StickMan player2) {
         //grid = new Grid(Definitions.DEFAULT_WIDTH, Definitions.DEFAULT_HEIGHT);
-        PhysicsManager.getInstance().addObject(player);
-        fighters.add(player);
-        player.setPosition(level.getStartPos()[0].asDoublePair());
+
+        //BRIAN ADDED THINGS, added a new fighter for AI to control and renamed first player,
+        // changed constructor for world will ask Jeff about this.
+        PhysicsManager.getInstance().addObject(player1);
+        fighters.add(player1);
+        player1.setPosition(level.getStartPos()[0].asDoublePair());
         fighters.add(new StickMan(level.getStartPos()[1].asDoublePair(),
                 new DoublePair(0, 0), KUHL));
         PhysicsManager.getInstance().addObject(fighters.get(1));
+
+        fighters.add(player2);
+        player2.setPosition(level.getStartPos()[0].asDoublePair());
+        fighters.add(new StickMan(level.getStartPos()[1].asDoublePair(),
+                new DoublePair(0, 0), KUHL));
+        PhysicsManager.getInstance().addObject(fighters.get(2));
 
         //defined level
         this.level = level;
