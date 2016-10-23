@@ -11,6 +11,7 @@ public class Attack {
     private DoublePair[][] offsets;
     private int[][] damages;
     private DoublePair[][] effects;
+    private int[][] area;
     private int[] ticks;
     private Actor parent;
     private int temp;
@@ -19,11 +20,12 @@ public class Attack {
 
     protected Set<Shape> hurters = new HashSet<>();
 
-    public Attack(DoublePair[][] boxes, int[] stages, int[][] damage, DoublePair[][] launch, Actor parent){
+    public Attack(DoublePair[][] boxes, int[] stages, int[][] damage, DoublePair[][] launch, int[][]areas, Actor parent){
         offsets = boxes;
         ticks = stages;
         damages = damage;
         effects = launch;
+        area = areas;
         this.parent = parent;
         cur = 0;
         temp = 0;
@@ -41,7 +43,6 @@ public class Attack {
                 }
             }
         }
-
 
         if (ticks[cur] - temp > 0) {
             temp++;
@@ -64,12 +65,16 @@ public class Attack {
     public void genBoxes(int index){
         for(int i = 0; i < offsets[cur].length; i++){
             if(offsets[cur][i] != null) {
-                hurters.add(new HurtBox(offsets[cur][i], parent, this, 20, effects[cur][i], damages[cur][i], ticks[i]));
+                hurters.add(new HurtBox(offsets[cur][i], parent, this, area[cur][i], effects[cur][i], damages[cur][i], ticks[i]));
             }
         }
     }
 
     public Set<Shape> getPain(){
         return hurters;
+    }
+
+    public boolean isFinished(){
+        return finished;
     }
 }
