@@ -2,7 +2,7 @@ package com.huskygames.rekhid;
 
 import com.huskygames.rekhid.actor.StickMan;
 import com.huskygames.rekhid.slugger.GamePanel;
-import com.huskygames.rekhid.slugger.actor.AI.FSM;
+import com.huskygames.rekhid.slugger.actor.AI.FsmProf;
 import com.huskygames.rekhid.slugger.input.ControllerInput;
 import com.huskygames.rekhid.slugger.physics.PhysicsManager;
 import com.huskygames.rekhid.slugger.resource.ResourceManager;
@@ -24,6 +24,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.util.HashSet;
+import java.util.LinkedList;
 
 import static com.huskygames.rekhid.actor.Professor.LEO;
 
@@ -69,7 +70,8 @@ public class Rekhid extends JFrame {
 
     // BRIAN ADDED THINGS
     private StickMan AiPlayer;
-    private FSM firstAI;
+    private FsmProf firstAI;
+    private LinkedList<StickMan> players;
 
     private Rekhid() {
         super();
@@ -114,8 +116,15 @@ public class Rekhid extends JFrame {
         // BRIAN ADDED THINGS
         // Add new stickman for ai player to control
         AiPlayer = new StickMan(new DoublePair(1250, 300), new DoublePair(0, 0), LEO);
-        // Add it to the AI class (will change FSM name later, Java has FSM class already
-        firstAI = new FSM(1, AiPlayer, player1 );
+
+
+        players = new LinkedList<StickMan>();
+        //Add all created players to the players list
+        players.add(player1);
+        players.add(AiPlayer);
+
+        // Pass enemy player and AI player to a new AI instance
+        firstAI = new FsmProf(1, AiPlayer, player1 );
     }
 
     public static Rekhid getInstance() {
@@ -212,7 +221,7 @@ public class Rekhid extends JFrame {
                         //characterSelectTick();
                         state = GameState.MATCH;
                         //world = new World(new DefaultLevel(), player1);
-                        world = new World(new LevelTerminal(), player1, AiPlayer);
+                        world = new World(new LevelTerminal(), players);
                         PhysicsManager.getInstance().setWorld(world);
 
                         controllerManager.assignController(controllerManager.getValidControllers().get(0), player1);
@@ -254,7 +263,7 @@ public class Rekhid extends JFrame {
     private void matchTick() {
         world.tick();
         PhysicsManager.getInstance().updateObjects();
-        // BRIAN ADDED THINGS, move up to world maybe?
+        // Update AI
         firstAI.update();
     }
 
