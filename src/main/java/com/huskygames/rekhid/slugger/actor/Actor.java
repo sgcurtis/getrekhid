@@ -16,7 +16,7 @@ public abstract class Actor extends PhysicsObject implements Heightable {
     public static final int FOREVER = -1;
     private final static Logger logger = LogManager.getLogger(Actor.class);
     protected int lifetime;
-    protected Set<Shape> hurters = new HashSet<>();
+    protected Attack theAttack = null;
 
     public Actor() {
         this(new DoublePair(0, 0), new DoublePair(0, 0));
@@ -42,11 +42,11 @@ public abstract class Actor extends PhysicsObject implements Heightable {
     }
 
     public Set<Shape> getPain() {
-        return hurters;
+        return theAttack.getPain();
     }
 
-    public void removeHurtBox(HurtBox box) {
-        hurters.remove(box);
+    public void removeAttack() {
+        theAttack = null;
     }
 
     public DoublePair getRelativePosition(ViewPort port) {

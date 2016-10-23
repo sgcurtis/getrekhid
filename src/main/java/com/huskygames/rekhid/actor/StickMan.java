@@ -137,17 +137,10 @@ public class StickMan extends Fighter {
     }
 
     protected void updateHurtBoxes() {
-        Iterator<Shape> i = hurters.iterator();
-        Shape cur;
-        while (i.hasNext()) {
-            cur = i.next();
-            if (cur instanceof HurtBox) {
-                if (((HurtBox) cur).decrementLife()) {
-                    i.remove();
-                }
-            }
+        if(theAttack != null) {
+            theAttack.next();
         }
-        if (hurters.isEmpty()) {
+        if (theAttack == null && fightersHit.size() > 0 ) {
             clearDamaged();
         }
     }
@@ -278,7 +271,7 @@ public class StickMan extends Fighter {
     }
 
     private void attack() {
-        if (hurters.isEmpty()) {
+        if (theAttack == null) {
             switch (getPrimaryDirection(input.getStickForPlayer(this))) {
                 case 0: // down
                     break;
@@ -309,8 +302,8 @@ public class StickMan extends Fighter {
             offsetLow = new DoublePair(10, 0);
             offsetHigh = new DoublePair(10, 30);
         }
-        hurters.add(new HurtBox(offsetLow, this, 20, direction, 8, 8));
-        hurters.add(new HurtBox(offsetHigh, this, 20, direction, 8, 8));
+        //hurters.add(new HurtBox(offsetLow, this, 20, direction, 8, 8));
+        //hurters.add(new HurtBox(offsetHigh, this, 20, direction, 8, 8));
         sequence = new SpriteState(upAttack, false, 0);
         executing = true;
     }
@@ -319,27 +312,73 @@ public class StickMan extends Fighter {
         DoublePair direction;
         DoublePair offsetLow;
         DoublePair offsetHigh;
+
+        DoublePair[][] offsets = new DoublePair[3][3];
+        DoublePair[][] directions = new DoublePair[3][3];
+        int[][] damages = new int[3][3];
+        int[] ticks = new int[]{5, 5, 5};
         if (facingLeft) {
-            direction = new DoublePair(-2, 1);
-            offsetLow = new DoublePair(-10, -15);
-            offsetHigh = new DoublePair(-10, 15);
+            offsets[0][0] = new DoublePair(-10, -7);
+            offsets[0][1] = null;
+            offsets[0][2] = null;
+            offsets[1][0] = offsets[0][0];
+            offsets[1][1] = new DoublePair(-25, -7);
+            offsets[1][2] = new DoublePair(-40, -7);
+            offsets[2][0] = offsets[0][0];
+            offsets[2][1] = null;
+            offsets[2][2] = null;
+
+            for(int i = 0; i < directions.length; i++){
+                for(int j = 0; j < directions[i].length; j++){
+                    directions[i][j] = new DoublePair(-2, 1);
+                }
+            }
+
+            for(int i = 0; i < damages.length; i++){
+                for(int j = 0; j < damages[i].length; j++){
+                    damages[i][j] = 5;
+                }
+            }
+
+
         } else {
-            direction = new DoublePair(2, 1);
-            offsetLow = new DoublePair(10, -15);
-            offsetHigh = new DoublePair(10, 15);
+            offsets[0][0] = new DoublePair(10, -7);
+            offsets[0][1] = null;
+            offsets[0][2] = null;
+            offsets[1][0] = offsets[0][0];
+            offsets[1][1] = new DoublePair(25, -7);
+            offsets[1][2] = new DoublePair(40, -7);
+            offsets[2][0] = offsets[0][0];
+            offsets[2][1] = null;
+            offsets[2][2] = null;
+
+            for(int i = 0; i < directions.length; i++){
+                for(int j = 0; j < directions[i].length; j++){
+                    directions[i][j] = new DoublePair(2, 1);
+                }
+            }
+
+            for(int i = 0; i < damages.length; i++){
+                for(int j = 0; j < damages[i].length; j++){
+                    damages[i][j] = 5;
+                }
+            }
         }
-        hurters.add(new HurtBox(offsetLow, this, 20, direction, 5, 5));
-        hurters.add(new HurtBox(offsetHigh, this, 20, direction, 5, 5));
+
+        theAttack = new Attack(offsets,ticks, damages, directions, this);
         sequence = new SpriteState(neutralAttack, false, 0);
         executing = true;
     }
 
     public boolean attacking(){
         String temp = sequence.getSequence().getName();
-        return temp == "upAttack" || temp == "neutralAttack";
+        return temp.equals("upAttack") || temp.equals("neutralAttack");
     }
     public Set<Shape> getPain() {
-        return hurters;
+        if(theAttack == null){
+            return new HashSet<>();
+        }
+        return theAttack.getPain();
     }
 
     @Override
