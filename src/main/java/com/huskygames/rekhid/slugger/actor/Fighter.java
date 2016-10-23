@@ -55,12 +55,12 @@ public abstract class Fighter extends Actor {
 
     public void takeDamage(HurtBox hit) {
         // double check we're not hurting ourselves
-        if (hit.getParent().equals(this)) {
+        if (hit.getParentActor().equals(this)) {
             return;
         }
 
-        if (hit.getParent() instanceof Fighter) {
-            Fighter parent = (Fighter) hit.getParent();
+        if (hit.getParentActor() instanceof Fighter) {
+            Fighter parent = (Fighter) hit.getParentActor();
             // if we've already been hit by this attacker, don't hurt us
             if (parent.getDamaged().contains(this)) {
                 return;
