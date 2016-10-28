@@ -1,31 +1,30 @@
 package com.huskygames.rekhid.slugger.menu;
 
+
 import com.huskygames.rekhid.Definitions;
 
 import java.awt.*;
 
-public class TextButton extends MenuItem {
+public class Label extends MenuItem {
 
-    private final String text;
+    private final String label;
     private final Font font;
 
-    public TextButton(String text) {
-        this.text = text;
+    public Label(String label){
+        this.label = label;
         font = Definitions.DISPLAY_FONT;
     }
 
-    public TextButton(String text, Font font) {
-        this.text = text;
+    public Label(String label, Font font) {
+        this.label = label;
         this.font = font;
-    }
-
-    public String getText() {
-        return text;
     }
 
     public Font getFont() {
         return font;
     }
 
-
+    public String getLabel() {
+        return label;
+    }
 }
