@@ -8,6 +8,8 @@ import com.huskygames.rekhid.slugger.resource.ResourceManager;
 import com.huskygames.rekhid.slugger.sound.SoundThread;
 import com.huskygames.rekhid.slugger.util.DoublePair;
 import com.huskygames.rekhid.slugger.util.FileUtilities;
+import com.huskygames.rekhid.slugger.world.DefaultLevel;
+import com.huskygames.rekhid.slugger.world.LevelComputers;
 import com.huskygames.rekhid.slugger.world.LevelTerminal;
 import com.huskygames.rekhid.slugger.world.World;
 import net.java.games.input.Controller;
@@ -201,7 +203,8 @@ public class Rekhid extends JFrame {
                         //characterSelectTick();
                         state = GameState.MATCH;
                         //world = new World(new DefaultLevel(), player1);
-                        world = new World(new LevelTerminal(), player1);
+                        world = new World(new LevelComputers(), player1);
+                        //world = new World(new LevelTerminal(), player1);
                         PhysicsManager.getInstance().setWorld(world);
 
                         controllerManager.assignController(controllerManager.getValidControllers().get(5), player1);
