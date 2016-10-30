@@ -50,9 +50,9 @@ public class StickMan extends Fighter {
             new int[]{5,  6,  7,  8,  9, 10},
             new int[]{3, 10, 10, 10, 10, 10}, "jumping");
     SpriteSequence neutralAttack = new SpriteSequence(
-            new int[]{3,3,3},
-            new int[]{4,5,4},
-            new int[]{5,5,5}, "neutralAttack");
+            new int[]{3,3,3, 3},
+            new int[]{4,5,4, 4},
+            new int[]{5,5,5, 5}, "neutralAttack");
     SpriteSequence upAttack = new SpriteSequence(
             new int[]{4, 4, 4,5,5},
             new int[]{9,10,11,0,1},
@@ -368,8 +368,22 @@ public class StickMan extends Fighter {
     private void neutralAttack(){
         DoublePair[][] offsets = new DoublePair[3][3];
         DoublePair[][] directions = new DoublePair[3][3];
+
+        int[][] areas = new int[3][3];
         int[][] damages = new int[3][3];
         int[] ticks = new int[]{5, 5, 5};
+
+        for(int i = 0; i < areas.length; i++){
+            for(int j = 0; j < areas[i].length; j++){
+                areas[i][j] = 8;
+            }
+        }
+
+        for(int i = 0; i < damages.length; i++){
+            for(int j = 0; j < damages[i].length; j++){
+                damages[i][j] = 5;
+            }
+        }
         if (facingLeft) {
             offsets[0][0] = new DoublePair(-10, -7);
             offsets[0][1] = null;
@@ -387,12 +401,6 @@ public class StickMan extends Fighter {
                 }
             }
 
-            for(int i = 0; i < damages.length; i++){
-                for(int j = 0; j < damages[i].length; j++){
-                    damages[i][j] = 5;
-                }
-            }
-
 
         } else {
             offsets[0][0] = new DoublePair(10, -7);
@@ -405,21 +413,15 @@ public class StickMan extends Fighter {
             offsets[2][1] = null;
             offsets[2][2] = null;
 
+
             for(int i = 0; i < directions.length; i++){
                 for(int j = 0; j < directions[i].length; j++){
                     directions[i][j] = new DoublePair(2, 1);
                 }
             }
-
-            for(int i = 0; i < damages.length; i++){
-                for(int j = 0; j < damages[i].length; j++){
-                    damages[i][j] = 5;
-                }
-            }
         }
-
-        theAttack = new Attack(offsets,ticks, damages, directions, this);
-        sequence = new SpriteState(neutralAttack, false, 0, this);
+        theAttack = new Attack(offsets, ticks, damages, directions, areas, this);
+        sequence = new SpriteState(neutralAttack, false, 0);
         executing = true;
     }
 
