@@ -33,7 +33,7 @@ public class StickMan extends Fighter {
     private double slidiness = 10;
     private int jumps = 2;
     private DoublePair playerPos;
-    private double gamepadMaxVelocity = 1;
+    private double currentMaxVelocity = Definitions.MAX_VELOCITY;
 
     // declare sprite sequences
     SpriteSequence moveRight = new SpriteSequence(
@@ -195,13 +195,13 @@ public class StickMan extends Fighter {
                 setVelocity(new DoublePair(-getVelocity().getX(), getVelocity().getY()));
             }
 
-            moveLeft();
+            moveSideways();
         } else if (dir == 3) {
             if (getVelocity().getX() < 0) {
                 setVelocity(new DoublePair(-getVelocity().getX(), getVelocity().getY()));
             }
 
-            moveRight();
+            moveSideways();
         } else {
             if (sequence != null && !sequence.getSequence().equals(jump)) {
                 executing = false;
@@ -213,27 +213,6 @@ public class StickMan extends Fighter {
         if (jumps != 2 && velocity.getY() == 0) {
             jumps = 2;
         }
-        if (input.getStickForPlayer(this) != null) {
-            gamepadMaxVelocity = Math.pow(Math.abs(input.getStickForPlayer(this).getX()), 2);
-        }
-    }
-
-    private void moveRight() {
-        if (getVelocity().getX() <= Definitions.MAX_VELOCITY * gamepadMaxVelocity) {
-            if (getVelocity().getX() + speed > Definitions.MAX_VELOCITY * gamepadMaxVelocity) {
-                velocity.addInPlace(new DoublePair(Definitions.MAX_VELOCITY * gamepadMaxVelocity - getVelocity().getX(), 0));
-            } else {
-                velocity.addInPlace(new DoublePair(speed, 0));
-            }
-            if (sequence == null || !sequence.getSequence().equals(moveRight)) {
-                facingLeft = false;
-                sequence = new SpriteState(moveRight, true, 0);
-            }
-            executing = true;
-        }
-        else{
-            velocity.addInPlace(new DoublePair(-speed, 0));
-        }
     }
 
     //Move up to Player/Fighter?
@@ -241,24 +220,36 @@ public class StickMan extends Fighter {
         this.dead = true;
     }
 
-    private void moveLeft() {
-        if (getVelocity().getX() >= -Definitions.MAX_VELOCITY * gamepadMaxVelocity) {
-            if (getVelocity().getX() - speed < -Definitions.MAX_VELOCITY * gamepadMaxVelocity) {
-                velocity.addInPlace(new DoublePair(-Definitions.MAX_VELOCITY * gamepadMaxVelocity - getVelocity().getX(), 0));
+    private void moveSideways() {
+        currentMaxVelocity = Definitions.MAX_VELOCITY * (Math.pow(Math.abs(input.getStickForPlayer(this).getX()), 2));
+
+        int dir = getPrimaryDirection(input.getStickForPlayer(this));
+        if (dir == 1) {
+            dir = -1;
+        }
+        else if (dir == 3) {
+            dir = 1;
+        }
+
+        if (getVelocity().getX() * dir <= currentMaxVelocity) {
+            if (getVelocity().getX() * dir + speed  > currentMaxVelocity) {
+                velocity.addInPlace(new DoublePair(dir * currentMaxVelocity - getVelocity().getX(), 0));
             } else {
-                velocity.addInPlace(new DoublePair(-speed, 0));
+                velocity.addInPlace(new DoublePair(dir * speed, 0));
             }
-            if (sequence == null || !sequence.getSequence().equals(moveLeft)) {
+            if (dir == -1 && (sequence == null || !sequence.getSequence().equals(moveLeft))) {
                 facingLeft = true;
                 sequence = new SpriteState(moveLeft, true, 0);
             }
+            else if (dir == 1 && (sequence == null || !sequence.getSequence().equals(moveRight))) {
+                facingLeft = false;
+                sequence = new SpriteState(moveRight, true, 0);
+            }
             executing = true;
-
         }
         else{
-            velocity.addInPlace(new DoublePair(speed, 0));
+            velocity.addInPlace(new DoublePair(-1 * dir * speed, 0));
         }
-
     }
 
     private void jump() {
