@@ -32,7 +32,7 @@ public class Attack {
         genBoxes(cur);
     }
 
-    public void next(){
+    public boolean next(){
         Iterator<Shape> i = hurters.iterator();
         Shape current;
         while (i.hasNext()) {
@@ -43,19 +43,20 @@ public class Attack {
                 }
             }
         }
-
-        if (ticks[cur] - temp > 0) {
-            temp++;
-        } else {
-            temp = 0;
-            cur++;
-            if (cur == ticks.length) {
-                finished = true;
-            }
-            else{
-                genBoxes(cur);
+        if(!finished) {
+            if (ticks[cur] - temp > 0) {
+                temp++;
+            } else {
+                temp = 0;
+                cur++;
+                if (cur == ticks.length) {
+                    finished = true;
+                } else {
+                    genBoxes(cur);
+                }
             }
         }
+        return finished;
     }
 
     public Actor getParent(){

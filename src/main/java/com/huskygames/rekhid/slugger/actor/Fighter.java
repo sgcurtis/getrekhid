@@ -81,4 +81,12 @@ public abstract class Fighter extends Actor {
     public void clearDamaged() {
         fightersHit.clear();
     }
+
+    public boolean attacking(){
+        return theAttack != null;
+    }
+
+    public void endAnimation(){
+        executing = false;
+    }
 }
