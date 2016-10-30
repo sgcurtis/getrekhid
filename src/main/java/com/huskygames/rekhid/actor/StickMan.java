@@ -59,7 +59,6 @@ public class StickMan extends Fighter {
             new int[]{9,10,11,0,1},
             new int[]{4, 4, 4,10,0}, "upAttack");
 
-
     // end sprite sequences
 
     private static final Logger logger = LogManager.getLogger(StickMan.class.getName());
@@ -220,7 +219,7 @@ public class StickMan extends Fighter {
             moveSideways(1);
         } else {
             if (sequence != null && !sequence.getSequence().equals(jump) && !attacking()) {
-                executing = false;
+                //executing = false;
             }
             velocity.addInPlace(new DoublePair(-velocity.getX() / slidiness, 0));
         }
