@@ -45,7 +45,6 @@ public class HurtBox extends ActorCircle {
         return damage;
     }
     public boolean decrementLife() {
-        lifetime--;
-        return lifetime <= 0;
+        return --lifetime <= 0;
     }
 }

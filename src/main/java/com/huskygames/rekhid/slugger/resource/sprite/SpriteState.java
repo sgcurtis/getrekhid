@@ -1,5 +1,7 @@
 package com.huskygames.rekhid.slugger.resource.sprite;
 
+import com.huskygames.rekhid.slugger.actor.Fighter;
+
 public class SpriteState {
 
     public SpriteSequence getSequence() {
@@ -11,11 +13,13 @@ public class SpriteState {
     private int cur = 0;
     private int temp = 0;
     private boolean loop;
+    private Fighter parent;
 
-    public SpriteState(SpriteSequence sequence, boolean loop, int start) {
+    public SpriteState(SpriteSequence sequence, boolean loop, int start, Fighter parent) {
         this.sequence = sequence;
         this.loop = loop;
         this.cur = start;
+        this.parent = parent;
     }
 
 
@@ -36,9 +40,8 @@ public class SpriteState {
             temp++;
         } else {
             temp = 0;
-            if (cur + 2 == sequence.row.length && !loop) {
-                // end of animation settings
-                assert true;
+            if (cur+1 == sequence.row.length && !loop) {
+                parent.endAnimation();
             }
             else {
                 cur = (cur + 1) % sequence.row.length;
