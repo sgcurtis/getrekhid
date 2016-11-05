@@ -1,11 +1,11 @@
-package com.huskygames.rekhid.slugger.menu;
+package com.huskygames.rekhid.slugger.menu.items;
 
 
 import com.huskygames.rekhid.Definitions;
 
 import java.awt.*;
 
-public class Title extends MenuItem {
+public class Title extends com.huskygames.rekhid.slugger.menu.items.MenuItem {
 
     private final String title;
     private final Font font;
