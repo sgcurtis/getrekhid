@@ -119,6 +119,7 @@ public class StickMan extends Fighter {
                     case TAUNT_BUTTON:
                         break;
                     case START_BUTTON:
+                        logger.warn("POSITION: " + this.getPosition().getX() + ", " + this.getPosition().getY());
                         break;
                     case CONTROLLER_SELECT_BUTTON:
                         break;

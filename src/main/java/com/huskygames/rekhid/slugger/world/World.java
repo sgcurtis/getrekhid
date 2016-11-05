@@ -56,6 +56,7 @@ public class World implements Drawable {
         //grid = new Grid(Definitions.DEFAULT_WIDTH, Definitions.DEFAULT_HEIGHT);
         PhysicsManager.getInstance().addObject(player);
         fighters.add(player);
+        logger.warn("ADDING PLAYER " + player.getName() + " AT POSITION " + player.getPosition().getX() + ", " + player.getPosition().getY());
         player.setPosition(level.getStartPos()[0].asDoublePair());
         fighters.add(new StickMan(level.getStartPos()[1].asDoublePair(),
                 new DoublePair(0, 0), KUHL));
@@ -270,7 +271,7 @@ public class World implements Drawable {
 
         // draw the fighters
         for (Fighter ply : fighters) {
-            if (ply != null) {
+            if (ply != null && !ply.isDead()) {
                 drawActor(ply, context);
             }
         }
@@ -294,13 +295,19 @@ public class World implements Drawable {
 
             if (!ply.getPosition().isInAabb(lowerBound, upperBound)) {
                 // kill em!
+                if (ply.getLives() > 0) {
+                    logger.warn("Player " + ply.getName() + " died at pos " + ply.getPosition().getX() + ", " + ply.getPosition().getY());
+                    ply.removeLife();
+                }
                 ply.setDead(true);
             }
 
             if (ply.isDead()) {
                 ply.setPosition(level.getStartPos()[fighters.indexOf(ply)].asDoublePair());
                 // revive!
-                ply.setDead(false);
+                if (ply.getLives() > 0) {
+                    ply.setDead(false);
+                }
             }
 
         }
@@ -313,7 +320,7 @@ public class World implements Drawable {
         int minY = Integer.MAX_VALUE;
         int maxY = Integer.MIN_VALUE;
         for (Fighter ply: fighters) {
-            if (ply != null) {
+            if (ply != null && !ply.isDead()) {
                 if (ply.getPosition().getX() < minX) {
                     minX = (int) ply.getPosition().getX();
                 }
@@ -372,5 +379,15 @@ public class World implements Drawable {
 
     public List<Fighter> getFighters() {
         return fighters;
+    }
+
+    public int getNumLiveFighters() {
+        int alive = 0;
+        for (Fighter ply : fighters) {
+            if (!ply.isDead()) {
+                alive++;
+            }
+        }
+        return alive;
     }
 }
