@@ -219,7 +219,7 @@ public class StickMan extends Fighter {
             moveSideways(1);
         } else {
             if (sequence != null && !sequence.getSequence().equals(jump) && !attacking()) {
-                //executing = false;
+                executing = false;
             }
             velocity.addInPlace(new DoublePair(-velocity.getX() / slidiness, 0));
         }
@@ -369,7 +369,7 @@ public class StickMan extends Fighter {
 
         for(int i = 0; i < directions.length; i++){
             for(int j = 0; j < directions[i].length; j++){
-                directions[i][j] = new DoublePair(multiplier * 2, 1);
+                directions[i][j] = new DoublePair(multiplier * 2, -1);
             }
         }
         theAttack = new Attack(offsets, ticks, damages, directions, areas, this);
