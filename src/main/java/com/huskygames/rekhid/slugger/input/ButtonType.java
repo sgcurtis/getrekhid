@@ -6,5 +6,6 @@ public enum ButtonType {
     JUMP_BUTTON,
     SHIELD_BUTTON,
     TAUNT_BUTTON,
-    START_BUTTON
+    START_BUTTON,
+    CONTROLLER_SELECT_BUTTON
 }
