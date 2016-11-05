@@ -43,6 +43,7 @@ public class Attack {
                 }
             }
         }
+
         if(!finished) {
             if (ticks[cur] - temp > 0) {
                 temp++;
