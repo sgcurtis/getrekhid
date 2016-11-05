@@ -203,8 +203,7 @@ public class Rekhid extends JFrame {
                         //world = new World(new DefaultLevel(), player1);
                         world = new World(new LevelTerminal(), player1);
                         PhysicsManager.getInstance().setWorld(world);
-
-                        controllerManager.assignController(controllerManager.getValidControllers().get(0), player1);
+                        controllerManager.assignController(controllerManager.getValidControllers().get(3), player1);
                         break;
                     case MATCH:
                         //this.setSize(Definitions.DEFAULT_WIDTH, Definitions.DEFAULT_HEIGHT);

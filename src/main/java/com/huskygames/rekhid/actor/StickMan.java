@@ -98,16 +98,16 @@ public class StickMan extends Fighter {
 
     @Override
     public void tick() {
-        ticker++;
-        ticker %= 200;
-        if(ticker < 100)
-            moveRight();
-        if(ticker == 100)
-            upAttack();
-        if(ticker > 100 && ticker < 199)
-            moveLeft();
-        if(ticker == 199)
-            neutralAttack();
+//        ticker++;
+//        ticker %= 200;
+//        if(ticker < 100)
+//            moveRight();
+//        if(ticker == 100)
+//            upAttack();
+//        if(ticker > 100 && ticker < 199)
+//            moveLeft();
+//        if(ticker == 199)
+//            neutralAttack();
         // only work if the player is enabled
         if (!disabled) {
             if (executing) {
@@ -200,7 +200,7 @@ public class StickMan extends Fighter {
 
     private void updateMovement() {
         if(theAttack != null){
-            velocity.addInPlace(new DoublePair(-velocity.getX()/2, 0));
+            velocity.addInPlace(new DoublePair(-velocity.getX()/slidiness, 0));
             return;
         }
         int dir = getPrimaryDirection(input.getStickForPlayer(this));
@@ -216,7 +216,7 @@ public class StickMan extends Fighter {
             moveRight();
         } else {
             if (sequence != null && !sequence.getSequence().equals(jump) && !attacking()) {
-                //executing = false;
+                executing = false;
             }
             velocity.addInPlace(new DoublePair(-velocity.getX() / slidiness, 0));
         }
@@ -226,7 +226,7 @@ public class StickMan extends Fighter {
     }
 
     private void moveRight() {
-        if(theAttack != null){
+        if(attacking()){
             return;
         }
         if (getVelocity().getX() <= Definitions.MAX_VELOCITY) {
@@ -249,7 +249,7 @@ public class StickMan extends Fighter {
     }
 
     private void moveLeft() {
-        if(theAttack != null){
+        if(attacking()){
             return;
         }
         if (getVelocity().getX() >= -Definitions.MAX_VELOCITY) {
@@ -308,67 +308,49 @@ public class StickMan extends Fighter {
     }
 
     private void upAttack(){
+        int multiplier = facingLeft ? -1 : 1;
+        int[][] areas = new int[3][3];
         DoublePair[][] offsets = new DoublePair[3][3];
         DoublePair[][] directions = new DoublePair[3][3];
         int[][] damages = new int[3][3];
         int[] ticks = new int[]{5, 5, 5};
-        if (facingLeft) {
-            offsets[0][0] = new DoublePair(-10, -20);
-            offsets[0][1] = null;
-            offsets[0][2] = null;
-            offsets[1][0] = offsets[0][0];
-            offsets[1][1] = new DoublePair(-25, -20);
-            offsets[1][2] = new DoublePair(-40, -20);
-            offsets[2][0] = offsets[0][0];
-            offsets[2][1] = null;
-            offsets[2][2] = null;
+        offsets[0][0] = new DoublePair(multiplier * 30, -20);
+        offsets[0][1] = null;
+        offsets[0][2] = null;
+        offsets[1][0] = offsets[0][0];
+        offsets[1][1] = new DoublePair(multiplier * 40, -30);
+        offsets[1][2] = new DoublePair(multiplier * 50, -40);
+        offsets[2][0] = offsets[0][0];
+        offsets[2][1] = null;
+        offsets[2][2] = null;
 
-            for(int i = 0; i < directions.length; i++){
-                for(int j = 0; j < directions[i].length; j++){
-                    directions[i][j] = new DoublePair(-2, 1);
-                }
-            }
-
-            for(int i = 0; i < damages.length; i++){
-                for(int j = 0; j < damages[i].length; j++){
-                    damages[i][j] = 5;
-                }
-            }
-
-
-        } else {
-            offsets[0][0] = new DoublePair(30, -20);
-            offsets[0][1] = null;
-            offsets[0][2] = null;
-            offsets[1][0] = offsets[0][0];
-            offsets[1][1] = new DoublePair(40, -30);
-            offsets[1][2] = new DoublePair(50, -40);
-            offsets[2][0] = offsets[0][0];
-            offsets[2][1] = null;
-            offsets[2][2] = null;
-
-            for(int i = 0; i < directions.length; i++){
-                for(int j = 0; j < directions[i].length; j++){
-                    directions[i][j] = new DoublePair(2, 1);
-                }
-            }
-
-            for(int i = 0; i < damages.length; i++){
-                for(int j = 0; j < damages[i].length; j++){
-                    damages[i][j] = 5;
-                }
+        for(int i = 0; i < areas.length; i++){
+            for(int j = 0; j < areas[i].length; j++){
+                areas[i][j] = 8;
             }
         }
 
-        theAttack = new Attack(offsets, ticks, damages, directions, this);
+        for(int i = 0; i < directions.length; i++){
+            for(int j = 0; j < directions[i].length; j++){
+                directions[i][j] = new DoublePair(multiplier, -5);
+            }
+        }
+
+        for(int i = 0; i < damages.length; i++){
+            for(int j = 0; j < damages[i].length; j++){
+                damages[i][j] = 5;
+            }
+        }
+
+        theAttack = new Attack(offsets, ticks, damages, directions, areas, this);
         sequence = new SpriteState(upAttack, false, 0, this);
         executing = true;
     }
 
     private void neutralAttack(){
+        int multiplier = facingLeft ? -1 : 1;
         DoublePair[][] offsets = new DoublePair[3][3];
         DoublePair[][] directions = new DoublePair[3][3];
-
         int[][] areas = new int[3][3];
         int[][] damages = new int[3][3];
         int[] ticks = new int[]{5, 5, 5};
@@ -384,44 +366,24 @@ public class StickMan extends Fighter {
                 damages[i][j] = 5;
             }
         }
-        if (facingLeft) {
-            offsets[0][0] = new DoublePair(-10, -7);
-            offsets[0][1] = null;
-            offsets[0][2] = null;
-            offsets[1][0] = offsets[0][0];
-            offsets[1][1] = new DoublePair(-25, -7);
-            offsets[1][2] = new DoublePair(-40, -7);
-            offsets[2][0] = offsets[0][0];
-            offsets[2][1] = null;
-            offsets[2][2] = null;
+        offsets[0][0] = new DoublePair(multiplier * 10, -7);
+        offsets[0][1] = null;
+        offsets[0][2] = null;
+        offsets[1][0] = offsets[0][0];
+        offsets[1][1] = new DoublePair(multiplier * 25, -7);
+        offsets[1][2] = new DoublePair(multiplier * 40, -7);
+        offsets[2][0] = offsets[0][0];
+        offsets[2][1] = null;
+        offsets[2][2] = null;
 
-            for(int i = 0; i < directions.length; i++){
-                for(int j = 0; j < directions[i].length; j++){
-                    directions[i][j] = new DoublePair(-2, 1);
-                }
-            }
-
-
-        } else {
-            offsets[0][0] = new DoublePair(10, -7);
-            offsets[0][1] = null;
-            offsets[0][2] = null;
-            offsets[1][0] = offsets[0][0];
-            offsets[1][1] = new DoublePair(25, -7);
-            offsets[1][2] = new DoublePair(40, -7);
-            offsets[2][0] = offsets[0][0];
-            offsets[2][1] = null;
-            offsets[2][2] = null;
-
-
-            for(int i = 0; i < directions.length; i++){
-                for(int j = 0; j < directions[i].length; j++){
-                    directions[i][j] = new DoublePair(2, 1);
-                }
+        for(int i = 0; i < directions.length; i++){
+            for(int j = 0; j < directions[i].length; j++){
+                directions[i][j] = new DoublePair(multiplier * 2, 1);
             }
         }
+
         theAttack = new Attack(offsets, ticks, damages, directions, areas, this);
-        sequence = new SpriteState(neutralAttack, false, 0);
+        sequence = new SpriteState(neutralAttack, false, 0, this);
         executing = true;
     }
 
