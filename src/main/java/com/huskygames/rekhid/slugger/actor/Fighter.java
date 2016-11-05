@@ -88,5 +88,6 @@ public abstract class Fighter extends Actor {
 
     public void endAnimation(){
         executing = false;
+
     }
 }
