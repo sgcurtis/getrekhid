@@ -36,7 +36,6 @@ public class StickMan extends Fighter {
     private double currentMaxVelocity = Definitions.MAX_VELOCITY;
     private int ticker = -50;
 
-
     // declare sprite sequences
     SpriteSequence moveRight = new SpriteSequence(
             new int[]{0, 0, 0, 0,  0,  0, 1, 1, 1},
@@ -114,7 +113,9 @@ public class StickMan extends Fighter {
             if (executing) {
                 sequence.next();
             }
+
             updateHurtBoxes();
+
             readController();
         }
     }
@@ -221,13 +222,14 @@ public class StickMan extends Fighter {
             if (sequence != null && !sequence.getSequence().equals(jump) && !attacking()) {
                 executing = false;
             }
+
             velocity.addInPlace(new DoublePair(-velocity.getX() / slidiness, 0));
         }
+
         if (jumps != 2 && velocity.getY() == 0) {
             jumps = 2;
         }
     }
-
 
     //Move up to Player/Fighter?
     private void die() {
