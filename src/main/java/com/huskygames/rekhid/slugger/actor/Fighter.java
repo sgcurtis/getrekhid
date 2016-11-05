@@ -58,6 +58,7 @@ public abstract class Fighter extends Actor {
 
     public void removeLife() {
         this.lives--;
+        logger.warn("Lives remaining: " + lives);
     }
 
     public int getLives() {

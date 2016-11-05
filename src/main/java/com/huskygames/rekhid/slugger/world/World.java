@@ -56,6 +56,7 @@ public class World implements Drawable {
         //grid = new Grid(Definitions.DEFAULT_WIDTH, Definitions.DEFAULT_HEIGHT);
         PhysicsManager.getInstance().addObject(player);
         fighters.add(player);
+        logger.warn("ADDING PLAYER " + player.getName() + " AT POSITION " + player.getPosition().getX() + ", " + player.getPosition().getY());
         player.setPosition(level.getStartPos()[0].asDoublePair());
         fighters.add(new StickMan(level.getStartPos()[1].asDoublePair(),
                 new DoublePair(0, 0), KUHL));
@@ -295,6 +296,7 @@ public class World implements Drawable {
             if (!ply.getPosition().isInAabb(lowerBound, upperBound)) {
                 // kill em!
                 if (ply.getLives() > 0) {
+                    logger.warn("Player " + ply.getName() + " died at pos " + ply.getPosition().getX() + ", " + ply.getPosition().getY());
                     ply.removeLife();
                 }
                 ply.setDead(true);
