@@ -33,8 +33,11 @@ public class Definitions {
 
     public static final boolean DRAW_HITBOXES = false;
 
+    public static final boolean DRAW_PADDING = true;
+
     public static final Color HITBOX_COLOR = new Color(0, 100, 255, 100);
     public static final Color HURTBOX_COLOR = new Color(245, 0, 0, 100);
+    public static final Color PADDING_COLOR = new Color(45, 140, 0, 30);
 
     public static final boolean NOISY_RENDER = false;
     public static final boolean NOISY_COLLIDER = false;

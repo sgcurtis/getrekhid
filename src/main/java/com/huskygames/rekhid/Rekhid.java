@@ -194,8 +194,7 @@ public class Rekhid extends JFrame {
                 // GAMESTATE SPECIFIC
                 switch (state) {
                     case MENU:
-                        //menuTick();
-                        state = GameState.CHARACTER_SELECT;
+                        menuTick();
                         break;
                     case CHARACTER_SELECT:
                         //characterSelectTick();
@@ -207,7 +206,6 @@ public class Rekhid extends JFrame {
                         controllerManager.assignController(controllerManager.getValidControllers().get(0), player1);
                         break;
                     case MATCH:
-                        //this.setSize(Definitions.DEFAULT_WIDTH, Definitions.DEFAULT_HEIGHT);
                         matchTick();
                         break;
                     case POST_MATCH:

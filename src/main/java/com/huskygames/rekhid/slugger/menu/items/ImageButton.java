@@ -1,6 +1,6 @@
-package com.huskygames.rekhid.slugger.menu;
-
+package com.huskygames.rekhid.slugger.menu.items;
 import com.huskygames.rekhid.slugger.resource.Resource;
+
 
 public class ImageButton extends MenuItem {
 
@@ -13,6 +13,4 @@ public class ImageButton extends MenuItem {
     public Resource getImage() {
         return image;
     }
-
-
 }
