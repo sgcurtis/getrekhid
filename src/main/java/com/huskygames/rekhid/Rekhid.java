@@ -212,6 +212,10 @@ public class Rekhid extends JFrame {
                     case MATCH:
                         //this.setSize(Definitions.DEFAULT_WIDTH, Definitions.DEFAULT_HEIGHT);
                         matchTick();
+
+                        if (world.getNumLiveFighters() <= 1) {
+                            state = GameState.POST_MATCH;
+                        }
                         break;
                     case POST_MATCH:
                         break;

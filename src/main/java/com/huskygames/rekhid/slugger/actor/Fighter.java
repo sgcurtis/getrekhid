@@ -10,6 +10,7 @@ import java.util.Set;
 public abstract class Fighter extends Actor {
 
     private final static Logger logger = LogManager.getLogger(Fighter.class);
+    private int lives = 3;
     protected double damage;
     protected boolean executing;
     protected boolean dead;
@@ -49,6 +50,18 @@ public abstract class Fighter extends Actor {
 
     public void healDamage(double amount) {
         this.damage -= amount;
+    }
+
+    public void setLives(int lives) {
+        this.lives = lives;
+    }
+
+    public void removeLife() {
+        this.lives--;
+    }
+
+    public int getLives() {
+        return lives;
     }
 
     public abstract String getName();

@@ -270,7 +270,7 @@ public class World implements Drawable {
 
         // draw the fighters
         for (Fighter ply : fighters) {
-            if (ply != null) {
+            if (ply != null && !ply.isDead()) {
                 drawActor(ply, context);
             }
         }
@@ -294,13 +294,18 @@ public class World implements Drawable {
 
             if (!ply.getPosition().isInAabb(lowerBound, upperBound)) {
                 // kill em!
+                if (ply.getLives() > 0) {
+                    ply.removeLife();
+                }
                 ply.setDead(true);
             }
 
             if (ply.isDead()) {
                 ply.setPosition(level.getStartPos()[fighters.indexOf(ply)].asDoublePair());
                 // revive!
-                ply.setDead(false);
+                if (ply.getLives() > 0) {
+                    ply.setDead(false);
+                }
             }
 
         }
@@ -313,7 +318,7 @@ public class World implements Drawable {
         int minY = Integer.MAX_VALUE;
         int maxY = Integer.MIN_VALUE;
         for (Fighter ply: fighters) {
-            if (ply != null) {
+            if (ply != null && !ply.isDead()) {
                 if (ply.getPosition().getX() < minX) {
                     minX = (int) ply.getPosition().getX();
                 }
@@ -372,5 +377,15 @@ public class World implements Drawable {
 
     public List<Fighter> getFighters() {
         return fighters;
+    }
+
+    public int getNumLiveFighters() {
+        int alive = 0;
+        for (Fighter ply : fighters) {
+            if (!ply.isDead()) {
+                alive++;
+            }
+        }
+        return alive;
     }
 }
