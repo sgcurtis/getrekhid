@@ -65,8 +65,8 @@ public class GamePanel extends JPanel {
 
         FontMetrics metrics = g.getFontMetrics(g.getFont());
 
-        int x = 0;
-        int y = 0;
+        int x;
+        int y;
 
         int i = 0;
 
