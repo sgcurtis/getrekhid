@@ -50,13 +50,18 @@ public class StickMan extends Fighter {
             new int[]{5,  6,  7,  8,  9, 10},
             new int[]{3, 10, 10, 10, 10, 10}, "jumping");
     SpriteSequence neutralAttack = new SpriteSequence(
-            new int[]{3,3,3, 3},
-            new int[]{4,5,4, 4},
-            new int[]{5,5,5, 5}, "neutralAttack");
+            new int[]{3, 3, 3, 3},
+            new int[]{4, 5, 4, 4},
+            new int[]{5, 5, 5, 5}, "neutralAttack");
     SpriteSequence upAttack = new SpriteSequence(
-            new int[]{4, 4, 4,5,5},
-            new int[]{9,10,11,0,1},
-            new int[]{4, 4, 4,10,0}, "upAttack");
+            new int[]{4, 4, 4, 5, 5},
+            new int[]{9,10,11, 0, 1},
+            new int[]{4, 4, 4,10, 0}, "upAttack");
+    SpriteSequence downAttack = new SpriteSequence(
+            new int[]{ 2, 2, 2, 2, 3, 2},
+            new int[]{10, 8, 9, 7, 0,11},
+            new int[]{ 5, 5, 5, 5, 5, 5}, "downAttack");
+
 
     // end sprite sequences
 
@@ -98,16 +103,11 @@ public class StickMan extends Fighter {
 
     @Override
     public void tick() {
-//        ticker++;
-//        ticker %= 200;
-//        if(ticker < 100)
-//            moveRight();
-//        if(ticker == 100)
-//            upAttack();
-//        if(ticker > 100 && ticker < 199)
-//            moveLeft();
-//        if(ticker == 199)
-//            neutralAttack();
+        ticker++;
+        ticker %= 200;
+        if(ticker % 100 == 0)
+            downAttack();
+
         // only work if the player is enabled
         if (!disabled) {
             if (executing) {
@@ -220,7 +220,7 @@ public class StickMan extends Fighter {
             moveSideways(1);
         } else {
             if (sequence != null && !sequence.getSequence().equals(jump) && !attacking()) {
-                executing = false;
+                //executing = false;
             }
 
             velocity.addInPlace(new DoublePair(-velocity.getX() / slidiness, 0));
@@ -237,7 +237,11 @@ public class StickMan extends Fighter {
     }
 
     private void moveSideways(int dir) {
-        currentMaxVelocity = Definitions.MAX_VELOCITY * (Math.pow(Math.abs(input.getStickForPlayer(this).getX()), 2));
+        if(input.getStickForPlayer(this) != null) {
+            currentMaxVelocity = Definitions.MAX_VELOCITY * (Math.pow(Math.abs(input.getStickForPlayer(this).getX()), 2));
+        } else {
+            currentMaxVelocity = Definitions.MAX_VELOCITY;
+        }
         if (getVelocity().getX() * dir <= currentMaxVelocity) {
             if (getVelocity().getX() * dir + speed  > currentMaxVelocity) {
                 velocity.addInPlace(new DoublePair(dir * currentMaxVelocity - getVelocity().getX(), 0));
@@ -282,6 +286,7 @@ public class StickMan extends Fighter {
         if (theAttack == null) {
             switch (getPrimaryDirection(input.getStickForPlayer(this))) {
                 case 0: // down
+                    downAttack();
                     break;
                 case 1: // left
                     break;
@@ -378,7 +383,50 @@ public class StickMan extends Fighter {
         sequence = new SpriteState(neutralAttack, false, 0, this);
         executing = true;
     }
+    public void downAttack(){
+        int multiplier = facingLeft ? -1 : 1;
+        DoublePair[][] offsets = new DoublePair[6][2];
+        DoublePair[][] directions = new DoublePair[6][2];
+        int[][] areas = new int[6][2];
+        int[][] damages = new int[6][2];
+        int[] ticks = new int[]{5, 5, 5, 5, 5, 5};
 
+        offsets[0][0] = null;
+        offsets[0][1] = new DoublePair(0, -30);
+        offsets[1][0] = offsets[0][1];
+        offsets[1][1] = new DoublePair(multiplier * -15, -20);
+        offsets[2][0] = offsets[1][1];
+        offsets[2][1] = new DoublePair(multiplier * -25, 0);
+        offsets[3][0] = offsets[2][1];
+        offsets[3][1] = new DoublePair(0, 30);
+        offsets[4][0] = offsets[3][1];
+        offsets[4][1] = new DoublePair(multiplier * 25, 0);
+        offsets[5][0] = offsets[4][1];
+        offsets[5][1] = new DoublePair(multiplier * 15, -20);
+
+        for(int i = 0; i < areas.length; i++){
+            for(int j = 0; j < areas[i].length; j++){
+                areas[i][j] = 10;
+            }
+        }
+        areas[3][1] = 30;
+        areas[4][0] = 30;
+
+        for(int i = 0; i < damages.length; i++){
+            for(int j = 0; j < damages[i].length; j++){
+                damages[i][j] = 10;
+            }
+        }
+
+        for(int i = 0; i < directions.length; i++){
+            for(int j = 0; j < directions[i].length; j++){
+                directions[i][j] = new DoublePair(0, 10);
+            }
+        }
+        theAttack = new Attack(offsets, ticks, damages, directions, areas, this);
+        sequence = new SpriteState(downAttack, false, 0, this);
+        executing = true;
+    }
     public Set<Shape> getPain() {
         if(theAttack == null){
             return new HashSet<>();
