@@ -26,6 +26,7 @@ import java.lang.management.ManagementFactory;
 import java.util.HashSet;
 import java.util.LinkedList;
 
+import static com.huskygames.rekhid.actor.Professor.KUHL;
 import static com.huskygames.rekhid.actor.Professor.LEO;
 
 public class Rekhid extends JFrame {
@@ -111,11 +112,11 @@ public class Rekhid extends JFrame {
 
 
         //creates an instance of a player to be used for testing purposes
-        player1 = new StickMan(new DoublePair(1250, 300), new DoublePair(0, 0), LEO);
+        player1 = new StickMan(new DoublePair(1000, 150), new DoublePair(0, 0), LEO);
 
         // BRIAN ADDED THINGS
         // Add new stickman for ai player to control
-        AiPlayer = new StickMan(new DoublePair(1250, 300), new DoublePair(0, 0), LEO);
+        AiPlayer = new StickMan(new DoublePair(3000, 150), new DoublePair(0, 0), KUHL);
 
 
         players = new LinkedList<StickMan>();
@@ -220,11 +221,13 @@ public class Rekhid extends JFrame {
                     case CHARACTER_SELECT:
                         //characterSelectTick();
                         state = GameState.MATCH;
-                        //world = new World(new DefaultLevel(), player1);
+                        //world = new World(new DefaultLevel(), players);
                         world = new World(new LevelTerminal(), players);
                         PhysicsManager.getInstance().setWorld(world);
 
+                        controllerManager.assignController(controllerManager.getValidControllers().get(0), AiPlayer);
                         controllerManager.assignController(controllerManager.getValidControllers().get(0), player1);
+
                         break;
                     case MATCH:
                         //this.setSize(Definitions.DEFAULT_WIDTH, Definitions.DEFAULT_HEIGHT);

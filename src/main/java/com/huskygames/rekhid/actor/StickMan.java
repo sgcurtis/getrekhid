@@ -30,7 +30,7 @@ public class StickMan extends Fighter {
     private SpriteState sequence;
     private ControllerInput input;
     private Set<Shape> colliders = new HashSet<>();
-    private double speed = 0.5;
+    private double speed = .5;
     private double slidiness = 10;
     private int jumps = 2;
     private DoublePair playerPos;
@@ -104,7 +104,7 @@ public class StickMan extends Fighter {
     }
 
     //BRIAN ADDED THING, added fake controller input for AI to use
-    public void AIreadController(Queue<ButtonEvent> buttonEvents){
+    public void AIreadController(Queue<ButtonEvent> buttonEvents, int dir){
         if (buttonEvents != null) {
             if (buttonEvents.peek() != null) {
                 switch (buttonEvents.poll().getButton()) {
@@ -126,7 +126,34 @@ public class StickMan extends Fighter {
                         break;
                 }
             }
-            updateMovement();
+            AIupdateMovement(dir);
+        }
+    }
+
+    private void AIupdateMovement(int dir) {
+
+        if (dir == 1) {
+            if (getVelocity().getX() > 0) {
+                setVelocity(new DoublePair(-getVelocity().getX(), getVelocity().getY()));
+            }
+
+            moveLeft();
+        } else if (dir == 3) {
+            if (getVelocity().getX() < 0) {
+                setVelocity(new DoublePair(-getVelocity().getX(), getVelocity().getY()));
+            }
+
+            moveRight();
+        } else {
+            if (sequence != null && !sequence.getSequence().equals(jump)) {
+                executing = false;
+            }
+
+            //velocity.addInPlace(new DoublePair(-velocity.getX() / slidiness, 0));
+        }
+
+        if (jumps != 2 && velocity.getY() == 0) {
+            jumps = 2;
         }
     }
 
@@ -216,6 +243,7 @@ public class StickMan extends Fighter {
     }
 
     private void updateMovement() {
+
         int dir = getPrimaryDirection(input.getStickForPlayer(this));
         if (dir == 1) {
             if (getVelocity().getX() > 0) {

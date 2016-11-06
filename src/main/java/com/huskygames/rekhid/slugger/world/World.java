@@ -57,16 +57,12 @@ public class World implements Drawable {
     public World(Level level, LinkedList<StickMan> players) {
         //grid = new Grid(Definitions.DEFAULT_WIDTH, Definitions.DEFAULT_HEIGHT);
 
-        //added a new fighter for AI to control and renamed first player,
-        // changed constructor for world
-        for (StickMan Player : players) {
-            PhysicsManager.getInstance().addObject(Player);
-            fighters.add(Player);
-            Player.setPosition(level.getStartPos()[0].asDoublePair());
-            fighters.add(new StickMan(level.getStartPos()[1].asDoublePair(),
-                    //TODO: add some way to pass a Professor Enum
-                    new DoublePair(0, 0), KUHL));
-            PhysicsManager.getInstance().addObject(fighters.get(1));
+        for (int i=0; i<players.size(); i++){
+            PhysicsManager.getInstance().addObject(players.get(i));
+            fighters.add(players.get(i));
+            //Players should start at the location specified in their constructor, not in a level.getStartPos() ??
+            //players.get(i).setPosition(level.getStartPos()[i].asDoublePair());
+            PhysicsManager.getInstance().addObject(fighters.get(i));
         }
 
         //defined level
@@ -223,7 +219,6 @@ public class World implements Drawable {
                         .subtract(viewPort.getTopLeft())
                         .multiply(1 / getViewRatio())
                         .rounded();
-
                 IntPair size = max.subtract(min);
 
                 context.fillRect(min.getX(), min.getY(), size.getX(), size.getY());
