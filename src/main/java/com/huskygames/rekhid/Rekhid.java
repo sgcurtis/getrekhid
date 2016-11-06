@@ -19,6 +19,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Mixer;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
@@ -68,6 +69,7 @@ public class Rekhid extends JFrame {
     private StickMan player1;
 
     private Rekhid() {
+
         super();
         logger.info("Building main class");
 
@@ -113,6 +115,11 @@ public class Rekhid extends JFrame {
     }
 
     public static void main(String[] args) {
+
+        for (Mixer.Info in: AudioSystem.getMixerInfo()) {
+            logger.info("Builtin mixers: " + in.toString());
+            logger.info("   " + in.getVendor());
+        }
 
         Thread.currentThread().setName("MainThread");
 

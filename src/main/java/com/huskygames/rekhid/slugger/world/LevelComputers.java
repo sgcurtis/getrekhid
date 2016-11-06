@@ -31,10 +31,10 @@ public class LevelComputers extends Level {
         background = Resource.LEVEL_COMPUTERS_BG;
         levelSize = Definitions.DEFAULT_WORLD_SIZE;
         defaultViewPort = new ViewPort(1500, new IntPair(700, 200), levelSize.getY());
-        startPos = new IntPair[] {new IntPair(2150, 0),
-                new IntPair(2550, 0),
-                new IntPair(700, 0),
-                new IntPair(700, 0)};
+        startPos = new IntPair[] {new IntPair(2150, 1),
+                new IntPair(2550, 1),
+                new IntPair(700, 1),
+                new IntPair(700, 1)};
         createDefaultColliders();
     }
 

@@ -31,7 +31,6 @@ public class StickMan extends Fighter {
     private Set<Shape> colliders = new HashSet<>();
     private double speed = 0.5;
     private double slidiness = 10;
-    private int jumps = 2;
     private DoublePair playerPos;
     private double currentMaxVelocity = Definitions.MAX_VELOCITY;
 
@@ -119,7 +118,7 @@ public class StickMan extends Fighter {
                     case TAUNT_BUTTON:
                         break;
                     case START_BUTTON:
-                        logger.warn("POSITION: " + this.getPosition().getX() + ", " + this.getPosition().getY());
+                        die();
                         break;
                     case CONTROLLER_SELECT_BUTTON:
                         break;
@@ -211,14 +210,9 @@ public class StickMan extends Fighter {
             velocity.addInPlace(new DoublePair(-velocity.getX() / slidiness, 0));
         }
 
-        if (jumps != 2 && velocity.getY() == 0) {
-            jumps = 2;
+        if (this.getJumps() != 2 && velocity.getY() == 0 && position.getY() > 1) {
+            this.setJumps(2);
         }
-    }
-
-    //Move up to Player/Fighter?
-    private void die() {
-        this.dead = true;
     }
 
     private void moveSideways() {
@@ -254,10 +248,10 @@ public class StickMan extends Fighter {
     }
 
     private void jump() {
-        if (jumps > 0) {
+        if (this.getJumps() > 0) {
             position.setY(position.getY() - 3);
             velocity.addInPlace(0, -5);
-            jumps--;
+            this.setJumps(this.getJumps() - 1);
             executing = true;
             sequence = new SpriteState(jump, false, 0);
         }
