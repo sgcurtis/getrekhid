@@ -56,17 +56,8 @@ public class ResourceManager {
             try {
 
                 AudioInputStream inputStream = AudioSystem.getAudioInputStream(stream);
-                AudioFormat baseFormat = inputStream.getFormat();
-                AudioFormat format = new AudioFormat(
-                        AudioFormat.Encoding.PCM_SIGNED,
-                        baseFormat.getSampleRate(),
-                        16,
-                        baseFormat.getChannels(),
-                        baseFormat.getChannels() * 2,
-                        baseFormat.getSampleRate(),
-                        baseFormat.isBigEndian()
-                );
-                temp = new AudioFile(res.location, inputStream, format);
+
+                temp = new AudioFile(res.location, inputStream);
             } catch (UnsupportedAudioFileException | IOException e) {
                 logger.warn("Unable to open audio: " + res.location, e);
                 temp = null;
