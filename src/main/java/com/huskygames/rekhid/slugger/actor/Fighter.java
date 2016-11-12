@@ -11,7 +11,7 @@ public abstract class Fighter extends Actor {
 
     private final static Logger logger = LogManager.getLogger(Fighter.class);
     private int lives = 2;
-    private int jumps = 0;
+    protected int jumps = 0;
     protected double damage;
     protected boolean executing;
     protected boolean dead;

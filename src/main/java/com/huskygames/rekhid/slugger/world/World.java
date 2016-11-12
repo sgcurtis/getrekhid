@@ -54,7 +54,7 @@ public class World implements Drawable {
      *
      * @param level: The Level that will be running on this world
      */
-    public World(Level level, LinkedList<StickMan> players) {
+    public World(Level level, List<Fighter> players) {
         //grid = new Grid(Definitions.DEFAULT_WIDTH, Definitions.DEFAULT_HEIGHT);
 
         for (int i=0; i<players.size(); i++){
