@@ -118,7 +118,6 @@ public class StickMan extends Fighter {
                     case TAUNT_BUTTON:
                         break;
                     case START_BUTTON:
-                        die();
                         break;
                     case CONTROLLER_SELECT_BUTTON:
                         break;
