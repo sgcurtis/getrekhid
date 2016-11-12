@@ -29,7 +29,7 @@ public class StickMan extends Fighter {
     private SpriteState sequence;
     private ControllerInput input;
     private Set<Shape> colliders = new HashSet<>();
-    private double speed = 0.5;
+    private double speed = .5;
     private double slidiness = 10;
     private DoublePair playerPos;
     private double currentMaxVelocity = Definitions.MAX_VELOCITY;
@@ -86,6 +86,8 @@ public class StickMan extends Fighter {
         colliders.add(new ActorCircle(new DoublePair(0, -getHeight() / 4), this, getHeight() / 6));
     }
 
+    protected SpriteState getSequence(){ return sequence; }
+
     private BufferedImage getHead() {
         LoadedImage temp = null;
         switch (prof) {
@@ -116,6 +118,60 @@ public class StickMan extends Fighter {
             updateHurtBoxes();
 
             readController();
+        }
+    }
+
+    //BRIAN ADDED THING, added fake controller input for AI to use
+    public void AIreadController(Queue<ButtonEvent> buttonEvents, int dir){
+        if (buttonEvents != null) {
+            if (buttonEvents.peek() != null) {
+                switch (buttonEvents.poll().getButton()) {
+                    case ATTACK_BUTTON:
+                        attack();
+                        break;
+                    case SPECIAL_BUTTON:
+                        break;
+                    case JUMP_BUTTON:
+                        jump();
+                        break;
+                    case SHIELD_BUTTON:
+                        break;
+                    case TAUNT_BUTTON:
+                        break;
+                    case START_BUTTON:
+                        break;
+                    default:
+                        break;
+                }
+            }
+            AIupdateMovement(dir);
+        }
+    }
+
+    private void AIupdateMovement(int dir) {
+
+        if (dir == 1) {
+            if (getVelocity().getX() > 0) {
+                setVelocity(new DoublePair(-getVelocity().getX(), getVelocity().getY()));
+            }
+
+            moveSideways(1);
+        } else if (dir == 3) {
+            if (getVelocity().getX() < 0) {
+                setVelocity(new DoublePair(-getVelocity().getX(), getVelocity().getY()));
+            }
+
+            moveSideways(-1);
+        } else {
+            if (sequence != null && !sequence.getSequence().equals(jump)) {
+                executing = false;
+            }
+
+            //velocity.addInPlace(new DoublePair(-velocity.getX() / slidiness, 0));
+        }
+
+        if (jumps != 2 && velocity.getY() == 0) {
+            jumps = 2;
         }
     }
 
