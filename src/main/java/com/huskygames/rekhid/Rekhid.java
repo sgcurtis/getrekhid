@@ -259,6 +259,8 @@ public class Rekhid extends JFrame {
                         //characterSelectTick();
                         state = GameState.MATCH;
                         ArrayList<Fighter> fighters = new ArrayList<Fighter>();
+                        fighters.add(AiPlayer);
+                        fighters.add(player1);
                         world = new World(new LevelComputers(), fighters);
 
                         PhysicsManager.getInstance().setWorld(world);

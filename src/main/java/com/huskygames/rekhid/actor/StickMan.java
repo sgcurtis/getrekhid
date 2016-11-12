@@ -112,7 +112,9 @@ public class StickMan extends Fighter {
         // only work if the player is enabled
         if (!disabled) {
             if (executing) {
-                sequence.next();
+                if (sequence != null) {
+                    sequence.next();
+                }
             }
 
             updateHurtBoxes();
