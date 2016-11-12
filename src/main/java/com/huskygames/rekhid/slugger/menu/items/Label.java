@@ -7,7 +7,7 @@ import java.awt.*;
 
 public class Label extends com.huskygames.rekhid.slugger.menu.items.MenuItem {
 
-    private final String label;
+    private static String label;
     private final Font font;
 
     public Label(String label){
@@ -24,7 +24,7 @@ public class Label extends com.huskygames.rekhid.slugger.menu.items.MenuItem {
         return font;
     }
 
-    public String getLabel() {
+    public static String getLabel() {
         return label;
     }
 }

@@ -6,7 +6,7 @@ import java.awt.*;
 
 public class TextButton extends com.huskygames.rekhid.slugger.menu.items.MenuItem {
 
-    private final String text;
+    private static String text;
     private final Font font;
 
     public TextButton(String text) {
@@ -19,7 +19,7 @@ public class TextButton extends com.huskygames.rekhid.slugger.menu.items.MenuIte
         this.font = font;
     }
 
-    public String getText() {
+    public static String getText() {
         return text;
     }
 

@@ -5,6 +5,7 @@ import com.huskygames.rekhid.Rekhid;
 import com.huskygames.rekhid.slugger.Drawable;
 import com.huskygames.rekhid.slugger.menu.items.*;
 import com.huskygames.rekhid.slugger.menu.items.Container;
+import com.huskygames.rekhid.slugger.menu.items.Label;
 import com.huskygames.rekhid.slugger.menu.items.MenuItem;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -87,6 +88,7 @@ public abstract class Menu implements Drawable {
         int offsetx = (int) (dec.getxOffset() * windowWidth);
         int offsety = (int) (dec.getyOffset() * windowHeight);
 
+
         if (item instanceof Padding) {
             if (Definitions.DRAW_PADDING) {
                 g.setColor(Definitions.PADDING_COLOR);
@@ -94,7 +96,37 @@ public abstract class Menu implements Drawable {
             }
         }
 
-        g.setColor(temp);
+        if (item instanceof Label) {
+            g.setColor(Color.blue);
+            String output = Label.getLabel();
+            FontMetrics metrics = g.getFontMetrics(g.getFont());
+            int outWidth = metrics.stringWidth(output);
+            int outHeight = metrics.getHeight();
+            g.drawString(output, offsetx, offsety);
+            g.fillRect(offsetx, offsety, width, height);
+        }
+
+        if (item instanceof TextButton){
+            g.setColor(Color.red);
+            String output = TextButton.getText();
+            FontMetrics metrics = g.getFontMetrics(g.getFont());
+            int outWidth = metrics.stringWidth(output);
+            int outHeight = metrics.getHeight();
+            g.drawString(output, offsetx, offsety);
+            g.fillRect(offsetx, offsety, width, height);
+        }
+
+        if (item instanceof Title){
+            g.setColor(Color.black);
+            String output = Title.getTitle();
+            FontMetrics metrics = g.getFontMetrics(g.getFont());
+            int outWidth = metrics.stringWidth(output);
+            int outHeight = metrics.getHeight();
+            g.drawString(output, offsetx, offsety);
+            g.fillRect(offsetx, offsety, width, height);
+        }
+
+            g.setColor(temp);
     }
 
     private void sizeContainer(MenuItem element) {
@@ -167,4 +199,6 @@ public abstract class Menu implements Drawable {
         layoutDirty = true;
         this.root.setChild(root);
     }
+
+
 }
