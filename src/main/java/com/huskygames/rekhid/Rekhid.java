@@ -6,13 +6,12 @@ import com.huskygames.rekhid.slugger.actor.AI.FsmProf;
 import com.huskygames.rekhid.slugger.actor.Fighter;
 import com.huskygames.rekhid.slugger.input.ControllerInput;
 import com.huskygames.rekhid.slugger.physics.PhysicsManager;
+import com.huskygames.rekhid.slugger.resource.Resource;
 import com.huskygames.rekhid.slugger.resource.ResourceManager;
 import com.huskygames.rekhid.slugger.sound.SoundThread;
 import com.huskygames.rekhid.slugger.util.DoublePair;
 import com.huskygames.rekhid.slugger.util.FileUtilities;
-import com.huskygames.rekhid.slugger.world.DefaultLevel;
 import com.huskygames.rekhid.slugger.world.LevelComputers;
-import com.huskygames.rekhid.slugger.world.LevelTerminal;
 import com.huskygames.rekhid.slugger.world.World;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
@@ -20,9 +19,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sun.text.resources.cldr.sr.FormatData_sr_Latn_ME;
 
-import javax.sound.sampled.AudioFileFormat;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Mixer;
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
@@ -152,13 +149,41 @@ public class Rekhid extends JFrame {
         Rekhid game = new Rekhid();
         logger.info("Created game instance.");
 
-        // Run the sounds
-        SoundThread.getInstance().start();
-        logger.info("Started sound thread.");
 
         for (AudioFileFormat.Type type : AudioSystem.getAudioFileTypes()) {
             logger.info("supported audio: " + type);
         }
+
+        AudioInputStream i2 = null;
+        try {
+            i2 = AudioSystem.getAudioInputStream(
+                    Rekhid.class.getClassLoader().getResourceAsStream("music/meganddia.ogg"));
+        } catch (UnsupportedAudioFileException | IOException e) {
+            logger.error("Unable to load music", e);
+        }
+        AudioFormat baseFormat = i2.getFormat();
+
+        AudioFormat targetFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, baseFormat.getSampleRate(),
+                16, baseFormat.getChannels(), baseFormat.getChannels() * 2, baseFormat.getSampleRate(), false);
+
+        AudioInputStream dataIn = AudioSystem.getAudioInputStream(targetFormat, i2);
+
+
+        // get a line from a mixer in the system with the wanted format
+        DataLine.Info info = new DataLine.Info(SourceDataLine.class, targetFormat);
+        for (Mixer.Info in : AudioSystem.getMixerInfo()) {
+            Mixer mix = AudioSystem.getMixer(in);
+            if (mix.isLineSupported(info)) {
+                SoundThread.getInstance().setOutputMixer(AudioSystem.getMixer(in));
+                logger.warn("Choosing audio line: " + in);
+            }
+            //SourceDataLine line = (SourceDataLine) AudioSystem.getLine(info);
+        }
+
+        // Run the sounds
+        logger.info("Attempting to start sound thread.");
+        SoundThread.getInstance().start();
+
 
         while (game.state != GameState.QUITTING) {
             game.state = GameState.STARTING;
@@ -226,6 +251,7 @@ public class Rekhid extends JFrame {
                 // GAMESTATE SPECIFIC
                 switch (state) {
                     case MENU:
+                        SoundThread.getInstance().setBackgroundMusic(Resource.MENU_BG_MUSIC);
                         //menuTick();
                         state = GameState.CHARACTER_SELECT;
                         break;
@@ -239,7 +265,6 @@ public class Rekhid extends JFrame {
 
                         controllerManager.assignController(controllerManager.getValidControllers().get(0), AiPlayer);
                         controllerManager.assignController(controllerManager.getValidControllers().get(0), player1);
-
                         break;
                     case MATCH:
                         //this.setSize(Definitions.DEFAULT_WIDTH, Definitions.DEFAULT_HEIGHT);
