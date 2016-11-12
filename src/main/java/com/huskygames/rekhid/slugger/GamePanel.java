@@ -37,6 +37,10 @@ public class GamePanel extends JPanel {
                 drawScores((Graphics2D) g);
             } else if (parent.getGameState() == Rekhid.GameState.MENU) {
                 parent.getMainMenu().draw((Graphics2D) g);
+            } else if (parent.getGameState() == Rekhid.GameState.POST_MATCH) {
+                parent.getWorld().draw((Graphics2D) g);
+                drawScores((Graphics2D) g);
+
             }
 
 
@@ -59,18 +63,22 @@ public class GamePanel extends JPanel {
         int scoreSpacing = winWidth / 5;
         int scorePos = winHeight - winHeight / 7;
 
+        FontMetrics metrics = g.getFontMetrics(g.getFont());
+
+        int x;
+        int y;
+
         int i = 0;
 
         for (Fighter ply : parent.getWorld().getFighters()) {
             double damage = ply.getDamage();
             int centerX = scoreSpacing * (i + 1);
-            FontMetrics metrics = g.getFontMetrics(g.getFont());
             String output = Definitions.DAMAGE_FORMATTER.format(damage);
             int outWidth = metrics.stringWidth(output);
             int outHeight = metrics.getHeight();
 
-            int x = centerX - outWidth / 2;
-            int y = scorePos - outHeight / 2;
+            x = centerX - outWidth / 2;
+            y = scorePos - outHeight / 2;
 
             g.setColor(Definitions.SCORE_BACKGROUND);
             g.fillOval(centerX - Definitions.SCORE_BACKGROUND_SIZE.getX() / 2, y - outHeight,
@@ -80,8 +88,22 @@ public class GamePanel extends JPanel {
             y = y + outHeight;
             x = centerX - (metrics.stringWidth(ply.getName()) / 2);
             textWithShadow(g, ply.getName(), x, y);
+
+            output = "Lives: " + ply.getLives();
+            y = y + outHeight;
+            x = centerX - (metrics.stringWidth(output) / 2);
+            textWithShadow(g, output, x, y);
+
             i++;
         }
+
+        if (parent.getGameState() == Rekhid.GameState.POST_MATCH) {
+            String endString = parent.getWorld().getWinner().getName() + " WINS!";
+            x = winWidth / 2 - metrics.stringWidth(endString) / 2;
+            y = winHeight / 2 - metrics.getHeight() / 2;
+            textWithShadow(g, endString, x, y);
+        }
+
         g.setColor(temp);
     }
 
