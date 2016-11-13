@@ -9,6 +9,8 @@ public enum StateTypes {
     IDLE,
     ATTACK,
     BLOCK,
-    RETREATLEFT,
-    RETREATRIGHT
+    RETREAT_LEFT,
+    RETREAT_RIGHT,
+    JUMP_AWAY,
+    JUMP_TOWARDS
 }

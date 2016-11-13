@@ -11,8 +11,8 @@ import static com.huskygames.rekhid.slugger.actor.AI.StateTypes.ATTACK;
 import static com.huskygames.rekhid.slugger.actor.AI.StateTypes.APPROACH;
 import static com.huskygames.rekhid.slugger.actor.AI.StateTypes.IDLE;
 import static com.huskygames.rekhid.slugger.actor.AI.StateTypes.BLOCK;
-import static com.huskygames.rekhid.slugger.actor.AI.StateTypes.RETREATLEFT;
-import static com.huskygames.rekhid.slugger.actor.AI.StateTypes.RETREATRIGHT;
+import static com.huskygames.rekhid.slugger.actor.AI.StateTypes.RETREAT_LEFT;
+import static com.huskygames.rekhid.slugger.actor.AI.StateTypes.RETREAT_RIGHT;
 import static com.huskygames.rekhid.slugger.input.ButtonType.ATTACK_BUTTON;
 import static com.huskygames.rekhid.slugger.input.ButtonType.JUMP_BUTTON;
 import static com.huskygames.rekhid.slugger.input.ButtonType.SHIELD_BUTTON;
@@ -48,6 +48,7 @@ import static com.huskygames.rekhid.slugger.input.ButtonType.SHIELD_BUTTON;
 
             if(Math.abs(fpX - aiX) > 500) {
                 this.pushState(APPROACH);
+
             }else if(Math.abs(fpX - aiX) > 200){
                 this.pushState(IDLE);
             }else if(firstPlayer.getVelocity().getX() < 0.5 && Math.abs(fpX - aiX)<50){
@@ -58,9 +59,9 @@ import static com.huskygames.rekhid.slugger.input.ButtonType.SHIELD_BUTTON;
                 }
             }else if(Math.abs(fpX - aiX) < 200 && firstPlayer.getDamage() > 2.0){
                 if(aiX <600 || aiX > fpX ){
-                    this.pushState(RETREATRIGHT);
+                    this.pushState(RETREAT_RIGHT);
                 }else {
-                    this.pushState(RETREATLEFT);
+                    this.pushState(RETREAT_LEFT);
                 }
             }else {
                 this.pushState(BLOCK);
@@ -82,11 +83,11 @@ import static com.huskygames.rekhid.slugger.input.ButtonType.SHIELD_BUTTON;
                     buttonEvents.add(new ButtonEvent(SHIELD_BUTTON, meAIPlayer, System.nanoTime()));
                     meAIPlayer.AIreadController(buttonEvents, -1);
                     break;
-                case RETREATLEFT:
+                case RETREAT_LEFT:
                     //  buttonEvents.add( new ButtonEvent(JUMP_BUTTON, meAIPlayer, System.nanoTime()) );
                     meAIPlayer.AIreadController(buttonEvents, left);
                     break;
-                case RETREATRIGHT:
+                case RETREAT_RIGHT:
                     //  buttonEvents.add( new ButtonEvent(JUMP_BUTTON, meAIPlayer, System.nanoTime()) );
                     meAIPlayer.AIreadController(buttonEvents, right);
                     break;

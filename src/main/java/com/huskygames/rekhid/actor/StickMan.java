@@ -106,8 +106,10 @@ public class StickMan extends Fighter {
     public void tick() {
         ticker++;
         ticker %= 200;
+        /**
         if(ticker % 100 == 0)
             downAttack();
+    **/
 
         // only work if the player is enabled
         if (!disabled) {
@@ -278,7 +280,7 @@ public class StickMan extends Fighter {
             moveSideways(1);
         } else {
             if (sequence != null && !sequence.getSequence().equals(jump) && !attacking()) {
-                //executing = false;
+                executing = false;
             }
 
             velocity.addInPlace(new DoublePair(-velocity.getX() / slidiness, 0));
@@ -296,8 +298,8 @@ public class StickMan extends Fighter {
         }
         else if (dir == 3) {
             dir = 1;
-
         }
+
 
         currentMaxVelocity = Definitions.MAX_VELOCITY * (Math.pow(Math.abs(dir), 2));
 
