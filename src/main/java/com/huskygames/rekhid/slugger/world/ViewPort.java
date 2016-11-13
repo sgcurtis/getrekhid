@@ -14,6 +14,7 @@ public class ViewPort {
     //the world's height, used for sanity checking
     private int worldHeight;
     private IntPair topLeft;
+    private boolean debug = false;
 
     public ViewPort(int height, IntPair corner, int worldHeight) {
         this.height = height;
@@ -26,7 +27,7 @@ public class ViewPort {
         return "ViewPort{" +
                 "height=" + height +
                 ", topLeft=" + topLeft +
-                '}';
+                "}";
     }
 
     /**
@@ -37,12 +38,20 @@ public class ViewPort {
      *                   If the given height is too large, it will cap it down to the world's height.
      */
     public void update(int newHeight) {
-        if (newHeight > worldHeight)
+        if (debug) {
+            return;
+        }
+        if (newHeight > worldHeight ){
             height = worldHeight;
+            return;
+        }
         height = newHeight;
     }
 
     public void setCorner(IntPair newCorner) {
+        if(debug){
+            return;
+        }
         if (newCorner.getX() < 0) {
             newCorner.setX(0);
         }
@@ -59,8 +68,12 @@ public class ViewPort {
     }
 
     public void setCorner(int newHeight, IntPair newCorner) {
+        if(debug){
+            return;
+        }
         if (newHeight > worldHeight) {
             height = worldHeight;
+            return;
         }
         height = newHeight;
 
@@ -90,6 +103,10 @@ public class ViewPort {
 
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    public void setDebug(boolean debug){
+        this.debug = debug;
     }
 
     public IntPair getTopLeft() {

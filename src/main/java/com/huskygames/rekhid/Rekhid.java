@@ -12,6 +12,7 @@ import com.huskygames.rekhid.slugger.sound.SoundThread;
 import com.huskygames.rekhid.slugger.util.DoublePair;
 import com.huskygames.rekhid.slugger.util.FileUtilities;
 import com.huskygames.rekhid.slugger.world.LevelComputers;
+import com.huskygames.rekhid.slugger.world.LevelSky;
 import com.huskygames.rekhid.slugger.world.World;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
@@ -261,12 +262,12 @@ public class Rekhid extends JFrame {
                         ArrayList<Fighter> fighters = new ArrayList<Fighter>();
                         fighters.add(AiPlayer);
                         fighters.add(player1);
-                        world = new World(new LevelComputers(), fighters);
+                        world = new World(new LevelSky(), fighters);
 
                         PhysicsManager.getInstance().setWorld(world);
 
-                        controllerManager.assignController(controllerManager.getValidControllers().get(0), AiPlayer);
-                        controllerManager.assignController(controllerManager.getValidControllers().get(0), player1);
+                        //controllerManager.assignController(controllerManager.getValidControllers().get(0), AiPlayer);
+                        //controllerManager.assignController(controllerManager.getValidControllers().get(0), player1);
                         break;
                     case MATCH:
                         //this.setSize(Definitions.DEFAULT_WIDTH, Definitions.DEFAULT_HEIGHT);

@@ -94,7 +94,7 @@ public abstract class Fighter extends Actor {
             }
             parent.getDamaged().add(this);
             damage -= hit.getDamage() * 0.01;
-            velocity.addInPlace(hit.getLaunchVector());
+            velocity.addInPlace(hit.getLaunchVector().multiply(hit.getMultiplier(damage)));
         }
         else {
             throw new IllegalArgumentException("Non Fighter attacks not implemented.");

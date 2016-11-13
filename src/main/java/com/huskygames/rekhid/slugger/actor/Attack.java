@@ -1,5 +1,6 @@
 package com.huskygames.rekhid.slugger.actor;
 
+import com.huskygames.rekhid.Definitions;
 import com.huskygames.rekhid.slugger.util.DoublePair;
 import com.huskygames.rekhid.slugger.util.collison.shape.Shape;
 
@@ -78,4 +79,5 @@ public class Attack {
     public boolean isFinished(){
         return finished;
     }
+
 }

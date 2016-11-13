@@ -1,5 +1,6 @@
 package com.huskygames.rekhid.slugger.actor;
 
+import com.huskygames.rekhid.Definitions;
 import com.huskygames.rekhid.slugger.util.DoublePair;
 
 public class HurtBox extends ActorCircle {
@@ -46,5 +47,13 @@ public class HurtBox extends ActorCircle {
     }
     public boolean decrementLife() {
         return --lifetime <= 0;
+    }
+    public double getMultiplier(double health){
+        double diff = Definitions.MAX_HEALTH - health;
+        if(diff <= 2){
+            return 1 + diff/2;
+        } else {
+            return Math.pow(2, diff - 1);
+        }
     }
 }

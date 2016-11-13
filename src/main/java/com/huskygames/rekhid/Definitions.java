@@ -26,7 +26,7 @@ public class Definitions {
     public static final Color CENTRE_COLOR = new Color(0, 255, 0, 100);
 
     public static final double MAX_VELOCITY = 10;
-
+    public static final double  MAX_HEALTH = 4;
     public static final int DEFAULT_PLAYER_HEIGHT = 100;
 
     public static final DoublePair GRAVITY = new DoublePair(0, 0.09);

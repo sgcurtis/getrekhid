@@ -290,16 +290,9 @@ public class StickMan extends Fighter {
 
 
     private void moveSideways(int i) {
-        currentMaxVelocity = Definitions.MAX_VELOCITY * (Math.pow(Math.abs(input.getStickForPlayer(this).getX()), 2));
+        //currentMaxVelocity = Definitions.MAX_VELOCITY * (Math.pow(Math.abs(input.getStickForPlayer(this).getX()), 2));
 
-        int dir = getPrimaryDirection(input.getStickForPlayer(this));
-        if (dir == 1) {
-            dir = -1;
-        }
-        else if (dir == 3) {
-            dir = 1;
-
-        }
+        int dir = i;
         if (getVelocity().getX() * dir <= currentMaxVelocity) {
             if (getVelocity().getX() * dir + speed  > currentMaxVelocity) {
                 velocity.addInPlace(new DoublePair(dir * currentMaxVelocity - getVelocity().getX(), 0));
