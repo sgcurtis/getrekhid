@@ -106,8 +106,8 @@ public class StickMan extends Fighter {
     public void tick() {
         ticker++;
         ticker %= 200;
-        if(ticker % 100 == 0)
-            downAttack();
+        //if(ticker % 100 == 0)
+        //    downAttack();
 
         // only work if the player is enabled
         if (!disabled) {
@@ -195,6 +195,7 @@ public class StickMan extends Fighter {
                     case TAUNT_BUTTON:
                         break;
                     case START_BUTTON:
+                        logger.warn(this.getPosition());
                         break;
                     case CONTROLLER_SELECT_BUTTON:
                         break;
@@ -358,7 +359,7 @@ public class StickMan extends Fighter {
                     break;
             }
         } else {
-            logger.warn("Cannot attack right now, attack is already in progress");
+            //logger.warn("Cannot attack right now, attack is already in progress");
         }
     }
 

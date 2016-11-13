@@ -15,7 +15,7 @@ import java.util.Set;
 public class LevelComputers extends Level {
 
     private final IntPair minView = new IntPair(1000, 100);
-    private final IntPair maxView = new IntPair(3660, 1160);
+    private final IntPair maxView = new IntPair(3460, 1160);
     private final IntPair minPlayable = new IntPair(0, 0);
     private final IntPair maxPlayable = new IntPair(4060, 2000);
 

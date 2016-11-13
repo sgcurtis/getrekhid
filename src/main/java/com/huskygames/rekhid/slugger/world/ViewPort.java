@@ -2,6 +2,8 @@ package com.huskygames.rekhid.slugger.world;
 
 import com.huskygames.rekhid.Rekhid;
 import com.huskygames.rekhid.slugger.util.IntPair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * The object that controls the viewing position and zoom for the matches.
@@ -14,6 +16,8 @@ public class ViewPort {
     //the world's height, used for sanity checking
     private int worldHeight;
     private IntPair topLeft;
+
+    private Logger logger = LogManager.getLogger(World.class.getName());
 
     public ViewPort(int height, IntPair corner, int worldHeight) {
         this.height = height;
@@ -43,18 +47,31 @@ public class ViewPort {
     }
 
     public void setCorner(IntPair newCorner) {
-        if (newCorner.getX() < 0) {
-            newCorner.setX(0);
+
+        IntPair ULPlayable = Rekhid.getInstance().getWorld().getLevel().getUpperLeftPlayableArea();
+        IntPair LRPlayable = Rekhid.getInstance().getWorld().getLevel().getLowerRightPlayableArea();
+
+        int minX = ULPlayable.getX();
+        int maxX = LRPlayable.getX() - (height * 16 / 9);
+        int minY = ULPlayable.getY();
+        int maxY = LRPlayable.getY() - height;
+
+
+        if (newCorner.getX() > maxX) {
+            newCorner.setX(maxX);
         }
-        if (newCorner.getX() > ((worldHeight * 16 / 9) - (height * 16 / 9))) {
-            newCorner.setX(((worldHeight * 16 / 9) - (height * 16 / 9)));
+
+        if (newCorner.getY() > maxY) {
+            newCorner.setY(maxY);
         }
-        if (newCorner.getY() < 0) {
-            newCorner.setY(0);
+        if (newCorner.getX() < minX) {
+            newCorner.setX(minX);
         }
-        if (newCorner.getY() > (worldHeight - height)) {
-            newCorner.setY((worldHeight - height));
+
+        if (newCorner.getY() < minY) {
+            newCorner.setY(minY);
         }
+
         topLeft = newCorner;
     }
 
@@ -65,6 +82,7 @@ public class ViewPort {
         height = newHeight;
 
         if (newCorner.getX() < 0) {
+
             newCorner.setX(0);
         }
         if (newCorner.getX() > ((worldHeight * 16 / 9) - (height * 16 / 9))) {

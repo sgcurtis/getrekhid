@@ -11,6 +11,7 @@ import com.huskygames.rekhid.slugger.resource.ResourceManager;
 import com.huskygames.rekhid.slugger.sound.SoundThread;
 import com.huskygames.rekhid.slugger.util.DoublePair;
 import com.huskygames.rekhid.slugger.util.FileUtilities;
+import com.huskygames.rekhid.slugger.world.DefaultLevel;
 import com.huskygames.rekhid.slugger.world.LevelComputers;
 import com.huskygames.rekhid.slugger.world.World;
 import net.java.games.input.Controller;
@@ -69,7 +70,7 @@ public class Rekhid extends JFrame {
     private long tickCount;
     private MainMenu mainMenu;
     private World world;
-    private StickMan player1;
+    private StickMan player1, player2;
 
     // BRIAN ADDED THINGS
     private StickMan AiPlayer;
@@ -116,6 +117,7 @@ public class Rekhid extends JFrame {
 
         //creates an instance of a player to be used for testing purposes
         player1 = new StickMan(new DoublePair(1000, 150), new DoublePair(0, 0), LEO);
+        player2 = new StickMan(new DoublePair(3000, 150), new DoublePair(0, 0), KUHL);
 
         // BRIAN ADDED THINGS
         // Add new stickman for ai player to control
@@ -125,7 +127,7 @@ public class Rekhid extends JFrame {
         players = new LinkedList<StickMan>();
         //Add all created players to the players list
         players.add(player1);
-        players.add(AiPlayer);
+        //players.add(AiPlayer);
 
         // Pass enemy player and AI player to a new AI instance
         firstAI = new FsmProf(1, AiPlayer, player1 );
@@ -259,14 +261,16 @@ public class Rekhid extends JFrame {
                         //characterSelectTick();
                         state = GameState.MATCH;
                         ArrayList<Fighter> fighters = new ArrayList<Fighter>();
-                        fighters.add(AiPlayer);
+                        //fighters.add(AiPlayer);
                         fighters.add(player1);
+                        fighters.add(player2);
                         world = new World(new LevelComputers(), fighters);
 
                         PhysicsManager.getInstance().setWorld(world);
 
                         controllerManager.assignController(controllerManager.getValidControllers().get(0), AiPlayer);
-                        controllerManager.assignController(controllerManager.getValidControllers().get(0), player1);
+                        controllerManager.assignController(controllerManager.getValidControllers().get(5), player1);
+                        controllerManager.assignController(controllerManager.getValidControllers().get(3), player2);
                         break;
                     case MATCH:
                         //this.setSize(Definitions.DEFAULT_WIDTH, Definitions.DEFAULT_HEIGHT);

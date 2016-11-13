@@ -29,6 +29,10 @@ public class DefaultLevel extends Level {
 
     public DefaultLevel() {
         colliders.add(new WorldRectangle(0, 500, 7000, 1000));
+        startPos = new IntPair[] {new IntPair(2150, 1),
+                new IntPair(2550, 1),
+                new IntPair(700, 1),
+                new IntPair(700, 1)};
     }
 
     @Override
