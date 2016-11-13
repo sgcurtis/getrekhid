@@ -25,11 +25,18 @@ import static com.huskygames.rekhid.slugger.input.ButtonType.SHIELD_BUTTON;
         protected LinkedList<StateTypes> queuedStates;
         protected StickMan meAIPlayer;
         protected StickMan firstPlayer;
-        protected long timeofLastAttack=0;
+        protected long timeofLastAttack;
+        protected double fpX;
+        protected double aiX;
+        protected double aiY;
+        protected double fpY;
+
+        double distance = (Math.abs(fpX - aiX));
+
         private final static org.apache.logging.log4j.Logger logger = LogManager.getLogger(Rekhid.class);
-     //   protected LinkedList<>
         private int left = 1;
         private int right = 3;
+
         //TODO: Eventually change FPlayer to list of enemy players
         public FsmProf(int Difficulty, StickMan AIPlayer, StickMan FPlayer) {
             this.difficulty = Difficulty;
@@ -38,6 +45,12 @@ import static com.huskygames.rekhid.slugger.input.ButtonType.SHIELD_BUTTON;
             activeState = IDLE;
             firstPlayer = FPlayer;
             meAIPlayer = AIPlayer;
+            timeofLastAttack=0;
+            fpX = firstPlayer.getPosition().getX();
+            aiX = meAIPlayer.getPosition().getX();
+            aiY = meAIPlayer.getPosition().getY();
+            fpY = firstPlayer.getPosition().getY();
+            distance = (Math.abs(fpX - aiX));
         }
 
         public void pushState(StateTypes addState) { queuedStates.addFirst(addState); }
@@ -45,14 +58,14 @@ import static com.huskygames.rekhid.slugger.input.ButtonType.SHIELD_BUTTON;
         public void clear(){ queuedStates = new LinkedList<StateTypes>(); }
 
         public void update() {
+            fpX = firstPlayer.getPosition().getX();
+            aiX = meAIPlayer.getPosition().getX();
+            aiY = meAIPlayer.getPosition().getY();
+            fpY = firstPlayer.getPosition().getY();
+            double distance = (Math.abs(fpX - aiX));
 
-            double fpX = firstPlayer.getPosition().getX();
-            double aiX = meAIPlayer.getPosition().getX();
-            double aiY = meAIPlayer.getPosition().getY();
-            double fpY = firstPlayer.getPosition().getY();
             double fightorFlight = Math.random() * 10;
 
-            double distance = (Math.abs(fpX - aiX));
 
             if(distance > 500) {
                 this.pushState(APPROACH);
@@ -68,50 +81,18 @@ import static com.huskygames.rekhid.slugger.input.ButtonType.SHIELD_BUTTON;
 
             }else if(distance > 200){
                 this.pushState(IDLE);
-
-                /**    }else if(firstPlayer.getVelocity().getX() < 0.5 && Math.abs(fpX - aiX)<50  ){
-                if(fightorFlight > 3 && Math.abs(fpY - aiY) < 30) {
-                    if(activeState!=ATTACK) {
-                        this.pushState(ATTACK);
-                    }
-                }else{
-                    this.pushState(BLOCK);
-                }
-
-            }else if(Math.abs(fpX - aiX) < 200 && firstPlayer.getDamage() > 2.0){
-                if(aiX <600 || aiX > fpX ){
-                    this.pushState(RETREAT_RIGHT);
-                }else {
-                    this.pushState(RETREAT_LEFT);
-                }  **/
-
             }else {
                 this.pushState(BLOCK);
             }
             popState();
         }
 
-        /**
-        protected void down_attack(){
-            if(timeofLastAttack==0){
-                timeofLastAttack = System.nanoTime();
-            }
-
-            //Only attack every second
-            if(System.nanoTime() - timeofLastAttack > 1000000000 ) {
-                Queue<ButtonEvent> buttonEvents = new LinkedList<ButtonEvent>();
-                buttonEvents.add(new ButtonEvent(ATTACK_BUTTON, meAIPlayer, System.nanoTime()));
-                meAIPlayer.AIreadController(buttonEvents, -1);
-                timeofLastAttack = System.nanoTime();
-            }
-        }**/
-
         protected void attack(){
-            double fpX = firstPlayer.getPosition().getX();
-            double aiX = meAIPlayer.getPosition().getX();
-            double fpY = firstPlayer.getPosition().getY();
-            double aiY = meAIPlayer.getPosition().getY();
-
+            fpX = firstPlayer.getPosition().getX();
+            aiX = meAIPlayer.getPosition().getX();
+            aiY = meAIPlayer.getPosition().getY();
+            fpY = firstPlayer.getPosition().getY();
+            double distance = (Math.abs(fpX - aiX));
             if(timeofLastAttack==0){
                 timeofLastAttack = System.nanoTime();
             }
@@ -124,11 +105,13 @@ import static com.huskygames.rekhid.slugger.input.ButtonType.SHIELD_BUTTON;
                 //Face left
                 if(fpX < aiX){
                     Queue<ButtonEvent> buttonEvents = new LinkedList<ButtonEvent>();
+                    meAIPlayer.AIreadController(buttonEvents, left);
                     buttonEvents.add(new ButtonEvent(ATTACK_BUTTON, meAIPlayer, timeofLastAttack));
                     meAIPlayer.AIreadController(buttonEvents, left);
                 //Face right
                 }else{
                     Queue<ButtonEvent> buttonEvents = new LinkedList<ButtonEvent>();
+                    meAIPlayer.AIreadController(buttonEvents, right);
                     buttonEvents.add(new ButtonEvent(ATTACK_BUTTON, meAIPlayer, timeofLastAttack));
                     meAIPlayer.AIreadController(buttonEvents, right);
                 }
@@ -151,14 +134,18 @@ import static com.huskygames.rekhid.slugger.input.ButtonType.SHIELD_BUTTON;
             meAIPlayer.AIreadController(buttonEvents, right);
         }
 
-        protected void backstep_left(){
-            Queue<ButtonEvent> buttonEvents = new LinkedList<ButtonEvent>();
+        protected void backstep_left() {
+          //F  if( distance < 75 ) {
+                Queue<ButtonEvent> buttonEvents = new LinkedList<ButtonEvent>();
                 meAIPlayer.AIreadController(buttonEvents, left);
+           // }
         }
 
         protected void backstep_right(){
-            Queue<ButtonEvent> buttonEvents = new LinkedList<ButtonEvent>();
+          //  if( distance < 75 ) {
+                Queue<ButtonEvent> buttonEvents = new LinkedList<ButtonEvent>();
                 meAIPlayer.AIreadController(buttonEvents, right);
+          //  }
         }
 
         protected void idle() {
@@ -168,9 +155,10 @@ import static com.huskygames.rekhid.slugger.input.ButtonType.SHIELD_BUTTON;
 
         protected void approach() {
             Queue<ButtonEvent> buttonEvents = new LinkedList<ButtonEvent>();
-            if (meAIPlayer.getPosition().getX() > firstPlayer.getPosition().getX()){
+
+            if (aiX > fpX){
                 retreat_left();
-            }else if(meAIPlayer.getPosition().getX() < firstPlayer.getPosition().getX()){
+            }else if(aiX < fpX){
                 retreat_right();
             }
         }
@@ -196,13 +184,17 @@ import static com.huskygames.rekhid.slugger.input.ButtonType.SHIELD_BUTTON;
         }
 
         public void popState(){
-            double fpX = firstPlayer.getPosition().getX();
-            double aiX = meAIPlayer.getPosition().getX();
-            double aiY = meAIPlayer.getPosition().getY();
-            double fpY = firstPlayer.getPosition().getY();
+
+            fpX = firstPlayer.getPosition().getX();
+            aiX = meAIPlayer.getPosition().getX();
+            aiY = meAIPlayer.getPosition().getY();
+            fpY = firstPlayer.getPosition().getY();
+            double distance = (Math.abs(fpX - aiX));
             StateTypes statecase = queuedStates.pop();
             activeState = statecase;
+
             switch(statecase) {
+
                 case ATTACK:
                     attack();
                     break;
@@ -219,17 +211,14 @@ import static com.huskygames.rekhid.slugger.input.ButtonType.SHIELD_BUTTON;
 
                 case COMBAT:
                     double jumporRun = Math.random() * 10;
-
-
                     if(firstPlayer.attacking()){
-                        //Player is left of AI
+                        //Player is left of AI and facing right
                         if(fpX < aiX && !firstPlayer.getFacing() ){
                             if(jumporRun<1){
                                 right_jump();
                             }else {
                                 backstep_right();
                             }
-
                         }else if(fpX> aiX && firstPlayer.getFacing() ){
                             if(jumporRun<1) {
                                 left_jump();
@@ -237,7 +226,20 @@ import static com.huskygames.rekhid.slugger.input.ButtonType.SHIELD_BUTTON;
                                 backstep_left();
                             }
                         }
-                    }else{
+                    }else{/**
+                        if(jumporRun>1){
+                            if(fpX < aiX && !firstPlayer.getFacing() ){
+                                backstep_right();
+                            }else{
+                                backstep_left();;
+                            }
+                        }else if(jumporRun>9){
+                            if(fpX < aiX && !firstPlayer.getFacing() ){
+                                backstep_right();
+                            }else{
+                                backstep_left();;
+                            }
+                        }**/
                         attack();
                     }
                     break;

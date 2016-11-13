@@ -302,7 +302,6 @@ public class StickMan extends Fighter {
             dir = 1;
         }
 
-
         currentMaxVelocity = Definitions.MAX_VELOCITY * (Math.pow(Math.abs(dir), 2));
 
         if (getVelocity().getX() * dir <= currentMaxVelocity) {
@@ -335,8 +334,8 @@ public class StickMan extends Fighter {
         }
         else if (dir == 3) {
             dir = 1;
-
         }
+
         if (getVelocity().getX() * dir <= currentMaxVelocity) {
             if (getVelocity().getX() * dir + speed  > currentMaxVelocity) {
                 velocity.addInPlace(new DoublePair(dir * currentMaxVelocity - getVelocity().getX(), 0));
