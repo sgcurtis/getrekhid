@@ -9,6 +9,7 @@ public enum StateTypes {
     IDLE,
     ATTACK,
     CHASE,
+    COMBAT,
     BLOCK,
     RETREAT_LEFT,
     RETREAT_RIGHT,

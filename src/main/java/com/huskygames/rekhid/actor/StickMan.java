@@ -220,6 +220,8 @@ public class StickMan extends Fighter {
         }
     }
 
+    public boolean getFacing(){ return facingLeft; }
+
     @Override
     public BufferedImage getSprite() {
         if (!executing || sequence == null) {
