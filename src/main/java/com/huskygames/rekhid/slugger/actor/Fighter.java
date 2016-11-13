@@ -1,6 +1,5 @@
 package com.huskygames.rekhid.slugger.actor;
 
-import com.huskygames.rekhid.actor.Projectile;
 import com.huskygames.rekhid.slugger.physics.PhysicsManager;
 import com.huskygames.rekhid.slugger.util.DoublePair;
 import org.apache.logging.log4j.LogManager;

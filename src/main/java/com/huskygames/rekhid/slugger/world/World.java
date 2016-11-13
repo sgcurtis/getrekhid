@@ -2,9 +2,7 @@ package com.huskygames.rekhid.slugger.world;
 
 import com.huskygames.rekhid.Definitions;
 import com.huskygames.rekhid.Rekhid;
-import com.huskygames.rekhid.actor.Professor;
-import com.huskygames.rekhid.actor.Projectile;
-import com.huskygames.rekhid.actor.StickMan;
+import com.huskygames.rekhid.slugger.actor.Projectile;
 import com.huskygames.rekhid.slugger.Drawable;
 import com.huskygames.rekhid.slugger.Positionable;
 import com.huskygames.rekhid.slugger.actor.Actor;
@@ -23,11 +21,8 @@ import org.apache.logging.log4j.Logger;
 import java.awt.*;
 import java.awt.image.AffineTransformOp;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-
-import static com.huskygames.rekhid.actor.Professor.KUHL;
 
 
 /**

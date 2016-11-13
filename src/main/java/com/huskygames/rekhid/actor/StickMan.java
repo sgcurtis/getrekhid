@@ -13,7 +13,6 @@ import com.huskygames.rekhid.slugger.resource.sprite.SpriteSheet;
 import com.huskygames.rekhid.slugger.resource.sprite.SpriteState;
 import com.huskygames.rekhid.slugger.util.DoublePair;
 import com.huskygames.rekhid.slugger.util.collison.shape.Shape;
-import net.java.games.input.Controller;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -526,7 +525,7 @@ public class StickMan extends Fighter {
             DoublePair pos = new DoublePair(getPosition().getX(), getPosition().getY() - 5.0);
             DoublePair vel = new DoublePair(multiplier * 2.0, 0.0);
 
-            projectile = new Projectile(pos, vel, this, Projectiles.KuhlBird, 100);
+            projectile = new KuhlBird(pos, vel, this, Projectiles.KuhlBird, 100);
             PhysicsManager.getInstance().addObject(projectile);
         } else {
             logger.warn("Can only have one of these projectiles at a time.");
