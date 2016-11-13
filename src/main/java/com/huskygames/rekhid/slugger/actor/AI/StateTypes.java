@@ -8,6 +8,7 @@ public enum StateTypes {
     APPROACH,
     IDLE,
     ATTACK,
+    CHASE,
     BLOCK,
     RETREAT_LEFT,
     RETREAT_RIGHT,

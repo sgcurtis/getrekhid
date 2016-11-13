@@ -7,12 +7,7 @@ import com.huskygames.rekhid.slugger.util.DoublePair;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import static com.huskygames.rekhid.slugger.actor.AI.StateTypes.ATTACK;
-import static com.huskygames.rekhid.slugger.actor.AI.StateTypes.APPROACH;
-import static com.huskygames.rekhid.slugger.actor.AI.StateTypes.IDLE;
-import static com.huskygames.rekhid.slugger.actor.AI.StateTypes.BLOCK;
-import static com.huskygames.rekhid.slugger.actor.AI.StateTypes.RETREAT_LEFT;
-import static com.huskygames.rekhid.slugger.actor.AI.StateTypes.RETREAT_RIGHT;
+import static com.huskygames.rekhid.slugger.actor.AI.StateTypes.*;
 import static com.huskygames.rekhid.slugger.input.ButtonType.ATTACK_BUTTON;
 import static com.huskygames.rekhid.slugger.input.ButtonType.JUMP_BUTTON;
 import static com.huskygames.rekhid.slugger.input.ButtonType.SHIELD_BUTTON;
@@ -27,6 +22,8 @@ import static com.huskygames.rekhid.slugger.input.ButtonType.SHIELD_BUTTON;
         protected LinkedList<StateTypes> queuedStates;
         protected StickMan meAIPlayer;
         protected StickMan firstPlayer;
+        protected long timeofLastAttack=0;
+     //   protected LinkedList<>
         private int left = 1;
         private int right = 3;
         //TODO: Eventually change FPlayer to list of enemy players
@@ -44,16 +41,25 @@ import static com.huskygames.rekhid.slugger.input.ButtonType.SHIELD_BUTTON;
         public void update() {
             double fpX = firstPlayer.getPosition().getX();
             double aiX = meAIPlayer.getPosition().getX();
+            double aiY = meAIPlayer.getPosition().getY();
+            double fpY = firstPlayer.getPosition().getY();
             double fightorFlight = Math.random() * 10;
 
             if(Math.abs(fpX - aiX) > 500) {
                 this.pushState(APPROACH);
 
+            }else if(Math.abs(fpX-aiX) <150 ){ //&&  firstPlayer.getDamage() meAIPlayer.getDamage()){
+
+                this.pushState(CHASE);
+
+
             }else if(Math.abs(fpX - aiX) > 200){
                 this.pushState(IDLE);
-            }else if(firstPlayer.getVelocity().getX() < 0.5 && Math.abs(fpX - aiX)<50){
-                if(fightorFlight > 3) {
-                    this.pushState(ATTACK);
+            }else if(firstPlayer.getVelocity().getX() < 0.5 && Math.abs(fpX - aiX)<50  ){
+                if(fightorFlight > 3 && Math.abs(fpY - aiY) < 100) {
+                    if(activeState!=ATTACK) {
+                        this.pushState(ATTACK);
+                    }
                 }else{
                     this.pushState(BLOCK);
                 }
@@ -69,39 +75,83 @@ import static com.huskygames.rekhid.slugger.input.ButtonType.SHIELD_BUTTON;
             popState();
         }
 
-        public void popState(){
+        protected void attack(){
+            if(timeofLastAttack==0){
+                timeofLastAttack = System.nanoTime();
+            }
+
+            //Only attack every second
+            if(System.nanoTime() - timeofLastAttack > 1000000000 ) {
+                Queue<ButtonEvent> buttonEvents = new LinkedList<ButtonEvent>();
+                buttonEvents.add(new ButtonEvent(ATTACK_BUTTON, meAIPlayer, System.nanoTime()));
+                meAIPlayer.AIreadController(buttonEvents, -1);
+                timeofLastAttack = System.nanoTime();
+            }
+
+        }
+
+        protected void block(){
             Queue<ButtonEvent> buttonEvents = new LinkedList<ButtonEvent>();
+            buttonEvents.add(new ButtonEvent(SHIELD_BUTTON, meAIPlayer, System.nanoTime()));
+            meAIPlayer.AIreadController(buttonEvents, -1);
+        }
+
+        protected void retreat_left(){
+            Queue<ButtonEvent> buttonEvents = new LinkedList<ButtonEvent>();
+            meAIPlayer.AIreadController(buttonEvents, left);
+        }
+
+        protected void retreat_right(){
+            Queue<ButtonEvent> buttonEvents = new LinkedList<ButtonEvent>();
+            meAIPlayer.AIreadController(buttonEvents, right);
+        }
+
+        protected void idle() {
+            Queue<ButtonEvent> buttonEvents = new LinkedList<ButtonEvent>();
+            meAIPlayer.AIreadController(buttonEvents, -1);
+        }
+
+        protected void approach() {
+            Queue<ButtonEvent> buttonEvents = new LinkedList<ButtonEvent>();
+            if (meAIPlayer.getPosition().getX() > firstPlayer.getPosition().getX()){
+                retreat_left();
+            }else if(meAIPlayer.getPosition().getX()<firstPlayer.getPosition().getX()){
+                retreat_right();
+            }
+        }
+
+        public void popState(){
+
             StateTypes statecase = queuedStates.pop();
             activeState = statecase;
 
             switch(statecase) {
                 case ATTACK:
-                    buttonEvents.add(new ButtonEvent(ATTACK_BUTTON, meAIPlayer, System.nanoTime()));
-                    meAIPlayer.AIreadController(buttonEvents, -1);
+                    attack();
                     break;
                 case BLOCK:
-                    buttonEvents.add(new ButtonEvent(SHIELD_BUTTON, meAIPlayer, System.nanoTime()));
-                    meAIPlayer.AIreadController(buttonEvents, -1);
+                    block();
                     break;
                 case RETREAT_LEFT:
-                    //  buttonEvents.add( new ButtonEvent(JUMP_BUTTON, meAIPlayer, System.nanoTime()) );
-                    meAIPlayer.AIreadController(buttonEvents, left);
+                    retreat_left();
+                    break;
+
+                case CHASE:
+                    approach();
+                    attack();
+
                     break;
                 case RETREAT_RIGHT:
-                    //  buttonEvents.add( new ButtonEvent(JUMP_BUTTON, meAIPlayer, System.nanoTime()) );
-                    meAIPlayer.AIreadController(buttonEvents, right);
+                    retreat_right();
                     break;
                 case IDLE:
-                    meAIPlayer.AIreadController(buttonEvents, -1);
+                    idle();
                     break;
                 case APPROACH:
-                    if (meAIPlayer.getPosition().getX() > firstPlayer.getPosition().getX()){
-                        meAIPlayer.AIreadController(buttonEvents, left);
-                    }else{
-                        meAIPlayer.AIreadController(buttonEvents, right);
-                    }
+                    approach();
                     break;
                 default:
+
                     break;
             }
         }
