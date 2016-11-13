@@ -10,7 +10,8 @@ import java.util.Set;
 public abstract class Fighter extends Actor {
 
     private final static Logger logger = LogManager.getLogger(Fighter.class);
-    private int lives = 3;
+    private int lives = 2;
+    protected int jumps = 0;
     protected double damage;
     protected boolean executing;
     protected boolean dead;
@@ -58,23 +59,35 @@ public abstract class Fighter extends Actor {
 
     public void removeLife() {
         this.lives--;
-        logger.warn("Lives remaining: " + lives);
+
+    }
+
+    public void die() {
+        this.dead = true;
+        this.removeLife();
     }
 
     public int getLives() {
-        return lives;
+        return this.lives;
     }
 
+    public void setJumps(int jumps) {
+        this.jumps = jumps;
+    }
+
+    public int getJumps() {
+        return this.jumps;
+    }
     public abstract String getName();
 
     public void takeDamage(HurtBox hit) {
         // double check we're not hurting ourselves
-        if (hit.getParent().equals(this)) {
+        if (hit.getParentActor().equals(this)) {
             return;
         }
 
-        if (hit.getParent() instanceof Fighter) {
-            Fighter parent = (Fighter) hit.getParent();
+        if (hit.getParentActor() instanceof Fighter) {
+            Fighter parent = (Fighter) hit.getParentActor();
             // if we've already been hit by this attacker, don't hurt us
             if (parent.getDamaged().contains(this)) {
                 return;
@@ -94,5 +107,14 @@ public abstract class Fighter extends Actor {
 
     public void clearDamaged() {
         fightersHit.clear();
+    }
+
+    public boolean attacking(){
+        return theAttack != null;
+    }
+
+    public void endAnimation(){
+        executing = false;
+
     }
 }

@@ -2,29 +2,33 @@ package com.huskygames.rekhid;
 
 import com.huskygames.rekhid.actor.StickMan;
 import com.huskygames.rekhid.slugger.GamePanel;
+import com.huskygames.rekhid.slugger.actor.AI.FsmProf;
+import com.huskygames.rekhid.slugger.actor.Fighter;
 import com.huskygames.rekhid.slugger.input.ControllerInput;
 import com.huskygames.rekhid.slugger.physics.PhysicsManager;
+import com.huskygames.rekhid.slugger.resource.Resource;
 import com.huskygames.rekhid.slugger.resource.ResourceManager;
 import com.huskygames.rekhid.slugger.sound.SoundThread;
 import com.huskygames.rekhid.slugger.util.DoublePair;
 import com.huskygames.rekhid.slugger.util.FileUtilities;
-import com.huskygames.rekhid.slugger.world.DefaultLevel;
 import com.huskygames.rekhid.slugger.world.LevelComputers;
-import com.huskygames.rekhid.slugger.world.LevelTerminal;
 import com.huskygames.rekhid.slugger.world.World;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import sun.text.resources.cldr.sr.FormatData_sr_Latn_ME;
 
-import javax.sound.sampled.AudioFileFormat;
-import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 
+import static com.huskygames.rekhid.actor.Professor.KUHL;
 import static com.huskygames.rekhid.actor.Professor.LEO;
 
 public class Rekhid extends JFrame {
@@ -67,7 +71,13 @@ public class Rekhid extends JFrame {
     private World world;
     private StickMan player1;
 
+    // BRIAN ADDED THINGS
+    private StickMan AiPlayer;
+    private FsmProf firstAI;
+    private LinkedList<StickMan> players;
+
     private Rekhid() {
+
         super();
         logger.info("Building main class");
 
@@ -105,7 +115,20 @@ public class Rekhid extends JFrame {
 
 
         //creates an instance of a player to be used for testing purposes
-        player1 = new StickMan(new DoublePair(1250, 300), new DoublePair(0, 0), LEO);
+        player1 = new StickMan(new DoublePair(1000, 150), new DoublePair(0, 0), LEO);
+
+        // BRIAN ADDED THINGS
+        // Add new stickman for ai player to control
+        AiPlayer = new StickMan(new DoublePair(3000, 150), new DoublePair(0, 0), KUHL);
+
+
+        players = new LinkedList<StickMan>();
+        //Add all created players to the players list
+        players.add(player1);
+        players.add(AiPlayer);
+
+        // Pass enemy player and AI player to a new AI instance
+        firstAI = new FsmProf(1, AiPlayer, player1 );
     }
 
     public static Rekhid getInstance() {
@@ -114,6 +137,11 @@ public class Rekhid extends JFrame {
 
     public static void main(String[] args) {
 
+        for (Mixer.Info in: AudioSystem.getMixerInfo()) {
+            logger.info("Builtin mixers: " + in.toString());
+            logger.info("   " + in.getVendor());
+        }
+
         Thread.currentThread().setName("MainThread");
 
         logger.info("PID: " + ManagementFactory.getRuntimeMXBean().getName());
@@ -121,13 +149,41 @@ public class Rekhid extends JFrame {
         Rekhid game = new Rekhid();
         logger.info("Created game instance.");
 
-        // Run the sounds
-        SoundThread.getInstance().start();
-        logger.info("Started sound thread.");
 
         for (AudioFileFormat.Type type : AudioSystem.getAudioFileTypes()) {
             logger.info("supported audio: " + type);
         }
+
+        AudioInputStream i2 = null;
+        try {
+            i2 = AudioSystem.getAudioInputStream(
+                    Rekhid.class.getClassLoader().getResourceAsStream("music/meganddia.ogg"));
+        } catch (UnsupportedAudioFileException | IOException e) {
+            logger.error("Unable to load music", e);
+        }
+        AudioFormat baseFormat = i2.getFormat();
+
+        AudioFormat targetFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, baseFormat.getSampleRate(),
+                16, baseFormat.getChannels(), baseFormat.getChannels() * 2, baseFormat.getSampleRate(), false);
+
+        AudioInputStream dataIn = AudioSystem.getAudioInputStream(targetFormat, i2);
+
+
+        // get a line from a mixer in the system with the wanted format
+        DataLine.Info info = new DataLine.Info(SourceDataLine.class, targetFormat);
+        for (Mixer.Info in : AudioSystem.getMixerInfo()) {
+            Mixer mix = AudioSystem.getMixer(in);
+            if (mix.isLineSupported(info)) {
+                SoundThread.getInstance().setOutputMixer(AudioSystem.getMixer(in));
+                logger.warn("Choosing audio line: " + in);
+            }
+            //SourceDataLine line = (SourceDataLine) AudioSystem.getLine(info);
+        }
+
+        // Run the sounds
+        logger.info("Attempting to start sound thread.");
+        SoundThread.getInstance().start();
+
 
         while (game.state != GameState.QUITTING) {
             game.state = GameState.STARTING;
@@ -184,7 +240,6 @@ public class Rekhid extends JFrame {
         while (true) {
             // game loop
             panel.repaint();
-
             // This is terrible multithreading code, but it sure is easy.
             synchronized (gameLock) {
                 // ALL CODE THAT CHANGES THE GAME MUST BE IN HERE.
@@ -197,16 +252,22 @@ public class Rekhid extends JFrame {
                 switch (state) {
                     case MENU:
                         menuTick();
+
+                        SoundThread.getInstance().setBackgroundMusic(Resource.MENU_BG_MUSIC);
+
                         break;
                     case CHARACTER_SELECT:
                         //characterSelectTick();
                         state = GameState.MATCH;
-                        //world = new World(new DefaultLevel(), player1);
-                        world = new World(new LevelComputers(), player1);
-                        //world = new World(new LevelTerminal(), player1);
+                        ArrayList<Fighter> fighters = new ArrayList<Fighter>();
+                        fighters.add(AiPlayer);
+                        fighters.add(player1);
+                        world = new World(new LevelComputers(), fighters);
+
                         PhysicsManager.getInstance().setWorld(world);
 
-                        controllerManager.assignController(controllerManager.getValidControllers().get(5), player1);
+                        controllerManager.assignController(controllerManager.getValidControllers().get(0), AiPlayer);
+                        controllerManager.assignController(controllerManager.getValidControllers().get(0), player1);
                         break;
                     case MATCH:
                         matchTick();
@@ -248,6 +309,8 @@ public class Rekhid extends JFrame {
     private void matchTick() {
         world.tick();
         PhysicsManager.getInstance().updateObjects();
+        // Update AI
+        firstAI.update();
     }
 
     private void characterSelectTick() {

@@ -2,6 +2,7 @@ package com.huskygames.rekhid.slugger.world;
 
 import com.huskygames.rekhid.Definitions;
 import com.huskygames.rekhid.Rekhid;
+import com.huskygames.rekhid.actor.Professor;
 import com.huskygames.rekhid.actor.StickMan;
 import com.huskygames.rekhid.slugger.Drawable;
 import com.huskygames.rekhid.slugger.Positionable;
@@ -21,6 +22,7 @@ import org.apache.logging.log4j.Logger;
 import java.awt.*;
 import java.awt.image.AffineTransformOp;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -52,15 +54,16 @@ public class World implements Drawable {
      *
      * @param level: The Level that will be running on this world
      */
-    public World(Level level, StickMan player) {
+    public World(Level level, List<Fighter> players) {
         //grid = new Grid(Definitions.DEFAULT_WIDTH, Definitions.DEFAULT_HEIGHT);
-        PhysicsManager.getInstance().addObject(player);
-        fighters.add(player);
-        logger.warn("ADDING PLAYER " + player.getName() + " AT POSITION " + player.getPosition().getX() + ", " + player.getPosition().getY());
-        player.setPosition(level.getStartPos()[0].asDoublePair());
-        fighters.add(new StickMan(level.getStartPos()[1].asDoublePair(),
-                new DoublePair(0, 0), KUHL));
-        PhysicsManager.getInstance().addObject(fighters.get(1));
+
+        for (int i=0; i<players.size(); i++){
+            PhysicsManager.getInstance().addObject(players.get(i));
+            fighters.add(players.get(i));
+            //Players should start at the location specified in their constructor, not in a level.getStartPos() ??
+            //players.get(i).setPosition(level.getStartPos()[i].asDoublePair());
+            PhysicsManager.getInstance().addObject(fighters.get(i));
+        }
 
         //defined level
         this.level = level;
@@ -216,7 +219,6 @@ public class World implements Drawable {
                         .subtract(viewPort.getTopLeft())
                         .multiply(1 / getViewRatio())
                         .rounded();
-
                 IntPair size = max.subtract(min);
 
                 context.fillRect(min.getX(), min.getY(), size.getX(), size.getY());
@@ -293,11 +295,13 @@ public class World implements Drawable {
             DoublePair lowerBound = level.getUpperLeftPlayableArea().asDoublePair();
             DoublePair upperBound = level.getLowerRightPlayableArea().asDoublePair();
 
+            //logger.warn("POS of " + ply.getName() + ": " + ply.getPosition());
             if (!ply.getPosition().isInAabb(lowerBound, upperBound)) {
                 // kill em!
                 if (ply.getLives() > 0) {
-                    logger.warn("Player " + ply.getName() + " died at pos " + ply.getPosition().getX() + ", " + ply.getPosition().getY());
                     ply.removeLife();
+                    ply.setJumps(0);
+                    ply.setVelocity(new DoublePair(0, 0));
                 }
                 ply.setDead(true);
             }
@@ -389,5 +393,15 @@ public class World implements Drawable {
             }
         }
         return alive;
+    }
+
+    public Fighter getWinner() {
+        Fighter winner = getFighters().get(0);
+        for (Fighter ply : fighters) {
+            if (ply.getLives() > winner.getLives()){
+                winner = ply;
+            }
+        }
+        return winner;
     }
 }
