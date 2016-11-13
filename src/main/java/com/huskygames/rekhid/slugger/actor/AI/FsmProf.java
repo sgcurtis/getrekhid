@@ -7,6 +7,12 @@ import com.huskygames.rekhid.slugger.util.DoublePair;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import static com.huskygames.rekhid.slugger.actor.AI.StateTypes.ATTACK;
+import static com.huskygames.rekhid.slugger.actor.AI.StateTypes.APPROACH;
+import static com.huskygames.rekhid.slugger.actor.AI.StateTypes.IDLE;
+import static com.huskygames.rekhid.slugger.actor.AI.StateTypes.BLOCK;
+import static com.huskygames.rekhid.slugger.actor.AI.StateTypes.RETREATLEFT;
+import static com.huskygames.rekhid.slugger.actor.AI.StateTypes.RETREATRIGHT;
 import static com.huskygames.rekhid.slugger.input.ButtonType.ATTACK_BUTTON;
 import static com.huskygames.rekhid.slugger.input.ButtonType.JUMP_BUTTON;
 import static com.huskygames.rekhid.slugger.input.ButtonType.SHIELD_BUTTON;
@@ -17,8 +23,8 @@ import static com.huskygames.rekhid.slugger.input.ButtonType.SHIELD_BUTTON;
     public class FsmProf{
 
         protected int difficulty;
-        protected String activeState;
-        protected LinkedList<String> queuedStates;
+        protected StateTypes activeState;
+        protected LinkedList<StateTypes> queuedStates;
         protected StickMan meAIPlayer;
         protected StickMan firstPlayer;
         private int left = 1;
@@ -26,14 +32,14 @@ import static com.huskygames.rekhid.slugger.input.ButtonType.SHIELD_BUTTON;
         //TODO: Eventually change FPlayer to list of enemy players
         public FsmProf(int Difficulty, StickMan AIPlayer, StickMan FPlayer) {
             this.difficulty = Difficulty;
-            this.queuedStates = new LinkedList<String>();
-            this.queuedStates.add("Idle");
-            activeState = "idle";
+            this.queuedStates = new LinkedList<StateTypes>();
+            this.queuedStates.add(IDLE);
+            activeState = IDLE;
             firstPlayer = FPlayer;
             meAIPlayer = AIPlayer;
         }
 
-        public void pushState(String addState) { queuedStates.addFirst(addState); }
+        public void pushState(StateTypes addState) { queuedStates.addFirst(addState); }
 
         public void update() {
             double fpX = firstPlayer.getPosition().getX();
@@ -41,53 +47,53 @@ import static com.huskygames.rekhid.slugger.input.ButtonType.SHIELD_BUTTON;
             double fightorFlight = Math.random() * 10;
 
             if(Math.abs(fpX - aiX) > 500) {
-                this.pushState("Approach");
+                this.pushState(APPROACH);
             }else if(Math.abs(fpX - aiX) > 200){
-                this.pushState("Idle");
+                this.pushState(IDLE);
             }else if(firstPlayer.getVelocity().getX() < 0.5 && Math.abs(fpX - aiX)<50){
                 if(fightorFlight > 3) {
-                    this.pushState("Attack");
+                    this.pushState(ATTACK);
                 }else{
-                    this.pushState("Block");
+                    this.pushState(BLOCK);
                 }
             }else if(Math.abs(fpX - aiX) < 200 && firstPlayer.getDamage() > 2.0){
                 if(aiX <600 || aiX > fpX ){
-                    this.pushState("RetreatRight");
+                    this.pushState(RETREATRIGHT);
                 }else {
-                    this.pushState("RetreatLeft");
+                    this.pushState(RETREATLEFT);
                 }
             }else {
-                this.pushState("Block");
+                this.pushState(BLOCK);
             }
             popState();
         }
 
         public void popState(){
             Queue<ButtonEvent> buttonEvents = new LinkedList<ButtonEvent>();
-            String statecase = queuedStates.pop();
+            StateTypes statecase = queuedStates.pop();
             activeState = statecase;
 
             switch(statecase) {
-                case "Attack":
+                case ATTACK:
                     buttonEvents.add(new ButtonEvent(ATTACK_BUTTON, meAIPlayer, System.nanoTime()));
                     meAIPlayer.AIreadController(buttonEvents, -1);
                     break;
-                case "Block":
+                case BLOCK:
                     buttonEvents.add(new ButtonEvent(SHIELD_BUTTON, meAIPlayer, System.nanoTime()));
                     meAIPlayer.AIreadController(buttonEvents, -1);
                     break;
-                case "RetreatLeft":
+                case RETREATLEFT:
                     //  buttonEvents.add( new ButtonEvent(JUMP_BUTTON, meAIPlayer, System.nanoTime()) );
                     meAIPlayer.AIreadController(buttonEvents, left);
                     break;
-                case "RetreatRight":
+                case RETREATRIGHT:
                     //  buttonEvents.add( new ButtonEvent(JUMP_BUTTON, meAIPlayer, System.nanoTime()) );
                     meAIPlayer.AIreadController(buttonEvents, right);
                     break;
-                case "Idle":
+                case IDLE:
                     meAIPlayer.AIreadController(buttonEvents, -1);
                     break;
-                case "Approach":
+                case APPROACH:
                     if (meAIPlayer.getPosition().getX() > firstPlayer.getPosition().getX()){
                         meAIPlayer.AIreadController(buttonEvents, left);
                     }else{
@@ -98,7 +104,7 @@ import static com.huskygames.rekhid.slugger.input.ButtonType.SHIELD_BUTTON;
                     break;
             }
         }
-        public String activeState(){
+        public StateTypes activeState(){
             return activeState;
         }
 }
