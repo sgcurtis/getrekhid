@@ -5,6 +5,7 @@ import com.huskygames.rekhid.Rekhid;
 import com.huskygames.rekhid.slugger.actor.*;
 import com.huskygames.rekhid.slugger.input.ButtonEvent;
 import com.huskygames.rekhid.slugger.input.ControllerInput;
+import com.huskygames.rekhid.slugger.physics.PhysicsManager;
 import com.huskygames.rekhid.slugger.resource.LoadedImage;
 import com.huskygames.rekhid.slugger.resource.Resource;
 import com.huskygames.rekhid.slugger.resource.sprite.SpriteSequence;
@@ -104,10 +105,10 @@ public class StickMan extends Fighter {
 
     @Override
     public void tick() {
-        ticker++;
-        ticker %= 200;
-        if(ticker % 100 == 0)
-            downAttack();
+        //ticker++;
+        //ticker %= 200;
+        //if(ticker % 100 == 0)
+            //downAttack();
 
         // only work if the player is enabled
         if (!disabled) {
@@ -186,6 +187,7 @@ public class StickMan extends Fighter {
                         attack();
                         break;
                     case SPECIAL_BUTTON:
+                        specialAttack();
                         break;
                     case JUMP_BUTTON:
                         jump();
@@ -207,13 +209,20 @@ public class StickMan extends Fighter {
     }
 
     protected void updateHurtBoxes() {
+        // determine if we have an attack or a projectile
         if(theAttack != null) {
+            //it is a melee attack
             if(theAttack.next()){
                 theAttack = null;
+                clearDamaged();
             }
         }
-        if (theAttack == null && fightersHit.size() > 0 ) {
-            clearDamaged();
+        else if(projectile != null) {
+            //it is a projectile
+            projectile.tick();
+            if(projectile == null){
+                clearDamaged();
+            }
         }
     }
 
@@ -505,6 +514,22 @@ public class StickMan extends Fighter {
             return "LEO";
         } else {
             return "UNKNOWN PROFESSOR";
+        }
+    }
+
+    /*
+    example projectile attack, can be altered down the road
+     */
+    private void specialAttack(){
+        if(projectile == null) {
+            int multiplier = facingLeft ? -1 : 1;
+            DoublePair pos = new DoublePair(getPosition().getX(), getPosition().getY() - 5.0);
+            DoublePair vel = new DoublePair(multiplier * 2.0, 0.0);
+
+            projectile = new Projectile(pos, vel, this, Projectiles.KuhlBird, 100);
+            PhysicsManager.getInstance().addObject(projectile);
+        } else {
+            logger.warn("Can only have one of these projectiles at a time.");
         }
     }
 }

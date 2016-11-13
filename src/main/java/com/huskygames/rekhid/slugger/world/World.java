@@ -3,6 +3,7 @@ package com.huskygames.rekhid.slugger.world;
 import com.huskygames.rekhid.Definitions;
 import com.huskygames.rekhid.Rekhid;
 import com.huskygames.rekhid.actor.Professor;
+import com.huskygames.rekhid.actor.Projectile;
 import com.huskygames.rekhid.actor.StickMan;
 import com.huskygames.rekhid.slugger.Drawable;
 import com.huskygames.rekhid.slugger.Positionable;
@@ -224,7 +225,7 @@ public class World implements Drawable {
                 context.fillRect(min.getX(), min.getY(), size.getX(), size.getY());
             }
         }
-        if (actor instanceof Fighter) {
+        if (actor instanceof Fighter && !(actor instanceof Projectile)) {
             shapes = ((Fighter) actor).getPain();
             context.setColor(Definitions.HURTBOX_COLOR);
             for (Shape shape : shapes) {
@@ -275,6 +276,9 @@ public class World implements Drawable {
         for (Fighter ply : fighters) {
             if (ply != null && !ply.isDead()) {
                 drawActor(ply, context);
+            }
+            if (ply.hasProjectile()){
+                drawActor(ply.getProjectile(), context);
             }
         }
     }
