@@ -123,7 +123,6 @@ public class StickMan extends Fighter {
         }
     }
 
-    //BRIAN ADDED THING, added fake controller input for AI to use
     public void AIreadController(Queue<ButtonEvent> buttonEvents, int dir){
         if (buttonEvents != null) {
             if (buttonEvents.peek() != null) {
@@ -151,29 +150,31 @@ public class StickMan extends Fighter {
     }
 
     private void AIupdateMovement(int dir) {
+        if(theAttack != null){
+            velocity.addInPlace(new DoublePair(-velocity.getX()/slidiness, 0));
+            return;
+        }
 
         if (dir == 1) {
             if (getVelocity().getX() > 0) {
                 setVelocity(new DoublePair(-getVelocity().getX(), getVelocity().getY()));
             }
-
-            moveSideways(1);
+            AImoveSideways(-1,dir);
         } else if (dir == 3) {
             if (getVelocity().getX() < 0) {
                 setVelocity(new DoublePair(-getVelocity().getX(), getVelocity().getY()));
             }
-
-            moveSideways(-1);
+            AImoveSideways(1,dir);
         } else {
-            if (sequence != null && !sequence.getSequence().equals(jump)) {
-                executing = false;
+            if (sequence != null && !sequence.getSequence().equals(jump) && !attacking()) {
+                //executing = false;
             }
 
-            //velocity.addInPlace(new DoublePair(-velocity.getX() / slidiness, 0));
+            velocity.addInPlace(new DoublePair(-velocity.getX() / slidiness, 0));
         }
 
-        if (jumps != 2 && velocity.getY() == 0) {
-            jumps = 2;
+        if (this.getJumps() != 2 && velocity.getY() == 0 && position.getY() > 1) {
+            this.setJumps(2);
         }
     }
 
@@ -288,6 +289,38 @@ public class StickMan extends Fighter {
         }
     }
 
+    private void AImoveSideways(int i, int dir) {
+
+        if (dir == 1) {
+            dir = -1;
+        }
+        else if (dir == 3) {
+            dir = 1;
+
+        }
+
+        currentMaxVelocity = Definitions.MAX_VELOCITY * (Math.pow(Math.abs(dir), 2));
+
+        if (getVelocity().getX() * dir <= currentMaxVelocity) {
+            if (getVelocity().getX() * dir + speed  > currentMaxVelocity) {
+                velocity.addInPlace(new DoublePair(dir * currentMaxVelocity - getVelocity().getX(), 0));
+            } else {
+                velocity.addInPlace(new DoublePair(dir * speed, 0));
+            }
+            if (dir == -1 && (sequence == null || !sequence.getSequence().equals(moveLeft))) {
+                facingLeft = true;
+                sequence = new SpriteState(moveLeft, true, 0, this);
+            }
+            else if (dir == 1 && (sequence == null || !sequence.getSequence().equals(moveRight))) {
+                facingLeft = false;
+                sequence = new SpriteState(moveRight, true, 0, this);
+            }
+            executing = true;
+        }
+        else{
+            velocity.addInPlace(new DoublePair(-1 * dir * speed, 0));
+        }
+    }
 
     private void moveSideways(int i) {
         currentMaxVelocity = Definitions.MAX_VELOCITY * (Math.pow(Math.abs(input.getStickForPlayer(this).getX()), 2));

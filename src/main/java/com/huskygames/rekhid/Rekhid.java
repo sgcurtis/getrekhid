@@ -117,7 +117,6 @@ public class Rekhid extends JFrame {
         //creates an instance of a player to be used for testing purposes
         player1 = new StickMan(new DoublePair(1000, 150), new DoublePair(0, 0), LEO);
 
-        // BRIAN ADDED THINGS
         // Add new stickman for ai player to control
         AiPlayer = new StickMan(new DoublePair(3000, 150), new DoublePair(0, 0), KUHL);
 

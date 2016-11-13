@@ -70,7 +70,7 @@ import static com.huskygames.rekhid.slugger.input.ButtonType.SHIELD_BUTTON;
             switch(statecase) {
                 case "Attack":
                     buttonEvents.add(new ButtonEvent(ATTACK_BUTTON, meAIPlayer, System.nanoTime()));
-                    meAIPlayer.AIreadController(buttonEvents, -11);
+                    meAIPlayer.AIreadController(buttonEvents, -1);
                     break;
                 case "Block":
                     buttonEvents.add(new ButtonEvent(SHIELD_BUTTON, meAIPlayer, System.nanoTime()));
