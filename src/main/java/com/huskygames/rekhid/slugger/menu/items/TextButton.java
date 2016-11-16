@@ -4,10 +4,12 @@ import com.huskygames.rekhid.Definitions;
 
 import java.awt.*;
 
-public class TextButton extends com.huskygames.rekhid.slugger.menu.items.MenuItem {
+public class TextButton extends MenuItem implements Selectable{
 
-    private static String text;
+    private String text;
     private final Font font;
+
+    private boolean selected;
 
     public TextButton(String text) {
         this.text = text;
@@ -19,7 +21,7 @@ public class TextButton extends com.huskygames.rekhid.slugger.menu.items.MenuIte
         this.font = font;
     }
 
-    public static String getText() {
+    public String getText() {
         return text;
     }
 
@@ -28,4 +30,11 @@ public class TextButton extends com.huskygames.rekhid.slugger.menu.items.MenuIte
     }
 
 
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
 }

@@ -1,5 +1,6 @@
-package com.huskygames.rekhid;
+package com.huskygames.rekhid.menu;
 
+import com.huskygames.rekhid.Rekhid;
 import com.huskygames.rekhid.slugger.menu.Menu;
 import com.huskygames.rekhid.slugger.menu.items.*;
 import com.huskygames.rekhid.slugger.resource.LoadedImage;
@@ -23,10 +24,20 @@ public class MainMenu extends Menu {
         ListLayout list = new ListLayout();
         list.addElement(new Padding());
         list.addElement(new Title("Get Rekhi'd"));
-        list.addElement(new TextButton("Ayy lmao"));
+
+        TextButton button1 = new TextButton("Start Game");
+        this.setDefaultSelection(button1);
+        list.addElement(button1);
+
+        list.addElement(new TextButton("Options"));
         list.addElement(new Padding());
         root.addElement(list);
         root.addElement(new Padding());
+
+    }
+
+    @Override
+    public void tick() {
 
     }
 }

@@ -7,11 +7,12 @@ import com.huskygames.rekhid.slugger.menu.items.*;
 import com.huskygames.rekhid.slugger.menu.items.Container;
 import com.huskygames.rekhid.slugger.menu.items.Label;
 import com.huskygames.rekhid.slugger.menu.items.MenuItem;
-import org.apache.logging.log4j.Level;
+import com.huskygames.rekhid.slugger.resource.LoadedImage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -19,10 +20,10 @@ import java.util.Map;
 public abstract class Menu implements Drawable {
     private final Logger logger = LogManager.getLogger(Menu.class.getName());
     private final HashSet<MenuItem> items = new HashSet<>();
-
     private final RootElement root = new RootElement(this);
     protected Image background;
     Map<MenuItem, ItemDecorator> computedValues = new HashMap<>();
+    private Selectable currentSelection;
     private boolean layoutDirty = true;
 
     public void draw(Graphics2D context) {
@@ -38,6 +39,13 @@ public abstract class Menu implements Drawable {
 
         root.stream().forEach(x -> drawItem(x, context));
 
+    }
+
+    public abstract void tick();
+
+    public void setDefaultSelection(Selectable sel) {
+        this.currentSelection = sel;
+        sel.setSelected(true);
     }
 
     private void computeSizes() {
@@ -68,8 +76,6 @@ public abstract class Menu implements Drawable {
         computedValues.put(first, firstDec);
 
         sizeContainer(first);
-
-
     }
 
     private void drawItem(MenuItem item, Graphics2D g) {
@@ -88,6 +94,9 @@ public abstract class Menu implements Drawable {
         int offsetx = (int) (dec.getxOffset() * windowWidth);
         int offsety = (int) (dec.getyOffset() * windowHeight);
 
+        int centerx = offsetx + width / 2;
+        int centery = offsety + height / 2;
+
 
         if (item instanceof Padding) {
             if (Definitions.DRAW_PADDING) {
@@ -97,36 +106,70 @@ public abstract class Menu implements Drawable {
         }
 
         if (item instanceof Label) {
+            Label label = (Label) item;
             g.setColor(Color.blue);
-            String output = Label.getLabel();
+            String output = label.getLabel();
             FontMetrics metrics = g.getFontMetrics(g.getFont());
             int outWidth = metrics.stringWidth(output);
             int outHeight = metrics.getHeight();
-            g.drawString(output, offsetx, offsety);
-            g.fillRect(offsetx, offsety, width, height);
+            g.drawString(output, centerx - outWidth / 2, centery - outHeight / 2);
+            // g.fillRect(offsetx, offsety, width, height);
         }
 
-        if (item instanceof TextButton){
-            g.setColor(Color.red);
-            String output = TextButton.getText();
+        if (item instanceof TextButton) {
+            TextButton button = (TextButton) item;
+            String output = button.getText();
             FontMetrics metrics = g.getFontMetrics(g.getFont());
             int outWidth = metrics.stringWidth(output);
             int outHeight = metrics.getHeight();
-            g.drawString(output, offsetx, offsety);
-            g.fillRect(offsetx, offsety, width, height);
+
+            if (button.isSelected()) {
+                g.setColor(Color.YELLOW);
+                g.fillRoundRect(offsetx, offsety, width, height, 100, 100);
+            }
+            g.setColor(Color.BLACK);
+            g.fillRoundRect(offsetx + 4, offsety + 4, width - 8, height - 8, 100, 100);
+            g.setColor(Color.RED);
+            g.drawString(output, centerx - outWidth / 2, centery);
         }
 
-        if (item instanceof Title){
+        if (item instanceof Title) {
+            Title title = (Title) item;
+            String output = title.getTitle();
+            FontMetrics metrics = g.getFontMetrics(g.getFont());
+
+            int outWidth = metrics.stringWidth(output);
+            int outHeight = metrics.getHeight();
+
+            g.setColor(Color.WHITE);
+            g.drawString(output, centerx - outWidth / 2 + 1, centery + 1);
+            g.drawString(output, centerx - outWidth / 2 - 1, centery - 1);
+
             g.setColor(Color.black);
-            String output = Title.getTitle();
-            FontMetrics metrics = g.getFontMetrics(g.getFont());
-            int outWidth = metrics.stringWidth(output);
-            int outHeight = metrics.getHeight();
-            g.drawString(output, offsetx, offsety);
-            g.fillRect(offsetx, offsety, width, height);
+            g.drawString(output, centerx - outWidth / 2, centery);
+
+
         }
 
-            g.setColor(temp);
+        if (item instanceof ImageButton) {
+            ImageButton imageButton = (ImageButton) item;
+
+            BufferedImage img = ((LoadedImage) Rekhid.getInstance().getResourceManager()
+                    .requestResource(imageButton.getImage())).getImage();
+            if (imageButton.isSelected()) {
+                g.setColor(Color.YELLOW);
+                g.fillRect(offsetx, offsety, width, height);
+            }
+
+            g.drawImage(img, offsetx + 4, offsety + 4, width - 8, height - 8, null);
+        }
+
+        if (item instanceof CustomMenuItem) {
+            CustomMenuItem cItem = (CustomMenuItem) item;
+            cItem.draw(g, offsetx, offsety, height, width);
+        }
+
+        g.setColor(temp);
     }
 
     private void sizeContainer(MenuItem element) {
@@ -143,14 +186,14 @@ public abstract class Menu implements Drawable {
                 temp.setPercentHeight(computedValues.get(item.getParent()).getPercentHeight());
                 if (item.getWidth() == MenuItem.USE_DYNAMIC_SIZE) {
                     temp.setPercentWidth(computedValues.get(cols).getPercentWidth()
-                                    / cols.getElements().size());
+                            / cols.getElements().size());
 
                 }
 
                 temp.setxOffset(computedValues.get(item.getParent()).getxOffset()
                         + counter * itemWidth);
                 temp.setyOffset(computedValues.get(cols).getyOffset());
-                counter ++;
+                counter++;
                 computedValues.put(item, temp);
 
                 if (item instanceof Container) {
@@ -171,13 +214,13 @@ public abstract class Menu implements Drawable {
                 temp.setPercentWidth(computedValues.get(item.getParent()).getPercentWidth());
                 if (item.getHeight() == MenuItem.USE_DYNAMIC_SIZE) {
                     temp.setPercentHeight(computedValues.get(rows).getPercentHeight()
-                                    / rows.getElements().size());
+                            / rows.getElements().size());
 
                 }
                 temp.setyOffset(computedValues.get(rows).getyOffset()
                         + counter * itemHeight);
                 temp.setxOffset(computedValues.get(rows).getxOffset());
-                counter ++ ;
+                counter++;
                 computedValues.put(item, temp);
                 if (item instanceof Container) {
                     sizeContainer(item);
@@ -199,6 +242,4 @@ public abstract class Menu implements Drawable {
         layoutDirty = true;
         this.root.setChild(root);
     }
-
-
 }
