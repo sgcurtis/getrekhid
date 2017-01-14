@@ -32,7 +32,7 @@ import static com.huskygames.rekhid.actor.Professor.KUHL;
 import static com.huskygames.rekhid.actor.Professor.LEO;
 
 public class Rekhid extends JFrame {
-
+    //ALEX: TESTING NEW REPOSITORY
     private final static Logger logger = LogManager.getLogger(Rekhid.class);
     private static final String OPERATING_SYSTEM = System.getProperty("os.name");
     private static Rekhid instance;
