@@ -9,7 +9,7 @@ public enum Resource {
     LEVEL_COMPUTERS_BG("images/LevelComputers.jpg", Type.IMAGE),
     LEVEL_TERMINAL_BG("images/LevelTerminal.png", Type.IMAGE),
     MAIN_MENU_BG("images/menu1.jpg", Type.IMAGE),
-    MENU_BG_MUSIC("music/meganddia.ogg", Type.MUSIC),
+    MENU_BG_MUSIC("music/Rekhi'd_Test01.ogg", Type.MUSIC),
 
     KUHLS_HEAD("images/kuhl.jpg", Type.IMAGE),
     //STICK_MAN("spritesheets/sticks.png", Type.SPRITE_SHEET),

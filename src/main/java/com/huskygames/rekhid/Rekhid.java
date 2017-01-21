@@ -157,7 +157,7 @@ public class Rekhid extends JFrame {
         AudioInputStream i2 = null;
         try {
             i2 = AudioSystem.getAudioInputStream(
-                    Rekhid.class.getClassLoader().getResourceAsStream("music/meganddia.ogg"));
+                    Rekhid.class.getClassLoader().getResourceAsStream("music/Rekhi'd_Test01.ogg"));
         } catch (UnsupportedAudioFileException | IOException e) {
             logger.error("Unable to load music", e);
         }
