@@ -33,12 +33,13 @@ public class MainMenu extends Menu {
 
         ControllerInput input = Rekhid.getInstance().getControllerManager();
 
-        Component[] componentList = input.getValidControllers().get(3).getComponents();
+        Component[] componentList;
 
         for (int i = 0; i < input.getValidControllers().size(); i++) {
+            componentList = input.getValidControllers().get(i).getComponents();
             for (int j = 0; j < 10; j++) {
                 input.getValidControllers().get(i).poll();
-                if (componentList[j].getPollData() != 0) {
+                if (componentList[j].getPollData() == 1) {
                     Rekhid.getInstance().setControllerForPlayer1(i);
                     Rekhid.getInstance().setGameState(Rekhid.GameState.CHARACTER_SELECT);
                 }
